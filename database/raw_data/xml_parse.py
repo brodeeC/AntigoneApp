@@ -1,6 +1,7 @@
 import csv
 from unicodedata import normalize, category
 import xml.etree.ElementTree as ET
+import requests
  
 
 
@@ -61,9 +62,11 @@ def xml_parse(file):
                 prn_gender = prn_dict['gender']
                 prn_type = prn_dict['type']
                 
+            #get_definition(lemma)
+
+            full_eng = grk_to_eng(lemma)
             
-            
-            row = {'lemma_id': hash_word(eng_lemma), 'lemma': lemma, 'urn': urn, 'line_number': line, 'normalized': normalized, 'eng_lemma': eng_lemma, 
+            row = {'lemma_id': hash_word(eng_lemma), 'lemma': lemma, 'full_eng': full_eng, 'urn': urn, 'line_number': line, 'normalized': normalized, 'eng_lemma': eng_lemma, 
                    'case': ending, 'number': number, 'gender': gender, 
                     'voice': voice, 'tense': tense, 'mood': mood, 'person': person, 
                     'ppl_voice': ppl_voice, 'ppl_tense': ppl_tense, 'ppl_gender': ppl_gender, 'ppl_case': ppl_ending,
@@ -79,7 +82,7 @@ def strip_accents(s):
             
 def csv_write(wordList):
     with open('database/csv/wordList.csv', 'w', encoding='utf-8', newline='') as csvfile:
-        fieldnames = ['lemma_id', 'lemma', 'urn', 'line_number', 'normalized', 'eng_lemma', 'case', 'number', 'gender', 'voice', 'tense', 'mood', 'person',
+        fieldnames = ['lemma_id', 'lemma', 'full_eng', 'urn', 'line_number', 'normalized', 'eng_lemma', 'case', 'number', 'gender', 'voice', 'tense', 'mood', 'person',
                       'ppl_voice', 'ppl_tense', 'ppl_gender', 'ppl_case', 'prn_type', 'prn_case', 'prn_gender']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
@@ -97,16 +100,23 @@ def hash_word(eng_lemma):
 def grk_to_eng(word):
 
     word_dict = {
-     'α': 'a', 'β': 'b', 'γ': 'g', 'δ': 'd', 'ε': 'e', 'ζ': 'z', 'η': 'h', 'θ': 'q',
-     'ι': 'i', 'κ': 'k', 'λ': 'l', 'μ': 'm', 'ν': 'n', 'ξ': 'c', 'ο': 'o', 'π': 'p',
-     'ρ': 'r', 'σ': 's', 'ς': 's', 'τ': 't', 'υ': 'u', 'φ': 'f', 'χ': 'x', 'ψ': 'Y',
-     'ω': 'w',
+    'α': 'a', 'ἁ': 'a(', 'ἀ': 'a)', 'ἂ': 'a)\\', 'ἃ': 'a(\\', 'ἄ': 'a)/', 'ἅ': 'a(/', 'ἇ': 'a)=', 'ἆ': 'a(=',
+    'β': 'b', 'γ': 'g', 'δ': 'd', 'ε': 'e', 'ἐ': 'e)', 'ἑ': 'e(', 'έ': 'e/', 'ἔ': 'e)/', 'ἕ': 'e(/', # Finish this letter, I think there's a few more
+    'ζ': 'z', 'η': 'h',
+    'ἡ': 'h(', 'ἠ': 'h)', # Finish these
+    'θ': 'q)', 'ι': 'i', 'ἰ': 'i)', 'ἱ': 'i(', 'ῖ': 'i=', 'ί': 'i/', # Finish these
+    'κ': 'k', 'λ': 'l', 'μ': 'm', 'ν': 'n',
+    'ξ': 'c', 'ο': 'o', 'ὀ': 'o)', 'ό': 'o/', # Finish these get rho too
+    'π': 'p', 'ρ': 'r', 'σ': 's', 'ς': 's', 'τ': 't', 'υ': 'u', 'ύ': 'u/', # finish these
+    'ῦ': 'u=', 'φ': 'f', 'χ': 'x', 'ψ': 'Y', 'ω': 'w', 'ὠ': 'w)', 'ὧ': 'w)=', 'ώ': 'w/', 'ῷ': 'w=', 'ὦ': 'w(=', # Figure out how to handle iota subscript and finish these
+    
+    # Capital letters
+    'Α': 'A', 'Ἀ': 'A)', 'Ἁ': 'A(', 'Ἄ': 'A)/', 'Ἅ': 'A(/', 'Ἆ': 'A(=', #Check through the rest of these to see if all's good.
+    'Β': 'B', 'Γ': 'G', 'Δ': 'D', 'Ε': 'E', 'Ζ': 'Z', 'Η': 'H', 'Θ': 'Q)', 'Ι': 'I', 'Κ': 'K', 'Λ': 'L',
+    'Μ': 'M', 'Ν': 'N', 'Ξ': 'C', 'Ο': 'O', 'Π': 'P', 'Ρ': 'R', 'Σ': 'S', 'Τ': 'T', 'Υ': 'U', 'Φ': 'F',
+    'Χ': 'X', 'Ψ': 'Y', 'Ω': 'W', 'Ὀ': 'O', 'Ὄ': 'O/', 'Ὅ': 'O/', 'Ὀ': 'O)', 'Ῥ': 'R'
+}
 
-     # Capital letters
-     'Α': 'A', 'Β': 'B', 'Γ': 'G', 'Δ': 'D', 'Ε': 'E', 'Ζ': 'Z', 'Η': 'H', 'Θ': 'Q',
-     'Ι': 'I', 'Κ': 'K', 'Λ': 'L', 'Μ': 'M', 'Ν': 'N', 'Ξ': 'C', 'Ο': 'O', 'Π': 'P',
-     'Ρ': 'R', 'Σ': 'S', 'Τ': 'T', 'Υ': 'U', 'Φ': 'F', 'Χ': 'X', 'Ψ': 'Y', 'Ω': 'W'
-    }
 
     new_word = ''
     for char in word:
@@ -714,9 +724,23 @@ def is_pronoun(lemma):
                     for pronoun in PRONOUN_ENDINGS[type][number][gender][ending]:
                         if lemma in pronoun:
                             return {'type': type, 'number': number, 'gender': gender, 'case': ending}
+    
+
+
+def get_definition(lemma):
+    print(lemma)
 
 
 def main():
+    r = requests.get('https://www.perseus.tufts.edu/hopper/vocablist?works=Perseus%3Atext%3A1999.01.0185&sort=keyword_score&filt=50&filt_custom=&output=table&lang=greek')
+
+    # check status code for response received
+    # success code - 200
+    print(r)
+
+    # print content of request
+    print(r.content)
+    
     wordlist = xml_parse('database/raw_data/treebank.xml')
 
     csv_write(wordlist)
