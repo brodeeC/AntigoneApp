@@ -8,9 +8,11 @@ def xml_parse(file):
 
     wordList = []
     for elem in root.iter('./sentence/word'): 
+        print(elem)
         word = elem.text.strip()
         if word:
-            wordList.append({'word': elem,  })
+            print(word)
+            #wordList.append({'word': elem,  })
 
 
 def main():
