@@ -66,7 +66,7 @@ def xml_parse(file):
 
             full_eng = grk_to_eng(lemma)
             
-            row = {'lemma_id': hash_word(eng_lemma), 'lemma': lemma, 'full_eng': full_eng, 'urn': urn, 'line_number': line, 'normalized': normalized, 'eng_lemma': eng_lemma, 
+            row = {'lemma_id': hash_word(full_eng), 'lemma': lemma, 'full_eng': full_eng, 'urn': urn, 'line_number': line, 'normalized': normalized, 'eng_lemma': eng_lemma, 
                    'case': ending, 'number': number, 'gender': gender, 
                     'voice': voice, 'tense': tense, 'mood': mood, 'person': person, 
                     'ppl_voice': ppl_voice, 'ppl_tense': ppl_tense, 'ppl_gender': ppl_gender, 'ppl_case': ppl_ending,
