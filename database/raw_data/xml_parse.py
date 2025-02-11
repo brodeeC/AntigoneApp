@@ -760,15 +760,6 @@ def get_definition(lemma):
 
 
 def main():
-    r = requests.get('https://www.perseus.tufts.edu/hopper/vocablist?works=Perseus%3Atext%3A1999.01.0185&sort=keyword_score&filt=50&filt_custom=&output=table&lang=greek')
-
-    # check status code for response received
-    # success code - 200
-    print(r)
-
-    # print content of request
-    print(r.content)
-    
     wordlist = xml_parse('database/raw_data/treebank.xml')
 
     csv_write(wordlist)
