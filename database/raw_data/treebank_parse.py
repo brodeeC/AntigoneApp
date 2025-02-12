@@ -1,8 +1,7 @@
 import csv
 from unicodedata import normalize, category
 import xml.etree.ElementTree as ET
-import requests
- 
+
 
 
 def xml_parse(file):
@@ -80,8 +79,9 @@ def strip_accents(s):
    return ''.join(c for c in normalize('NFD', s)
         if category(c) != 'Mn')
             
-def csv_write(wordList):
-    with open('database/csv/wordList.csv', 'w', encoding='utf-8', newline='') as csvfile:
+def csv_write(wordList, fname):
+    filepath = f"database/csv/{fname}.csv"
+    with open(filepath, 'w', encoding='utf-8', newline='') as csvfile:
         fieldnames = ['lemma_id', 'lemma', 'full_eng', 'urn', 'line_number', 'normalized', 'eng_lemma', 'case', 'number', 'gender', 'voice', 'tense', 'mood', 'person',
                       'ppl_voice', 'ppl_tense', 'ppl_gender', 'ppl_case', 'prn_type', 'prn_case', 'prn_gender']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -762,7 +762,7 @@ def get_definition(lemma):
 def main():
     wordlist = xml_parse('database/raw_data/treebank.xml')
 
-    csv_write(wordlist)
+    csv_write(wordlist, 'wordList')
 
 
 if __name__ == '__main__':
