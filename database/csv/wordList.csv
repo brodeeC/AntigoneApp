@@ -1,4 +1,4 @@
-lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case,number,gender,voice,tense,mood,person,ppl_voice,ppl_tense,ppl_gender,ppl_case,prn_type,prn_case,prn_gender
+lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,gender,voice,tense,mood,person,ppl_voice,ppl_tense,ppl_gender,ppl_case,prn_type,prn_case,prn_gender
 19563,ὦ,w)=,urn:cts:greekLit:tlg0011.tlg002:1,1,ω,w,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 74650,κοινός,koino/s,urn:cts:greekLit:tlg0011.tlg002:1,1,κοινος,koinos,nominative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 106050,αὐτάδελφος,au)tdelfos,urn:cts:greekLit:tlg0011.tlg002:1,1,αυταδελφος,autadelfos,nominative,sg,masculine,None,None,None,None,None,None,None,None,None,None,None

@@ -1,5 +1,4 @@
-from treebank_parse import hash_word
-import csv
+from treebank_parse import hash_word, csv_write
 import xml.etree.ElementTree as ET
 
 
@@ -8,6 +7,8 @@ def xml_parse(file):
     root = tree.getroot()
 
     vocab_list = []
+    def_list = []
+    def_counter = 1
     for frequency in root.findall('.//frequency'):
         # Access the lemma, headword, shortDefinition, and lexiconQueries
         headword = frequency.find('.//headword').text
@@ -24,26 +25,29 @@ def xml_parse(file):
         
         lemma_id = hash_word(headword)
 
-        vocab_list.append({'lemma_id': lemma_id, 'headword': headword, 'short_definition': short_definition, 'queries': queries})
+        present = False
+        for row in vocab_list:
+            if lemma_id in row.values():
+                present = True
+                break
+        
+        if present == False: 
+            vocab_list.append({'lemma_id': lemma_id, 'headword': headword})
 
-    return vocab_list
+        def_list.append({'lemma_id': lemma_id, 'def_num': def_counter, 'short_definition': short_definition, 'queries': queries})
+        def_counter += 1
+
+    return vocab_list, def_list
     
-def csv_write(wordList, fname):
-    filepath = f"/Users/brodee69/Documents/GitHub/AntigoneApp/database/csv/{fname}.csv"
-    with open(filepath, 'w', encoding='utf-8', newline='') as csvfile:
-        fieldnames = ['lemma_id', 'headword', 'short_definition', 'queries']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-        writer.writeheader()
-        for row in wordList:
-            writer.writerow(row)
 
 
 
 
 def main():
-    vocab_list = xml_parse('/Users/brodee69/Documents/GitHub/AntigoneApp/database/raw_data/vocablist.xml')
+    vocab_list, def_list = xml_parse('database/raw_data/vocablist.xml')
     csv_write(vocab_list, 'vocabList')
+    #csv_write(def_list, 'defList')
     
 
 

@@ -66,7 +66,7 @@ def xml_parse(file):
             full_eng = grk_to_eng(lemma)
             
             row = {'lemma_id': hash_word(full_eng), 'lemma': lemma, 'full_eng': full_eng, 'urn': urn, 'line_number': line, 'normalized': normalized, 'eng_lemma': eng_lemma, 
-                   'case': ending, 'number': number, 'gender': gender, 
+                   'case_type': ending, 'number': number, 'gender': gender, 
                     'voice': voice, 'tense': tense, 'mood': mood, 'person': person, 
                     'ppl_voice': ppl_voice, 'ppl_tense': ppl_tense, 'ppl_gender': ppl_gender, 'ppl_case': ppl_ending,
                       'prn_type': prn_type, 'prn_case': prn_ending, 'prn_gender': prn_gender}
@@ -84,8 +84,8 @@ def strip_accents(s):
 def csv_write(wordList, fname):
     filepath = f"database/csv/{fname}.csv"
     with open(filepath, 'w', encoding='utf-8', newline='') as csvfile:
-        fieldnames = ['lemma_id', 'lemma', 'full_eng', 'urn', 'line_number', 'normalized', 'eng_lemma', 'case', 'number', 'gender', 'voice', 'tense', 'mood', 'person',
-                      'ppl_voice', 'ppl_tense', 'ppl_gender', 'ppl_case', 'prn_type', 'prn_case', 'prn_gender']
+        
+        fieldnames = wordList[0].keys()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()
