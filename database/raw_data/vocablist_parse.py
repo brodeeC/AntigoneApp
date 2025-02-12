@@ -9,6 +9,7 @@ def xml_parse(file):
     vocab_list = []
     def_list = []
     def_counter = 1
+    prev = ''
     for frequency in root.findall('.//frequency'):
         # Access the lemma, headword, shortDefinition, and lexiconQueries
         headword = frequency.find('.//headword').text
@@ -34,8 +35,15 @@ def xml_parse(file):
         if present == False: 
             vocab_list.append({'lemma_id': lemma_id, 'headword': headword})
 
+        if prev == lemma_id:
+            def_counter += 1
+        else:
+            def_counter = 1
+        prev = lemma_id
+
+        
+
         def_list.append({'lemma_id': lemma_id, 'def_num': def_counter, 'short_definition': short_definition, 'queries': queries})
-        def_counter += 1
 
     return vocab_list, def_list
     
@@ -46,8 +54,8 @@ def xml_parse(file):
 
 def main():
     vocab_list, def_list = xml_parse('database/raw_data/vocablist.xml')
-    csv_write(vocab_list, 'vocabList')
-    #csv_write(def_list, 'defList')
+    #csv_write(vocab_list, 'vocabList')
+    csv_write(def_list, 'defList')
     
 
 
