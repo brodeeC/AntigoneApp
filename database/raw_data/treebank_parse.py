@@ -74,11 +74,13 @@ def xml_parse(file):
 
     return wordList
 
+
 # Stack Overflow: https://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-normalize-in-a-python-unicode-string
 def strip_accents(s):
    return ''.join(c for c in normalize('NFD', s)
         if category(c) != 'Mn')
-            
+
+
 def csv_write(wordList, fname):
     filepath = f"database/csv/{fname}.csv"
     with open(filepath, 'w', encoding='utf-8', newline='') as csvfile:
@@ -89,6 +91,7 @@ def csv_write(wordList, fname):
         writer.writeheader()
         for row in wordList:
             writer.writerow(row)
+
 
 def hash_word(eng_lemma):
     hash = 0
@@ -154,6 +157,7 @@ def grk_to_eng(word):
             assert f"Character {char} not found in dictionary"
 
     return new_word
+
 
 def noun_case(lemma):
     CASE_ENDINGS = {
@@ -499,6 +503,7 @@ def verb_case(lemma):
                         
     return None
 
+
 def ppl_case(lemma):
     PARTICIPLE_ENDINGS = {
         "active": {
@@ -753,7 +758,6 @@ def is_pronoun(lemma):
                         if lemma in pronoun:
                             return {'type': type, 'number': number, 'gender': gender, 'case': ending}
     
-
 
 def get_definition(lemma):
     print(lemma)
