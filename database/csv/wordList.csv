@@ -259,7 +259,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 41723,λύω,lu/w,urn:cts:greekLit:tlg0011.tlg002:40,40,λυω,luw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 25399,ἄν,a)/n,urn:cts:greekLit:tlg0011.tlg002:40,40,αν,an,accusative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 14706,ἤ,h)/,urn:cts:greekLit:tlg0011.tlg002:40,40,η,h,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:40,40,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 62447,ἐφάπτω,e)fptw,urn:cts:greekLit:tlg0011.tlg002:40,40,εφαπτω,efaptw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 125948,προστίθημι,prosti/q)hmi,urn:cts:greekLit:tlg0011.tlg002:40,40,προστιθημι,prostiq)hmi,dative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 73904,πλείων,plei/wn,urn:cts:greekLit:tlg0011.tlg002:40,40,πλειων,pleiwn,genitive,pl,masculine,None,None,None,None,active,present,masculine,nominative,None,None,None
@@ -526,7 +525,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 108626,ὑπερδείδω,u(perdei/dw,urn:cts:greekLit:tlg0011.tlg002:82,82,υπερδειδω,uperdeidw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 29123,σύ,su/,urn:cts:greekLit:tlg0011.tlg002:82,82,συ,su,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
 24906,μή,mh/,urn:cts:greekLit:tlg0011.tlg002:83,83,μη,mh,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:83,83,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 22491,ἐγώ,e)g,urn:cts:greekLit:tlg0011.tlg002:83,83,εγω,egw,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
 109897,προταρβέω,protarbe/w,urn:cts:greekLit:tlg0011.tlg002:83,83,προταρβεω,protarbew,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:83,83,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
@@ -1241,7 +1239,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 38572,ἔτι,e)/ti,urn:cts:greekLit:tlg0011.tlg002:218,218,ετι,eti,dative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:219,219,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 24906,μή,mh/,urn:cts:greekLit:tlg0011.tlg002:219,219,μη,mh,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:219,219,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 103579,ἐπιχωρέω,e)pixwre/w,urn:cts:greekLit:tlg0011.tlg002:219,219,επιχωρεω,epixwrew,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:219,219,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 87911,ἀπιστέω,a)piste/w,urn:cts:greekLit:tlg0011.tlg002:219,219,απιστεω,apistew,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
@@ -1643,12 +1640,10 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 50874,πρίν,pri/n,urn:cts:greekLit:tlg0011.tlg002:280,280,πριν,prin,accusative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 50632,ὀργή,o)rgh/,urn:cts:greekLit:tlg0011.tlg002:280,280,οργη,orgh,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 34092,καί,kai/,urn:cts:greekLit:tlg0011.tlg002:280,280,και,kai,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:280,280,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 22491,ἐγώ,e)g,urn:cts:greekLit:tlg0011.tlg002:280,280,εγω,egw,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
 77454,μεστόω,mesto/w,urn:cts:greekLit:tlg0011.tlg002:280,280,μεστοω,mestow,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 48844,λέγω,le/gw,urn:cts:greekLit:tlg0011.tlg002:280,280,λεγω,legw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 24906,μή,mh/,urn:cts:greekLit:tlg0011.tlg002:281,281,μη,mh,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:281,281,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 111241,ἐφευρίσκω,e)feuri/skw,urn:cts:greekLit:tlg0011.tlg002:281,281,εφευρισκω,efeuriskw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 63266,ἄνοος,a)/noos,urn:cts:greekLit:tlg0011.tlg002:281,281,ανοος,anoos,nominative,sg,masculine,None,None,None,None,None,None,None,None,None,None,None
 23657,τε,te,urn:cts:greekLit:tlg0011.tlg002:281,281,τε,te,vocative,sg,masculine,active,present,imperative,2nd,None,None,None,None,None,None,None
@@ -1861,7 +1856,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:317,317,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 44637,οὖς,ou)=s,urn:cts:greekLit:tlg0011.tlg002:317,317,ους,ous,nominative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 14706,ἤ,h)/,urn:cts:greekLit:tlg0011.tlg002:317,317,η,h,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:317,317,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 37660,ἐπί,e)pi/,urn:cts:greekLit:tlg0011.tlg002:317,317,επι,epi,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:317,317,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 49035,ψυχή,Yuxh/,urn:cts:greekLit:tlg0011.tlg002:317,317,ψυχη,Yuxh,None,None,None,None,None,None,None,None,None,None,None,None,None,None
@@ -2154,7 +2148,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 85924,ἐκεῖνος,e)kei=nos,urn:cts:greekLit:tlg0011.tlg002:384,384,εκεινος,ekeinos,nominative,sg,masculine,None,None,None,None,None,None,None,None,demonstrative,nominative,masculine
 62117,ἔργον,e)/rgon,urn:cts:greekLit:tlg0011.tlg002:384,384,εργον,ergon,nominative,sg,masculine,active,imperfect,indicative,1st,active,present,neuter,nominative,None,None,None
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:384,384,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:384,384,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 115009,ἐξεργάζομαι,e)cergzomai,urn:cts:greekLit:tlg0011.tlg002:384,384,εξεργαζομαι,ecergazomai,nominative,pl,feminine,mediopassive,present,indicative,1st,None,None,None,None,None,None,None
 36331,ὅδε,o(/de,urn:cts:greekLit:tlg0011.tlg002:385,385,οδε,ode,vocative,sg,masculine,active,present,imperative,2nd,None,None,None,None,None,None,None
 61601,αἱρέω,ai(re/w,urn:cts:greekLit:tlg0011.tlg002:385,385,αιρεω,airew,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
@@ -2184,7 +2177,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 58181,ψεύδω,Yeu/dw,urn:cts:greekLit:tlg0011.tlg002:389,389,ψευδω,Yeudw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 23605,γάρ,gr,urn:cts:greekLit:tlg0011.tlg002:389,389,γαρ,gar,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:389,389,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:389,389,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 82515,ἐπίνοια,e)pi/noia,urn:cts:greekLit:tlg0011.tlg002:389,389,επινοια,epinoia,nominative,sg,feminine,None,None,None,None,None,None,None,None,None,None,None
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:389,389,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 45406,γνώμη,gnmh,urn:cts:greekLit:tlg0011.tlg002:389,389,γνωμη,gnwmh,nominative,sg,feminine,active,pluperfect,indicative,1st,None,None,None,None,None,None,None
@@ -2521,7 +2513,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 77930,κομίζω,komi/zw,urn:cts:greekLit:tlg0011.tlg002:444,444,κομιζω,komizw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 25399,ἄν,a)/n,urn:cts:greekLit:tlg0011.tlg002:444,444,αν,an,accusative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 89711,σεαυτοῦ,seautou=,urn:cts:greekLit:tlg0011.tlg002:444,444,σεαυτου,seautou,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,ᾗ,,urn:cts:greekLit:tlg0011.tlg002:444,444,η,h,None,None,None,None,None,None,None,None,None,None,None,relative,dative,feminine
 64567,ἐθέλω,e)q)e/lw,urn:cts:greekLit:tlg0011.tlg002:444,444,εθελω,eq)elw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 38053,ἔξω,e)/cw,urn:cts:greekLit:tlg0011.tlg002:445,445,εξω,ecw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 61132,βαρύς,baru/s,urn:cts:greekLit:tlg0011.tlg002:445,445,βαρυς,barus,nominative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
@@ -2608,7 +2599,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 49277,εἴδω,ei)/dw,urn:cts:greekLit:tlg0011.tlg002:457,457,ειδω,eidw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 23331,ἐκ,e)k,urn:cts:greekLit:tlg0011.tlg002:457,457,εκ,ek,None,None,None,None,None,None,None,None,None,None,None,demonstrative,nominative,masculine
 67061,ὅστις,o(/stis,urn:cts:greekLit:tlg0011.tlg002:457,457,οστις,ostis,nominative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:457,457,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 59308,φαίνω,fai/nw,urn:cts:greekLit:tlg0011.tlg002:457,457,φαινω,fainw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 70333,οὗτος,ou(=tos,urn:cts:greekLit:tlg0011.tlg002:458,458,ουτος,outos,nominative,sg,masculine,None,None,None,None,None,None,None,None,None,None,None
 22491,ἐγώ,e)g,urn:cts:greekLit:tlg0011.tlg002:458,458,εγω,egw,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
@@ -3099,7 +3089,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 46335,φημί,fhmi/,urn:cts:greekLit:tlg0011.tlg002:535,535,φημι,fhmi,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 76509,μετέχω,mete/xw,urn:cts:greekLit:tlg0011.tlg002:535,535,μετεχω,metexw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 14706,ἤ,h)/,urn:cts:greekLit:tlg0011.tlg002:535,535,η,h,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:535,535,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 96789,ἐξόμνυμι,e)co/mnumi,urn:cts:greekLit:tlg0011.tlg002:535,535,εξομνυμι,ecomnumi,dative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:535,535,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 24906,μή,mh/,urn:cts:greekLit:tlg0011.tlg002:535,535,μη,mh,None,None,None,None,None,None,None,None,None,None,None,None,None,None
@@ -3130,7 +3119,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 53557,οὔτε,ou)/te,urn:cts:greekLit:tlg0011.tlg002:539,539,ουτε,oute,vocative,sg,masculine,active,present,imperative,2nd,None,None,None,None,None,None,None
 23657,τε,te,urn:cts:greekLit:tlg0011.tlg002:539,539,τε,te,vocative,sg,masculine,active,present,imperative,2nd,None,None,None,None,None,None,None
 22491,ἐγώ,e)g,urn:cts:greekLit:tlg0011.tlg002:539,539,εγω,egw,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:539,539,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 75586,κοινόω,koino/w,urn:cts:greekLit:tlg0011.tlg002:539,539,κοινοω,koinow,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 34418,ἀλλά,a)ll,urn:cts:greekLit:tlg0011.tlg002:540,540,αλλα,alla,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 23982,ἐν,e)n,urn:cts:greekLit:tlg0011.tlg002:540,540,εν,en,accusative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
@@ -3181,7 +3169,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 22410,δέ,de/,urn:cts:greekLit:tlg0011.tlg002:546,546,δε,de,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 29355,ὅς,o(/s,urn:cts:greekLit:tlg0011.tlg002:546,546,ος,os,nominative,sg,neuter,None,None,None,None,None,None,None,None,relative,nominative,masculine
 24906,μή,mh/,urn:cts:greekLit:tlg0011.tlg002:546,546,μη,mh,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:546,546,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 72954,θιγγάνω,q)iggnw,urn:cts:greekLit:tlg0011.tlg002:546,546,θιγγανω,q)igganw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 62461,ποιέω,poie/w,urn:cts:greekLit:tlg0011.tlg002:547,547,ποιεω,poiew,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 79510,σαυτοῦ,sautou=,urn:cts:greekLit:tlg0011.tlg002:547,547,σαυτου,sautou,None,None,None,None,None,None,None,None,None,None,None,None,None,None
@@ -3260,7 +3247,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:557,557,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 22410,δέ,de/,urn:cts:greekLit:tlg0011.tlg002:557,557,δε,de,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 22491,ἐγώ,e)g,urn:cts:greekLit:tlg0011.tlg002:557,557,εγω,egw,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:557,557,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 60341,δοκέω,doke/w,urn:cts:greekLit:tlg0011.tlg002:557,557,δοκεω,dokew,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 74392,φρονέω,frone/w,urn:cts:greekLit:tlg0011.tlg002:557,557,φρονεω,fronew,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 34092,καί,kai/,urn:cts:greekLit:tlg0011.tlg002:558,558,και,kai,None,None,None,None,None,None,None,None,None,None,None,None,None,None
@@ -3269,7 +3255,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 22491,ἐγώ,e)g,urn:cts:greekLit:tlg0011.tlg002:558,558,εγω,egw,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
 48022,εἰμί,ei)mi/,urn:cts:greekLit:tlg0011.tlg002:558,558,ειμι,eimi,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:558,558,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:558,558,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 101477,ἐξαμαρτία,e)camarti/a,urn:cts:greekLit:tlg0011.tlg002:558,558,εξαμαρτια,ecamartia,nominative,sg,feminine,None,None,None,None,None,None,None,None,None,None,None
 76651,θαρσέω,q)arse/w,urn:cts:greekLit:tlg0011.tlg002:559,559,θαρσεω,q)arsew,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 29123,σύ,su/,urn:cts:greekLit:tlg0011.tlg002:559,559,συ,su,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
@@ -4296,7 +4281,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 62173,ἄλλος,a)/llos,urn:cts:greekLit:tlg0011.tlg002:736,736,αλλος,allos,nominative,sg,masculine,None,None,None,None,None,None,None,None,None,None,None
 23605,γάρ,gr,urn:cts:greekLit:tlg0011.tlg002:736,736,γαρ,gar,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 14706,ἤ,h)/,urn:cts:greekLit:tlg0011.tlg002:736,736,η,h,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:736,736,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 22491,ἐγώ,e)g,urn:cts:greekLit:tlg0011.tlg002:736,736,εγω,egw,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
 40421,χρή,xrh/,urn:cts:greekLit:tlg0011.tlg002:736,736,χρη,xrh,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 22491,ἐγώ,e)g,urn:cts:greekLit:tlg0011.tlg002:736,736,εγω,egw,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
@@ -4674,7 +4658,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 41610,νῦν,nu=n,urn:cts:greekLit:tlg0011.tlg002:801,801,νυν,nun,accusative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 22410,δέ,de/,urn:cts:greekLit:tlg0011.tlg002:801,801,δε,de,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 35522,ἤδη,h)/dh,urn:cts:greekLit:tlg0011.tlg002:801,801,ηδη,hdh,nominative,sg,feminine,active,pluperfect,indicative,1st,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:801,801,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 22491,ἐγώ,e)g,urn:cts:greekLit:tlg0011.tlg002:801,801,εγω,egw,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
 65990,αὐτός,au)to/s,urn:cts:greekLit:tlg0011.tlg002:801,801,αυτος,autos,nominative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 77512,θεσμός,q)esmo/s,urn:cts:greekLit:tlg0011.tlg002:801,801,θεσμος,q)esmos,nominative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
@@ -5064,7 +5047,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 76134,ὄλλυμι,o)/llumi,urn:cts:greekLit:tlg0011.tlg002:894,894,ολλυμι,ollumi,dative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 29355,ὅς,o(/s,urn:cts:greekLit:tlg0011.tlg002:895,895,ος,os,nominative,sg,neuter,None,None,None,None,None,None,None,None,relative,nominative,masculine
 101465,λοίσθιος,loi/sq)ios,urn:cts:greekLit:tlg0011.tlg002:895,895,λοισθιος,loisq)ios,nominative,sg,masculine,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:895,895,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 22491,ἐγώ,e)g,urn:cts:greekLit:tlg0011.tlg002:895,895,εγω,egw,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
 34092,καί,kai/,urn:cts:greekLit:tlg0011.tlg002:895,895,και,kai,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 60062,κακός,kako/s,urn:cts:greekLit:tlg0011.tlg002:895,895,κακος,kakos,nominative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
@@ -5117,7 +5099,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 70894,καίτοι,kai/toi,urn:cts:greekLit:tlg0011.tlg002:904,904,καιτοι,kaitoi,nominative,pl,masculine,active,present,optative,3rd,None,None,None,None,None,None,None
 29123,σύ,su/,urn:cts:greekLit:tlg0011.tlg002:904,904,συ,su,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
 22491,ἐγώ,e)g,urn:cts:greekLit:tlg0011.tlg002:904,904,εγω,egw,None,None,None,None,None,None,None,None,None,None,None,personal,nominative,singular
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:904,904,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 50523,τιμάω,timw,urn:cts:greekLit:tlg0011.tlg002:904,904,τιμαω,timaw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:904,904,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 74392,φρονέω,frone/w,urn:cts:greekLit:tlg0011.tlg002:904,904,φρονεω,fronew,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
@@ -5947,7 +5928,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 64057,μόνος,mo/nos,urn:cts:greekLit:tlg0011.tlg002:1061,1061,μονος,monos,nominative,sg,masculine,None,None,None,None,None,None,None,None,None,None,None
 22410,δέ,de/,urn:cts:greekLit:tlg0011.tlg002:1061,1061,δε,de,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 24906,μή,mh/,urn:cts:greekLit:tlg0011.tlg002:1061,1061,μη,mh,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:1061,1061,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 37660,ἐπί,e)pi/,urn:cts:greekLit:tlg0011.tlg002:1061,1061,επι,epi,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 72401,κέρδος,ke/rdos,urn:cts:greekLit:tlg0011.tlg002:1061,1061,κερδος,kerdos,nominative,sg,masculine,None,None,None,None,None,None,None,None,None,None,None
 48844,λέγω,le/gw,urn:cts:greekLit:tlg0011.tlg002:1061,1061,λεγω,legw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
@@ -5961,7 +5941,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 62833,μέρος,me/ros,urn:cts:greekLit:tlg0011.tlg002:1062,1062,μερος,meros,nominative,sg,masculine,None,None,None,None,None,None,None,None,None,None,None
 28986,ὡς,w(s,urn:cts:greekLit:tlg0011.tlg002:1063,1063,ως,ws,nominative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 24906,μή,mh/,urn:cts:greekLit:tlg0011.tlg002:1063,1063,μη,mh,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-0,̓,,urn:cts:greekLit:tlg0011.tlg002:1063,1063,,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 74453,ἐμπολάω,e)mpolw,urn:cts:greekLit:tlg0011.tlg002:1063,1063,εμπολαω,empolaw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 48157,οἶδα,oi)=da,urn:cts:greekLit:tlg0011.tlg002:1063,1063,οιδα,oida,nominative,sg,feminine,None,None,None,None,None,None,None,None,None,None,None
 13921,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:1063,1063,ο,o,None,None,None,None,None,None,None,None,None,None,None,None,None,None
@@ -6138,7 +6117,6 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,case_type,number,ge
 71081,δεινός,deino/s,urn:cts:greekLit:tlg0011.tlg002:1091,1091,δεινος,deinos,nominative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 92699,θεσπίζω,q)espi/zw,urn:cts:greekLit:tlg0011.tlg002:1091,1091,θεσπιζω,q)espizw,None,None,None,active,present,indicative,1st,None,None,None,None,None,None,None
 106065,ἐπίσταμαι,e)pi/stamai,urn:cts:greekLit:tlg0011.tlg002:1092,1092,επισταμαι,epistamai,nominative,pl,feminine,None,None,None,None,None,None,None,None,None,None,None
-0,??,,urn:cts:greekLit:tlg0011.tlg002:1092,1092,??,,None,None,None,None,None,None,None,None,None,None,None,None,None,None
 23331,ἐκ,e)k,urn:cts:greekLit:tlg0011.tlg002:1092,1092,εκ,ek,None,None,None,None,None,None,None,None,None,None,None,demonstrative,nominative,masculine
 67061,ὅστις,o(/stis,urn:cts:greekLit:tlg0011.tlg002:1092,1092,οστις,ostis,nominative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None
 74758,λευκός,leuko/s,urn:cts:greekLit:tlg0011.tlg002:1092,1092,λευκος,leukos,nominative,sg,neuter,None,None,None,None,None,None,None,None,None,None,None

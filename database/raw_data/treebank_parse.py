@@ -8,7 +8,7 @@ def xml_parse(file):
     tree = ET.parse(file)  
     root = tree.getroot()
 
-    PUNCTUATION = ['.', ',', '·', ';']
+    PUNCTUATION = ['.', ',', '·', ';', '̓,']
 
 
     wordList = []
@@ -61,18 +61,22 @@ def xml_parse(file):
                 prn_gender = prn_dict['gender']
                 prn_type = prn_dict['type']
                 
-            #get_definition(lemma)
-
             full_eng = grk_to_eng(lemma)
+
+            lemma_id = hash_word(full_eng)
             
-            row = {'lemma_id': hash_word(full_eng), 'lemma': lemma, 'full_eng': full_eng, 'urn': urn, 'line_number': line, 'normalized': normalized, 'eng_lemma': eng_lemma, 
+            
+            row = {'lemma_id': lemma_id, 'lemma': lemma, 'full_eng': full_eng, 'urn': urn, 'line_number': line, 'normalized': normalized, 'eng_lemma': eng_lemma, 
                    'case_type': ending, 'number': number, 'gender': gender, 
                     'voice': voice, 'tense': tense, 'mood': mood, 'person': person, 
                     'ppl_voice': ppl_voice, 'ppl_tense': ppl_tense, 'ppl_gender': ppl_gender, 'ppl_case': ppl_ending,
                       'prn_type': prn_type, 'prn_case': prn_ending, 'prn_gender': prn_gender}
-            wordList.append(row)
+            
+            if lemma_id != 0:
+                wordList.append(row)
 
     return wordList
+
 
 
 # Stack Overflow: https://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-normalize-in-a-python-unicode-string
