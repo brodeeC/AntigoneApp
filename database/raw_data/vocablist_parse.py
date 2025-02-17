@@ -53,22 +53,27 @@ def xml_parse(file):
     
 
 def check_dups(list):
+    count = 0
     for i in range(len(list)):
         first_row = list[i]
         for j in range(i+1, len(list)):
-            if list[i] == list[j]:
-                print(list[i])
-                print(list[j])
-                print('\n')
+            second_row = list[j]
+            if first_row['lemma_id'] == second_row['lemma_id'] and first_row['def_num'] == second_row['def_num']:
+                count+=1
+                print('Duplicate found: ', first_row['lemma_id'], first_row['def_num'])
+                second_row['def_num'] += 1#first_row['def_num']
+                break
+    print('Total duplicates: ', count)
 
 
 
 
 def main():
     vocab_list, def_list = xml_parse('database/raw_data/vocablist.xml')
-    check_dups(vocab_list)
+    #check_dups(def_list)
+    #check_dups(def_list)
     csv_write(vocab_list, 'vocabList')
-    csv_write(def_list, 'defList')
+    #csv_write(def_list, 'defList')
     
 
 

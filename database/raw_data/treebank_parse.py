@@ -105,7 +105,7 @@ def hash_word(eng_lemma):
     hash = 0
     for char in eng_lemma:
         idx = eng_lemma.index(char)
-        hash += (ord(char) * (ord(char)//2)) * idx
+        hash += (ord(char) * (ord(char)//(idx+1))) ** 2 
     return hash
 
 
