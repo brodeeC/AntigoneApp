@@ -14,7 +14,6 @@ def create_database(db_name="antigone.db"):
     # Create lemma_data table with composite primary key and foreign key
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS lemma_data (
-            word_num INTEGER PRIMARY KEY AUTOINCREMENT,
             lemma_id INTEGER,
             line_number INTEGER,
             lemma TEXT,
@@ -35,18 +34,19 @@ def create_database(db_name="antigone.db"):
             ppl_case TEXT,
             prn_type TEXT,
             prn_case TEXT,
-            prn_gender TEXT
+            prn_gender TEXT,
+            PRIMARY KEY (lemma_id, line_number)
         )
     ''')
 
     # Create lemma_definitions table first
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS lemma_definitions (
-            line_num INTEGER PRIMARY KEY AUTOINCREMENT,
             lemma_id INTEGER,
             def_num INTEGER,
             short_definition TEXT,
-            queries TEXT
+            queries TEXT,
+            PRIMARY KEY (lemma_id, def_num)
         )
     ''')
     
@@ -55,7 +55,8 @@ def create_database(db_name="antigone.db"):
         CREATE TABLE IF NOT EXISTS num_word (
             lemma_id INTEGER,
             headword TEXT,
-            PRIMARY KEY (lemma_id)
+            PRIMARY KEY (lemma_id),
+            FOREIGN KEY (lemma_id) REFERENCES lemma_definitions(lemma_id)
         )
     ''')
     

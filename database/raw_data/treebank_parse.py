@@ -64,16 +64,20 @@ def xml_parse(file):
             full_eng = grk_to_eng(lemma)
 
             lemma_id = hash_word(full_eng)
-            
-            
+
             row = {'lemma_id': lemma_id, 'lemma': lemma, 'full_eng': full_eng, 'urn': urn, 'line_number': line, 'normalized': normalized, 'eng_lemma': eng_lemma, 
                    'case_type': ending, 'number': number, 'gender': gender, 
                     'voice': voice, 'tense': tense, 'mood': mood, 'person': person, 
                     'ppl_voice': ppl_voice, 'ppl_tense': ppl_tense, 'ppl_gender': ppl_gender, 'ppl_case': ppl_ending,
                       'prn_type': prn_type, 'prn_case': prn_ending, 'prn_gender': prn_gender}
-            
+
             if lemma_id != 0:
-                wordList.append(row)
+                duplicate = False
+                for row_w in wordList:
+                    if row_w['lemma_id'] == lemma_id and row_w['line_number'] == line:
+                        duplicate = True
+                        break
+                if duplicate == False: wordList.append(row)               
 
     return wordList
 
@@ -100,7 +104,8 @@ def csv_write(wordList, fname):
 def hash_word(eng_lemma):
     hash = 0
     for char in eng_lemma:
-        hash += ord(char) ** 2
+        idx = eng_lemma.index(char)
+        hash += (ord(char) * (ord(char)//2)) * idx
     return hash
 
 
@@ -762,9 +767,6 @@ def is_pronoun(lemma):
                         if lemma in pronoun:
                             return {'type': type, 'number': number, 'gender': gender, 'case': ending}
     
-
-def get_definition(lemma):
-    print(lemma)
 
 
 def main():

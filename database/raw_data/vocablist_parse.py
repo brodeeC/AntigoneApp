@@ -35,10 +35,14 @@ def xml_parse(file):
         if present == False: 
             vocab_list.append({'lemma_id': lemma_id, 'headword': headword})
 
-        if prev == lemma_id:
-            def_counter += 1
-        else:
-            def_counter = 1
+        
+        
+        def_counter = 1
+        for row in def_list[-1:]:
+            if lemma_id == row['lemma_id']:
+                def_counter = row['def_num'] + def_counter
+                break
+
         prev = lemma_id
 
         
@@ -48,13 +52,22 @@ def xml_parse(file):
     return vocab_list, def_list
     
 
+def check_dups(list):
+    for i in range(len(list)):
+        first_row = list[i]
+        for j in range(i+1, len(list)):
+            if list[i] == list[j]:
+                print(list[i])
+                print(list[j])
+                print('\n')
 
 
 
 
 def main():
     vocab_list, def_list = xml_parse('database/raw_data/vocablist.xml')
-    #csv_write(vocab_list, 'vocabList')
+    check_dups(vocab_list)
+    csv_write(vocab_list, 'vocabList')
     csv_write(def_list, 'defList')
     
 
