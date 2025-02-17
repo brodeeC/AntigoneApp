@@ -47,6 +47,7 @@ def create_database(db_name="antigone.db"):
             short_definition TEXT,
             queries TEXT,
             PRIMARY KEY (lemma_id, def_num)
+            FOREIGN KEY (lemma_id) REFERENCES lemma_data(lemma_id)
         )
     ''')
 
