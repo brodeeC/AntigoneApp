@@ -49,30 +49,17 @@ def create_database(db_name="antigone.db"):
             PRIMARY KEY (lemma_id, def_num)
         )
     ''')
-    
-    # Create num_word table
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS num_word (
-            lemma_id INTEGER,
-            headword TEXT,
-            PRIMARY KEY (lemma_id),
-            FOREIGN KEY (lemma_id) REFERENCES lemma_definitions(lemma_id)
-        )
-    ''')
-    
+
     conn.commit()
     conn.close()
 
-def insert_data(wordList_csv, vocabList_csv, defList_csv, db_name="antigone.db"):
+def insert_data(wordList_csv, defList_csv, db_name="antigone.db"):
     conn = sqlite3.connect(db_name)
     
     # Load CSVs into DataFrames
     lemma_data_df = pd.read_csv(wordList_csv)
-    num_word_df = pd.read_csv(vocabList_csv)
     lemma_definitions_df = pd.read_csv(defList_csv)
-    
-    num_word_df.to_sql("num_word", conn, if_exists="append", index=False)
-    
+        
     lemma_data_df.to_sql("lemma_data", conn, if_exists="append", index=False)
 
     lemma_definitions_df.to_sql("lemma_definitions", conn, if_exists="append", index=False)
@@ -96,5 +83,5 @@ def check_duplicates(file_path):
 
 if __name__ == "__main__":
     create_database()
-    insert_data("database/csv/wordList.csv", "database/csv/vocabList.csv", "database/csv/defList.csv")
+    insert_data("database/csv/wordList.csv", "database/csv/defList.csv")
     print("Data import complete.")
