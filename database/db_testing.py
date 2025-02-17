@@ -29,7 +29,7 @@ def test_database_integrity(db_name="antigone.db"):
             SELECT short_definition FROM lemma_definitions WHERE lemma_id = 163312466;
         """
     }
-
+## Use LIKE in a query
     for description, query in queries.items():
         print(f"\n--- {description} ---")
         cursor.execute(query)
