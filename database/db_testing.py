@@ -25,8 +25,8 @@ def test_database_integrity(db_name="antigone.db"):
             SELECT * FROM lemma_data WHERE lemma IS NULL OR full_eng IS NULL;
         """,
         
-        "Find def of lemma_id = 163312466": """
-            SELECT short_definition FROM lemma_definitions WHERE lemma_id = 163312466;
+        "Find def of lemma_id = 120373959": """
+            SELECT short_definition FROM lemma_definitions WHERE lemma_id = 120373959;
         """
     }
 ## Use LIKE in a query
