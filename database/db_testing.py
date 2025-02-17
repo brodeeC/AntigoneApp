@@ -26,6 +26,10 @@ def test_database_integrity(db_name="antigone.db"):
         """,
         "Check for missing values in num_word": """
             SELECT * FROM num_word WHERE headword IS NULL OR lemma_id IS NULL;
+        """,
+
+        "Find def of lemma_id = 163312466": """
+            SELECT short_definition FROM lemma_definitions WHERE lemma_id = 163312466;
         """
     }
 
