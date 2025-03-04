@@ -8,7 +8,7 @@ def create_database(db_name="antigone.db"):
     # Drop tables if they exist
     cursor.execute('DROP TABLE IF EXISTS lemma_data')
     cursor.execute('DROP TABLE IF EXISTS lemma_definitions')
-    cursor.execute('DROP TABLE IF EXISTS num_word')
+    cursor.execute('DROP TABLE IF EXISTS full_text')
     
     
     # Create lemma_data table with composite primary key and foreign key
@@ -51,19 +51,39 @@ def create_database(db_name="antigone.db"):
         )
     ''')
 
+    # Create db for full text
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS full_text (
+            line_number INTEGER,
+            line_text TEXT,
+            speaker TEXT,
+            norm_speaker TEXT,
+            eng_speaker TEXT,
+            PRIMARY KEY (line_number)
+        )           
+
+    ''')
+
     conn.commit()
     conn.close()
 
-def insert_data(wordList_csv, defList_csv, db_name="antigone.db"):
+def insert_data(wordList_csv, defList_csv, lines_csv, db_name="antigone.db"):
     conn = sqlite3.connect(db_name)
     
     # Load CSVs into DataFrames
     lemma_data_df = pd.read_csv(wordList_csv)
     lemma_definitions_df = pd.read_csv(defList_csv)
+    full_text_df = pd.read_csv(lines_csv)
+
+    full_text_df["line_number"] = pd.to_numeric(full_text_df["line_number"], errors="coerce") 
+    full_text_df = full_text_df.dropna(subset=["line_number"])  
+    full_text_df["line_number"] = full_text_df["line_number"].astype(int)
         
     lemma_data_df.to_sql("lemma_data", conn, if_exists="append", index=False)
 
     lemma_definitions_df.to_sql("lemma_definitions", conn, if_exists="append", index=False)
+
+    full_text_df.to_sql("full_text", conn, if_exists="append", index=False)
     
     conn.commit()
     conn.close()
@@ -84,5 +104,5 @@ def check_duplicates(file_path):
 
 if __name__ == "__main__":
     create_database()
-    insert_data("database/csv/wordList.csv", "database/csv/defList.csv")
+    insert_data("database/csv/wordList.csv", "database/csv/defList.csv", "database/csv/lines.csv")
     print("Data import complete.")

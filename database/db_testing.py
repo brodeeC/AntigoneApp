@@ -27,6 +27,10 @@ def test_database_integrity(db_name="antigone.db"):
         
         "Find def of lemma_id = 120373959": """
             SELECT short_definition FROM lemma_definitions WHERE lemma_id = 120373959;
+        """,
+
+        "Get all lines numbers spoken by Kreon": """
+            SELECT line_number, line_text FROM full_text WHERE eng_speaker LIKE '%Kre%';
         """
     }
 ## Use LIKE in a query
