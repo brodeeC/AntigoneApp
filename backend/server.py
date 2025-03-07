@@ -19,8 +19,8 @@ def get_data(lineNum):
 
     # Check if any rows are returned
     if data:
-        row = data[0]  # Access the first row
-        # Decode the Unicode escape sequences
+        row = data[0]  # Access the row
+
         line_text = json.loads(f'"{row["line_text"]}"')
         speaker = json.loads(f'"{row["speaker"]}"')
         return json.dumps({
