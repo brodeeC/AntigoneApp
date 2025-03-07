@@ -10,8 +10,8 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-@app.route('/AntigoneApp/AntigoneApp/read/<lineNum>', methods=['GET'])
-def get_data(lineNum):
+@app.route('/AntigoneApp/AntigoneApp/oneLine/<lineNum>', methods=['GET'])
+def get_line(lineNum):
     conn = get_db_connection()
     query = f'SELECT line_text, speaker FROM full_text WHERE line_number={lineNum}'
     data = conn.execute(query).fetchall()
@@ -29,6 +29,25 @@ def get_data(lineNum):
         })
     else:
         return jsonify({"error": "No data found"}), 404
+    
+@app.route('/AntigoneApp/AntigoneApp/read/<page>', methods=['GET'])
+def get_page(page):
+    maxLine = page*11
+    minLine = ((page-1)*11) + 1
+
+    page_dict = {}
+
+    for line in range(minLine, maxLine):
+        data = get_line(line)
+        row = data[0]
+        line_text = json.loads(f'"{row["line_text"]}"')
+        speaker = json.loads(f'"{row["speaker"]}"')
+
+        page_dict.update({"lineNum":line, "line_text":line_text, "speaker":speaker})
+
+    return page_dict
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
