@@ -12,7 +12,7 @@ def get_db_connection():
 @app.route('/AntigoneApp/AntigoneApp/read/<lineNum>', methods=['GET'])
 def get_data(lineNum):
     conn = get_db_connection()
-    data = conn.execute('SELECT line_text, speaker FROM full_text WHERE line_number = lineNum').fetchall()
+    data = conn.execute('SELECT line_text, speaker FROM full_text WHERE line_number = {lineNum}').fetchall()
     conn.close()
     return jsonify([dict(row) for row in data])
 
