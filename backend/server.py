@@ -10,7 +10,7 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-@app.route('/AntigoneApp/AntigoneApp/oneLine/<lineNum>', methods=['GET'])
+#@app.route('/AntigoneApp/AntigoneApp/oneLine/<lineNum>', methods=['GET'])
 def get_line(lineNum):
     conn = get_db_connection()
     query = f'SELECT line_text, speaker FROM full_text WHERE line_number={lineNum}'
@@ -36,7 +36,7 @@ def get_page(page):
     minLine = ((page-1)*11) + 1
 
     page_dict = []
-    
+
     for line in range(minLine, maxLine):
         data = get_line(line)
         row = data[0]
