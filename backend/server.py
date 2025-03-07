@@ -20,13 +20,11 @@ def get_line(lineNum):
     if data:    
         row = data[0]  # Access the row
 
-        line_text = json.loads(f'"{row["line_text"]}"')
-        speaker = json.loads(f'"{row["speaker"]}"')
+        # Directly decode the line_text and speaker from Unicode escapes
+        line_text = row["line_text"].encode('utf-8').decode('unicode_escape')
+        speaker = row["speaker"].encode('utf-8').decode('unicode_escape')
 
-        decoded_line = line_text.encode('utf-8').decode('unicode_escape')
-        decoded_speaker = speaker.encode('utf-8').decode('unicode_escape')
-
-        return decoded_line, decoded_speaker
+        return line_text, speaker
     
     else:
         return None
@@ -39,12 +37,12 @@ def get_page(page):
     page_dict = []
 
     for line in range(minLine, maxLine):
-        text, speaker = get_line(line)
-        if text != None:
-          page_dict.append({"lineNum":line, "line_text":text, "speaker":speaker})
+        result = get_line(line)
+        if result:  # If result is not None
+            text, speaker = result
+            page_dict.append({"lineNum":line, "line_text":text, "speaker":speaker})
 
     return page_dict
-
 
 
 if __name__ == "__main__":
