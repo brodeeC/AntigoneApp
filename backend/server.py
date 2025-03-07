@@ -23,8 +23,8 @@ def get_line(lineNum):
         print(row['line_text'])
 
         # Directly decode the line_text and speaker from Unicode escapes
-        line_text = row["line_text"].encode('utf-8')
-        speaker = row["speaker"].encode('utf-8')
+        line_text = row["line_text"]
+        speaker = row["speaker"]
         
 
         return line_text, speaker
