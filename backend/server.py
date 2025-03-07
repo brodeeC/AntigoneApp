@@ -20,10 +20,12 @@ def get_line(lineNum):
     if data:    
         row = data[0]  # Access the row
 
+        print(row['line_text'])
+
         # Directly decode the line_text and speaker from Unicode escapes
         line_text = row["line_text"].encode('utf-8').decode('unicode_escape')
         speaker = row["speaker"].encode('utf-8').decode('unicode_escape')
-        print(line_text)
+        
 
         return line_text, speaker
     
