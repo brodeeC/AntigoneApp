@@ -30,7 +30,7 @@ def get_line(lineNum):
     else:
         return jsonify({"error": "No data found"}), 404
     
-@app.route('/AntigoneApp/AntigoneApp/read/<page>', methods=['GET'])
+@app.route('/AntigoneApp/AntigoneApp/read/<int:page>', methods=['GET'])
 def get_page(page):
     maxLine = page*11
     minLine = ((page-1)*11) + 1
