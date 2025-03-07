@@ -13,13 +13,19 @@ def get_db_connection():
 @app.route('/AntigoneApp/AntigoneApp/read/<lineNum>', methods=['GET'])
 def get_data(lineNum):
     conn = get_db_connection()
-    query = 'SELECT line_text, speaker FROM full_text WHERE line_number=' + lineNum
+    query = f'SELECT line_text, speaker FROM full_text WHERE line_number={lineNum}'
     data = conn.execute(query).fetchall()
     conn.close()
-    return json.dumps({
-        "line_text": json.loads(f'"{data["line_text"]}"'),
-        "speaker": json.loads(f'"{data["speaker"]}"')
-    })
+
+    # Check if any rows are returned
+    if data:
+        row = data[0]  # Access the first row
+        return json.dumps({
+            "line_text": row["line_text"],
+            "speaker": row["speaker"]
+        })
+    else:
+        return jsonify({"error": "No data found"}), 404
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
