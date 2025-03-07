@@ -9,10 +9,10 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-@app.route('/AntigoneApp/AntigoneApp/api/read/<lineNum>', methods=['GET'])
-def get_data():
+@app.route('/AntigoneApp/AntigoneApp/read/<lineNum>', methods=['GET'])
+def get_data(lineNum):
     conn = get_db_connection()
-    data = conn.execute('SELECT * FROM your_table').fetchall()
+    data = conn.execute('SELECT line_text, speaker FROM full_text WHERE line_number = lineNum').fetchall()
     conn.close()
     return jsonify([dict(row) for row in data])
 
