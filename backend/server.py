@@ -20,9 +20,12 @@ def get_data(lineNum):
     # Check if any rows are returned
     if data:
         row = data[0]  # Access the first row
+        # Decode the Unicode escape sequences
+        line_text = json.loads(f'"{row["line_text"]}"')
+        speaker = json.loads(f'"{row["speaker"]}"')
         return json.dumps({
-            "line_text": row["line_text"],
-            "speaker": row["speaker"]
+            "line_text": line_text,
+            "speaker": speaker
         })
     else:
         return jsonify({"error": "No data found"}), 404
