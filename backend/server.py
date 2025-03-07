@@ -19,16 +19,19 @@ def get_line(lineNum):
 
     # Check if any rows are returned
     if data:
-        row = data[0]  # Access the row
+        return data
+    
+    return None
+    #     row = data[0]  # Access the row
 
-        line_text = json.loads(f'"{row["line_text"]}"')
-        speaker = json.loads(f'"{row["speaker"]}"')
-        return json.dumps({
-            "line_text": line_text,
-            "speaker": speaker
-        })
-    else:
-        return jsonify({"error": "No data found"}), 404
+    #     line_text = json.loads(f'"{row["line_text"]}"')
+    #     speaker = json.loads(f'"{row["speaker"]}"')
+    #     return json.dumps({
+    #         "line_text": line_text,
+    #         "speaker": speaker
+    #     })
+    # else:
+    #     return jsonify({"error": "No data found"}), 404
     
 @app.route('/AntigoneApp/AntigoneApp/read/<int:page>', methods=['GET'])
 def get_page(page):
@@ -39,11 +42,12 @@ def get_page(page):
 
     for line in range(minLine, maxLine):
         data = get_line(line)
-        row = data[0]
-        line_text = json.loads(f'"{row["line_text"]}"')
-        speaker = json.loads(f'"{row["speaker"]}"')
+        if data:
+          row = data[0]
+          line_text = json.loads(f'"{row["line_text"]}"')
+          speaker = json.loads(f'"{row["speaker"]}"')
 
-        page_dict.append({"lineNum":line, "line_text":line_text, "speaker":speaker})
+          page_dict.append({"lineNum":line, "line_text":line_text, "speaker":speaker})
 
     return page_dict
 
