@@ -45,7 +45,7 @@ def get_page(page):
             text, speaker = result
             page_dict.append({"lineNum":line, "line_text":text, "speaker":speaker})
 
-    return page_dict
+    return jsonify(page_dict)
 
 
 if __name__ == "__main__":
