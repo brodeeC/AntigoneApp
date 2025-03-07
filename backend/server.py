@@ -1,3 +1,4 @@
+import json
 from flask import Flask, jsonify
 import sqlite3
 
@@ -15,7 +16,10 @@ def get_data(lineNum):
     query = 'SELECT line_text, speaker FROM full_text WHERE line_number=' + lineNum
     data = conn.execute(query).fetchall()
     conn.close()
-    return jsonify([dict(row) for row in data])
+    return json.dumps({
+        "line_text": json.loads(f'"{data["line_text"]}"'),
+        "speaker": json.loads(f'"{data["speaker"]}"')
+    })
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
