@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # Database connection
 def get_db_connection():
-    conn = sqlite3.connect('/database/antigone.db')  # Update path to your DB
+    conn = sqlite3.connect('backend/database/antigone.db')  # Update path to your DB
     conn.row_factory = sqlite3.Row
     return conn
 
