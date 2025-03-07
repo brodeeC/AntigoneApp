@@ -35,7 +35,7 @@ def get_page(page):
     maxLine = page*11
     minLine = ((page-1)*11) + 1
 
-    page_dict = {}
+    page_dict = []
 
     for line in range(minLine, maxLine):
         data = get_line(line)
@@ -43,7 +43,7 @@ def get_page(page):
         line_text = json.loads(f'"{row["line_text"]}"')
         speaker = json.loads(f'"{row["speaker"]}"')
 
-        page_dict.update({"lineNum":line, "line_text":line_text, "speaker":speaker})
+        page_dict.append({"lineNum":line, "line_text":line_text, "speaker":speaker})
 
     return page_dict
 
