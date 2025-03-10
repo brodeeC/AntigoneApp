@@ -32,7 +32,7 @@ def get_line(lineNum):
     else:
         return None
     
-@app.route('/AntigoneApp/AntigoneApp/read/<int:page>', methods=['GET'])
+@app.route('/AntigoneApp/read/<int:page>', methods=['GET'])
 def get_page(page):
     maxLine = (page*11) + 1
     minLine = ((page-1)*11) + 1
