@@ -59,8 +59,14 @@ def get_speaker(eng_speaker):
     else:
         return None
     
-@app.route('/AntigoneApp/lines/<int:startLine>/<int:endLine>', methods=['GET'])
+@app.route('/AntigoneApp/lines/<startLine>/<endLine>', methods=['GET'])
 def get_lines(startLine, endLine):
+    try:
+        startLine = int(startLine)
+        endLine = int(endLine)
+    except ValueError:
+        return jsonify({"error": "Invalid line number"}), 400
+    
     if startLine < MIN_LINE: startLine = MIN_LINE
     if endLine > MAX_LINE: endLine = MAX_LINE
     
