@@ -73,8 +73,7 @@ def get_lines(startLine, endLine):
             page_dict.append({"lineNum":line, "line_text":text, "speaker":speaker})
 
         else:
-            text, speaker = None
-            page_dict.append({"lineNum":line, "line_text":text, "speaker":speaker})
+            page_dict.append({"lineNum":line, "line_text":None, "speaker":None})
 
     return jsonify(page_dict)
 
