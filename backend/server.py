@@ -5,6 +5,7 @@ import unicodedata
 from backend.database.raw_data.treebank_parse import grk_to_eng, hash_word, strip_accents
 
 app = Flask(__name__)
+FIRST_PAGE = 1
 LAST_PAGE = 123
 MIN_LINE = 1
 MAX_LINE = 1353
@@ -99,6 +100,7 @@ def get_lines(startLine, endLine=None):
 @app.route('/AntigoneApp/read/<int:page>', methods=['GET'])
 def get_page(page):
     if page > LAST_PAGE: return []
+    if page < FIRST_PAGE: return []
 
     maxLine = (page*11)
     minLine = ((page-1)*11) + 1
