@@ -32,6 +32,7 @@ def test_database_integrity(db_name="antigone.db"):
         "Get all lines numbers spoken by Kreon": """
             SELECT line_number, line_text FROM full_text WHERE eng_speaker LIKE '%Kre%';
         """
+        
     }
 ## Use LIKE in a query
     for description, query in queries.items():

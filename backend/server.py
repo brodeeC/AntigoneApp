@@ -1,10 +1,14 @@
 import json
 from flask import Flask, jsonify
 import sqlite3
+import unicodedata
+from database.raw_data.treebank_parse import grk_to_eng, hash_word, strip_accents
 
 app = Flask(__name__)
+LAST_PAGE = 123
+MIN_LINE = 1
+MAX_LINE = 1353
 
-# Database connection
 def get_db_connection():
     conn = sqlite3.connect('backend/database/antigone.db')  # Update path to your DB
     conn.row_factory = sqlite3.Row
@@ -18,11 +22,8 @@ def get_line(lineNum):
 
     # Check if any rows are returned
     if data:    
-        row = data[0]  # Access the row
+        row = data[0]  
 
-        print(row['line_text'])
-
-        # Directly decode the line_text and speaker from Unicode escapes
         line_text = row["line_text"]
         speaker = row["speaker"]
         
@@ -32,20 +33,86 @@ def get_line(lineNum):
     else:
         return None
     
-@app.route('/AntigoneApp/read/<int:page>', methods=['GET'])
-def get_page(page):
-    maxLine = (page*11) + 1
-    minLine = ((page-1)*11) + 1
+def is_ancient_greek(word):
+    for char in word:
+        unicode_block = unicodedata.name(char, "").split()[0]
+        if unicode_block != "GREEK":
+            return False
+    return True
+    
+def get_speaker(eng_speaker):
+    conn = get_db_connection()
+    query = f'SELECT line_text, line_number FROM full_text WHERE eng_speaker LIKE %{eng_speaker}%'
+    data = conn.execute(query).fetchall()
+    conn.close()
 
+    # Check if any rows are returned
+    if data:    
+        row = data[0]  
+
+        line_text = row["line_text"]
+        lineNum = row["line_number"]
+        
+
+        return lineNum, line_text
+    
+    else:
+        return None
+    
+@app.route('/AntigoneApp/lines/<int:startLine>/<int:endLine>', methods=['GET'])
+def get_lines(startLine, endLine):
+    if startLine < MIN_LINE: startLine = MIN_LINE
+    if endLine > MAX_LINE: endLine = MAX_LINE
+    
     page_dict = []
 
-    for line in range(minLine, maxLine):
+    for line in range(startLine, endLine):
         result = get_line(line)
-        if result:  # If result is not None
+        if result:
             text, speaker = result
             page_dict.append({"lineNum":line, "line_text":text, "speaker":speaker})
 
+        else:
+            text, speaker = None
+            page_dict.append({"lineNum":line, "line_text":text, "speaker":speaker})
+
     return jsonify(page_dict)
+
+@app.route('/AntigoneApp/read/<int:page>', methods=['GET'])
+def get_page(page):
+    if page > LAST_PAGE: return []
+
+    maxLine = (page*11) + 1
+    minLine = ((page-1)*11) + 1
+
+    return get_lines(minLine, maxLine)
+
+### Route to get all of a speaker's lines, param lineNum to return the closest line/lines to that lineNum.
+@app.route('/AntigoneApp/speaker/<speaker>/', defaults={'linesNear':None})
+@app.route('/AntigoneApp/speaker/<speaker>/<int:linesNear>', methods=['GET'])
+def get_speaker_lines(speaker, linesNear=None):
+    if is_ancient_greek(speaker):
+        speaker = grk_to_eng(strip_accents(speaker))
+
+    result = get_speaker(speaker)
+
+    if not result: return []
+    
+    speaker_dict = []
+    lineNum, line_text = result
+
+    ## So far I'm thinking, first iterate over lineNear - 50 through linesNear + 50
+    # and see if speaker is present, return speaker_dict
+
+    ## Then if linesNear == None iterate over full result list and nest array's for 'blocks' of speaker lines
+    
+
+    
+    return []
+
+### Need routes for advanced searching, will have to make these as frontend develops to gauge needs
+### Make raw csv's downloadable?
+### 
 
 
 if __name__ == "__main__":
