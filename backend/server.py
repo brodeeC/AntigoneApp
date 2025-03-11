@@ -66,7 +66,7 @@ def get_lines(startLine, endLine):
     
     page_dict = []
 
-    for line in range(startLine, endLine):
+    for line in range(startLine, endLine+1):
         result = get_line(line)
         if result:
             text, speaker = result
