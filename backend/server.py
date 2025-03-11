@@ -65,13 +65,18 @@ def get_lines(startLine, endLine=None):
     try:
         if endLine == None:
           startLine = int(startLine)
+          if startLine < MIN_LINE: startLine = MIN_LINE
+
           result = get_line(startLine)
           if result:
               text, speaker = result
               return [{"lineNum":startLine, "line_text":text, "speaker":speaker}]
+          else: return []
+          
         else:
           startLine = int(startLine)
           endLine = int(endLine)
+
     except ValueError:
         return jsonify({"error": "Invalid line number"}), 400
     
