@@ -2,7 +2,7 @@ import json
 from flask import Flask, jsonify
 import sqlite3
 import unicodedata
-from database.raw_data.treebank_parse import grk_to_eng, hash_word, strip_accents
+from backend.database.raw_data.treebank_parse import grk_to_eng, hash_word, strip_accents
 
 app = Flask(__name__)
 LAST_PAGE = 123
