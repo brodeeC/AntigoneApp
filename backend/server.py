@@ -88,7 +88,7 @@ def get_page(page):
     if page > LAST_PAGE: return []
 
     maxLine = (page*11) + 1
-    minLine = ((page-1)*11) + 1
+    minLine = ((page-1)*11)
 
     return get_lines(minLine, maxLine)
 
