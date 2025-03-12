@@ -60,6 +60,45 @@ def get_speaker(eng_speaker):
     else:
         return None
 
+# Takes greek word -> english -> hash -> SQL query for definition  
+# Could use lemma from lemma_data table to get defs, may need to depending
+def get_word_defs(grk_word):
+    lemma_id = hash_word(grk_to_eng(grk_word))
+
+    conn = get_db_connection()
+    query = f'SELECT def_num, short_definition, queries  FROM lemma_definitions WHERE lemma_id={lemma_id}'
+    data = conn.execute(query).fetchall()
+    conn.close()
+
+    if data:
+        row = data[0]
+        def_num = row['def_num']
+        short_def = row['short_definition']
+        queries = row['queries']
+
+        return def_num, short_def, queries
+    else:
+        return None
+    
+# Takes greek word -> english -> hash -> SQL query for case details 
+def get_word_case(grk_word, lineNum):
+    lemma_id = hash_word(grk_to_eng(grk_word))
+
+    conn = get_db_connection()
+    query = f'SELECT def_num, short_definition, queries  FROM lemma_definitions WHERE lemma_id={lemma_id}'
+    data = conn.execute(query).fetchall()
+    conn.close()
+
+    if data:
+        row = data[0]
+        def_num = row['def_num']
+        short_def = row['short_definition']
+        queries = row['queries']
+
+        return def_num, short_def, queries
+    else:
+        return None
+
 @app.route('/AntigoneApp/lines/<startLine>', defaults={'endLine':None})   
 @app.route('/AntigoneApp/lines/<startLine>/<endLine>', methods=['GET'])
 def get_lines(startLine, endLine=None):
@@ -133,6 +172,17 @@ def get_speaker_lines(speaker, linesNear=None):
 ### Need routes for advanced searching, will have to make these as frontend develops to gauge needs
 ### Make raw csv's downloadable?
 ### 
+@app.route('/AntigoneApp/word-details/<word>', methods=['GET'])
+def get_word_details(word):
+    result_def = get_word_defs(word)
+    #get_word_case(word, lineNum) have to find a way to get lineNum inside of word-details
+
+    if not result_def: return []
+
+    def_num, short_def, queries = result_def
+
+    return jsonify([{'def_num': def_num, 'short_def': short_def, 'queries': queries}])
+
 
 
 if __name__ == "__main__":

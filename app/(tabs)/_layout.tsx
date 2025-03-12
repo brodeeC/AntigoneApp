@@ -22,8 +22,8 @@ export default function TabLayout() {
                         default: {},
                     }),
                 ],
-                tabBarActiveTintColor: dynamicStyles.activeTab.color, // Active tab text/icon color
-                tabBarInactiveTintColor: dynamicStyles.inactiveTab.color, // Inactive tab text/icon color
+                tabBarActiveTintColor: dynamicStyles.activeTab.color, 
+                tabBarInactiveTintColor: dynamicStyles.inactiveTab.color, 
             }}>
             <Tabs.Screen
                 name="index"

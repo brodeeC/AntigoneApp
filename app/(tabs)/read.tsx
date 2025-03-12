@@ -11,6 +11,7 @@ export default function Read() {
 
     return (
         <View style={[styles.container, dynamicStyles.container]}>
+          
             {/* Header */}
             <SafeAreaView>
                 <View style={styles.headerContainer}>

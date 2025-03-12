@@ -2,7 +2,8 @@ import { useLocalSearchParams } from "expo-router";
 import { Text, View } from "react-native";
 
 export default function WordDetails() {
-    const { word } = useLocalSearchParams(); // Get the line number from URL params
+    const { word } = useLocalSearchParams(); 
+    // For data need to also pass the lineNum to this page
 
     return (
         <View>

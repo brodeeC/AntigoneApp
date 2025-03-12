@@ -1,4 +1,4 @@
-import { Image, TouchableOpacity, ScrollView, View, Text, useColorScheme } from 'react-native';
+import { TouchableOpacity, ScrollView, View, Text, useColorScheme } from 'react-native';
 import { router, usePathname } from 'expo-router'; // Import usePathname
 import styles from '../app-styles/app.styles'; // Import styles
 

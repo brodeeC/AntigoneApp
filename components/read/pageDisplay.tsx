@@ -17,6 +17,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
     const [data, setData] = useState<Line[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    
     const router = useRouter();
     const isDarkMode = useColorScheme() === "dark"; // Detect light/dark mode
     const dynamicStyles = getDynamicStyles(isDarkMode);
