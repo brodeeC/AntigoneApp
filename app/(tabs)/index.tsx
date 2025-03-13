@@ -30,18 +30,7 @@ export default function HomeScreen() {
                 </TouchableOpacity>
             </View>
 
-            {/* Bottom Tabs */}
-            <View style={[styles.tabContainer, theme === 'dark' ? styles.darkTabContainer : styles.lightTabContainer]}>
-                <TouchableOpacity style={styles.tabButton} onPress={navigateToRead}>
-                    <Text style={[styles.tabText, pathname === '/read' ? styles.activeTabText : styles.inactiveTabText]}>Read</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tabButton} onPress={navigateToSearch}>
-                    <Text style={[styles.tabText, pathname === '/search' ? styles.activeTabText : styles.inactiveTabText]}>Search</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tabButton} onPress={navigateToFavs}>
-                    <Text style={[styles.tabText, pathname === '/favorites' ? styles.activeTabText : styles.inactiveTabText]}>Favorites</Text>
-                </TouchableOpacity>
-            </View>
+            
         </ScrollView>
     );
 }

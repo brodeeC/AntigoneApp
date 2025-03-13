@@ -7,7 +7,7 @@ export default function WordDetails() {
 
     return (
         <View>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Line {word}</Text>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Word: {word}</Text>
             <Text>Display details about this line here.</Text>
         </View>
     );
