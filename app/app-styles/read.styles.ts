@@ -38,8 +38,8 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderTopWidth: 1,
         position: "absolute", // Position absolutely
-        bottom: Platform.OS === "ios" ? 60 : 60, // Adjust for tab bar height
-        left: 0, // Stretch across the screen
+        bottom: Platform.OS === "ios" ? 60 : 5, // Adjust for tab bar height
+        left: 20, // Stretch across the screen
         right: 0, // Stretch across the screen
         backgroundColor: LIGHT_GRAY, // Light mode background
     },
