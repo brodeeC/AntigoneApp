@@ -21,20 +21,8 @@ def create_database(db_name="antigone.db"):
             urn TEXT,
             normalized TEXT,
             eng_lemma TEXT,
-            case_type TEXT,
-            number TEXT,
-            gender TEXT,
-            voice TEXT,
-            tense TEXT,
-            mood TEXT,
-            person TEXT,
-            ppl_voice TEXT,
-            ppl_tense TEXT,
-            ppl_gender TEXT,
-            ppl_case TEXT,
-            prn_type TEXT,
-            prn_case TEXT,
-            prn_gender TEXT,
+            form TEXT,
+            postag TEXT,
             PRIMARY KEY (lemma_id, line_number)
         )
     ''')
@@ -104,5 +92,5 @@ def check_duplicates(file_path):
 
 if __name__ == "__main__":
     create_database()
-    insert_data("database/csv/wordList.csv", "database/csv/defList.csv", "database/csv/lines.csv")
+    insert_data("backend/database/csv/wordList.csv", "backend/database/csv/defList.csv", "backend/database/csv/lines.csv")
     print("Data import complete.")

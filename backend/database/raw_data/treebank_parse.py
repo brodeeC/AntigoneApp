@@ -13,63 +13,22 @@ def xml_parse(file):
 
     wordList = []
     for elem in root.iter('word'): 
+        form = elem.get('form')
         lemma = elem.get('lemma')
         urn = elem.get('cite')
+        postag = elem.get('postag')
         if lemma not in PUNCTUATION and lemma != None:
             normalized = strip_accents(lemma)
             eng_lemma = grk_to_eng(normalized)
 
             line = urn.split(':')[-1]
-
-            ending = 'None'
-            number = 'None'
-            gender = 'None'
-            case_dict = noun_case(lemma)
-            if case_dict:
-                ending = case_dict['case']
-                number = case_dict['number']
-                gender = case_dict['gender']
-
-            verb_dict = verb_case(lemma)
-            voice = 'None'
-            tense = 'None'
-            mood = 'None'
-            person = 'None'
-            if verb_dict:
-                voice = verb_dict['voice']
-                tense = verb_dict['tense']
-                mood = verb_dict['mood']
-                person = verb_dict['person']
-
-            ppl_dict = ppl_case(lemma)
-            ppl_voice = 'None'
-            ppl_tense = 'None'
-            ppl_gender = 'None'
-            ppl_ending = 'None'
-            if ppl_dict:
-                ppl_voice = ppl_dict['voice']
-                ppl_tense = ppl_dict['tense']
-                ppl_gender = ppl_dict['gender']
-                ppl_ending = ppl_dict['case']
-
-            prn_dict = is_pronoun(lemma)
-            prn_type = 'None'
-            prn_ending = 'None'
-            prn_gender = 'None'
-            if prn_dict:
-                prn_ending = prn_dict['case']
-                prn_gender = prn_dict['gender']
-                prn_type = prn_dict['type']
                 
             full_eng = grk_to_eng(lemma)
 
             lemma_id = hash_word(full_eng)
 
-            row = {'lemma_id': lemma_id, 'lemma': lemma, 'full_eng': full_eng, 'urn': urn, 'line_number': line, 'normalized': normalized, 'eng_lemma': eng_lemma, 
-                   'case_type': ending, 'number': number, 'gender': gender, 
-                    'voice': voice, 'tense': tense, 'mood': mood, 'person': person, 
-                    'ppl_voice': ppl_voice, 'ppl_tense': ppl_tense, 'ppl_gender': ppl_gender, 'ppl_case': ppl_ending,
-                      'prn_type': prn_type, 'prn_case': prn_ending, 'prn_gender': prn_gender}
+            row = {'lemma_id': lemma_id, 'lemma': lemma, 'full_eng': full_eng, 'urn': urn, 'line_number': line,
+                    'normalized': normalized, 'eng_lemma': eng_lemma, 'form':form, 'postag':postag}
 
             if lemma_id != 0:
                 duplicate = False
@@ -90,7 +49,7 @@ def strip_accents(s):
 
 
 def csv_write(wordList, fname):
-    filepath = f"database/csv/{fname}.csv"
+    filepath = f"backend/database/csv/{fname}.csv"
     with open(filepath, 'w', encoding='utf-8', newline='') as csvfile:
         
         fieldnames = wordList[0].keys()
@@ -770,7 +729,7 @@ def is_pronoun(lemma):
 
 
 def main():
-    wordlist = xml_parse('database/raw_data/treebank.xml')
+    wordlist = xml_parse('backend/database/raw_data/treebank.xml')
 
     csv_write(wordlist, 'wordList')
 
