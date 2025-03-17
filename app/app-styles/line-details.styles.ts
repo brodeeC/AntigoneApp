@@ -41,11 +41,22 @@ export const styles = StyleSheet.create({
         flexWrap: "wrap",
     },
 
+    speakerContainer:{
+        flexDirection: "row",
+        flexWrap: "wrap",
+    },
+
     // Word Styling
     word: {
         fontSize: 18,
         color: MUTED_PURPLE,
         marginRight: 5,
+    },
+
+    wordsContainer:{
+        flexDirection: "row",
+        flexWrap: "wrap",
+        flex:1,
     },
 
     // Navigation Container

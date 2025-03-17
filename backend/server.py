@@ -62,42 +62,71 @@ def get_speaker(eng_speaker):
 
 # Takes greek word -> english -> hash -> SQL query for definition  
 # Could use lemma from lemma_data table to get defs, may need to depending
-def get_word_defs(grk_word):
-    lemma_id = hash_word(grk_to_eng(grk_word))
+def get_word_defs(lemma_id, form):
+    #lemma_id = hash_word(grk_to_eng(grk_word))
 
     conn = get_db_connection()
     query = f'SELECT def_num, short_definition, queries  FROM lemma_definitions WHERE lemma_id={lemma_id}'
     data = conn.execute(query).fetchall()
     conn.close()
 
-    if data:
-        row = data[0]
+    def_list = []
+
+    if not data: return def_list
+    for row in data:
         def_num = row['def_num']
         short_def = row['short_definition']
         queries = row['queries']
 
-        return def_num, short_def, queries
-    else:
-        return None
+        def_list.append({'def_num':def_num, 'short_def':short_def, 'queries':queries})
+
+    return def_list
+
+def parse_postag(postag):
+    i = 1
+    pos = []
+    prs = []
+    num = []
+    tense = []
+    mood = []
+    voice = []
+    gen = []
+    cas = []
+    deg = []
+    for char in postag:
+        # Part of speech
+        if i == 1:
+            None
+        # Person
+        elif i == 2:
+            None
+        # Number
+        elif i == 3:
+            None
+        # Tense
+        elif i == 4:
+            None
+        # Mood
+        elif i == 5:
+            None
+        # Voice
+        elif i == 6:
+            None
+        # Gender
+        elif i == 7:
+            None
+        # Case
+        elif i == 8:
+            None
+        # Degree
+        elif i == 9:
+            None
+        else:
+            break
+            
+
     
-# Takes greek word -> english -> hash -> SQL query for case details 
-def get_word_case(grk_word, lineNum):
-    lemma_id = hash_word(grk_to_eng(grk_word))
-
-    conn = get_db_connection()
-    query = f'SELECT def_num, short_definition, queries  FROM lemma_definitions WHERE lemma_id={lemma_id}'
-    data = conn.execute(query).fetchall()
-    conn.close()
-
-    if data:
-        row = data[0]
-        def_num = row['def_num']
-        short_def = row['short_definition']
-        queries = row['queries']
-
-        return def_num, short_def, queries
-    else:
-        return None
+    return None
 
 @app.route('/AntigoneApp/lines/<startLine>', defaults={'endLine':None})   
 @app.route('/AntigoneApp/lines/<startLine>/<endLine>', methods=['GET'])
@@ -174,16 +203,39 @@ def get_speaker_lines(speaker, linesNear=None):
 ### 
 @app.route('/AntigoneApp/word-details/<word>', methods=['GET'])
 def get_word_details(word):
-    result_def = get_word_defs(word)
-    #get_word_case(word, lineNum) have to find a way to get lineNum inside of word-details
+    conn = get_db_connection()
+    query = f'SELECT lemma_id, form, line_number, postag  FROM lemma_data WHERE lemma LIKE %{word}% or form LIKE %{word}%'
+    data = conn.execute(query).fetchall()
+    conn.close()
 
-    if not result_def: return []
+    if not data: return {}
 
-    def_num, short_def, queries = result_def
+    row_dict = {}
+    for row in data:
+        lemma_id = row['lemma_id']
+        form = row['form']
+        line_number = row['line_number']
+        postag = row['postag']
 
-    return jsonify([{'def_num': def_num, 'short_def': short_def, 'queries': queries}])
+        # Need to parse postag
+        
+        result_def = get_word_defs(lemma_id)
+        if not result_def: return []
 
+        this_row = {'form':form, 'line_number':line_number, 'postag':postag}
+        row_dict.update(this_row)
 
+        def_list = {}
+        for definition in result_def:
+            def_num = definition['def_num']
+            short_def = definition['short_def']
+            queries = definition['queries']
+            this_def = {'def_num':def_num, 'short_def':short_def, 'queries':queries}
+            def_list.update(this_def)
+
+        row_dict.update(def_list)
+
+    return jsonify(row_dict)
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

@@ -2,6 +2,7 @@ import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme } from "react-native";
 import { styles, getDynamicStyles } from "../app-styles/line-details.styles"; // Import styles
+import { MaterialIcons } from "@expo/vector-icons";
 
 interface LineData {
     lineNum: number;
@@ -66,14 +67,16 @@ export default function LineDetails() {
                     <Text style={[styles.lineNumber, dynamicStyles.lineNumber]}>
                         Line {data.lineNum}
                     </Text>
+                </View>
+
+                {/* Speaker Section */}
+                <View style={styles.speakerContainer}>
                     {data.speaker && (
-                        <Text style={[styles.speaker, dynamicStyles.speaker]}>
-                            {data.speaker}
+                        <Text style={[styles.lineNumber, dynamicStyles.lineNumber]}>
+                            { data.speaker }
                         </Text>
                     )}
                 </View>
-
-                {/* Line Text Section */}
                 <View style={styles.lineTextContainer}>
                     {data.line_text.split(" ").map((word, i) => (
                         <TouchableOpacity
@@ -93,9 +96,11 @@ export default function LineDetails() {
                         onPress={() => goToLine(currentLine - 1)}
                         disabled={currentLine === 1}
                     >
-                        <Text style={[styles.navButtonText, currentLine === 1 && styles.disabledNavButtonText]}>
-                            ← Previous
-                        </Text>
+                        <MaterialIcons
+                            name="arrow-back" // Sleek icon for "Previous"
+                            size={24}
+                            disabled={currentLine === 1}
+                        />
                     </TouchableOpacity>
 
                     {/* Forward Button */}
@@ -104,9 +109,11 @@ export default function LineDetails() {
                         onPress={() => goToLine(currentLine + 1)}
                         disabled={currentLine === 1353}
                     >
-                        <Text style={[styles.navButtonText, currentLine === 1353 && styles.disabledNavButtonText]}>
-                            Next →
-                        </Text>
+                        <MaterialIcons
+                            name="arrow-forward" // Sleek icon for "Next"
+                            size={24}
+                            disabled={currentLine === 1353}
+                        />
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
