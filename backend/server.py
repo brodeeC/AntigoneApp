@@ -83,20 +83,40 @@ def get_word_defs(lemma_id, form):
     return def_list
 
 def parse_postag(postag):
-    i = 1
-    pos = []
-    prs = []
-    num = []
-    tense = []
-    mood = []
-    voice = []
-    gen = []
-    cas = []
-    deg = []
-    for char in postag:
+    pos_dict = {"n": "noun", "v": "verb", "a": "adjective", "d": "adverb", "l": "article", "g": "particle",
+        "c": "conjunction", "r": "preposition", "p": "pronoun", "m": "numeral", "i": "interjection",
+        "u": "punctuation", "x": "not available"}
+    
+    person_dict = {"1": "first person", "2": "second person", "3": "third person"}
+    
+    number_dict = {"s": "singular", "p": "plural", "d": "dual", "-": "category does not apply"}
+    
+    tense_dict = {"p": "present", "i": "imperfect", "r": "perfect", "l": "pluperfect", "t": "future perfect", 
+        "f": "future", "a": "aorist"}
+    
+    mood_dict = {"i": "indicative", "s": "subjunctive", "o": "optative", "n": "infinitive", "m": "imperative",
+        "p": "participle"}
+    
+    voice_dict = {"a": "active", "p": "passive", "m": "middle", "e": "medio-passive"}
+
+    
+    gender_dict = {"m": "masculine", "f": "feminine", "n": "neuter"}
+
+    case_dict = {"n": "nominative", "g": "genitive", "d": "dative", "a": "accusative", "v": "vocative",
+        "l": "locative"}
+    
+    degree_dict = {"c": "comparative", "s": "superlative"}
+
+    full_arr = []
+    for i in range(1,10):
+        char = postag[i-1]
+        if char == '-':
+            full_arr.append(i)
+            continue
         # Part of speech
         if i == 1:
-            None
+            pos = pos_dict[char]
+            full_arr.append(pos)
         # Person
         elif i == 2:
             None
