@@ -230,6 +230,7 @@ def get_word_details(word):
     row_dict = {}
     for row in data:
         lemma_id = row['lemma_id']
+        lemma = row['lemma']
         form = row['form']
         line_number = row['line_number']
         postag = row['postag']
@@ -239,7 +240,7 @@ def get_word_details(word):
         result_def = get_word_defs(lemma_id)
         if not result_def: return []
 
-        this_row = {'form':form, 'line_number':line_number, 'postag':postag}
+        this_row = {'lemma':lemma, 'form':form, 'line_number':line_number, 'postag':postag}
         row_dict.update(this_row)
         row_dict.update({'case':case_list})
 
