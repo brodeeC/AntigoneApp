@@ -62,7 +62,7 @@ def get_speaker(eng_speaker):
 
 # Takes greek word -> english -> hash -> SQL query for definition  
 # Could use lemma from lemma_data table to get defs, may need to depending
-def get_word_defs(lemma_id, form):
+def get_word_defs(lemma_id):
     #lemma_id = hash_word(grk_to_eng(grk_word))
 
     conn = get_db_connection()
