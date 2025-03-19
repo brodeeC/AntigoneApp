@@ -221,7 +221,7 @@ def get_speaker_lines(speaker, linesNear=None):
 @app.route('/AntigoneApp/word-details/<word>', methods=['GET'])
 def get_word_details(word):
     conn = get_db_connection()
-    query = f"SELECT lemma_id, form, line_number, postag  FROM lemma_data WHERE lemma LIKE '%{word}%' or form LIKE '%{word}%'"
+    query = f"SELECT lemma_id, form, line_number, postag  FROM lemma_data WHERE lemma='{word}' or form='{word}'"
     data = conn.execute(query).fetchall()
     conn.close()
 
