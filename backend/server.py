@@ -107,43 +107,43 @@ def parse_postag(postag):
     
     degree_dict = {"c": "comparative", "s": "superlative"}
 
-    full_arr = []
+    full_arr = {}
     for i in range(1,10):
         char = postag[i-1]
         if char == '-':
-            full_arr.append(i)
+            full_arr.update({i:'-'})
             continue
         # Part of speech
         if i == 1:
-            full_arr.append(pos_dict[char])
+            full_arr.update({i:pos_dict[char]})
         # Person
         elif i == 2:
-            full_arr.append(person_dict[char])
+            full_arr.update({i:person_dict[char]})
         # Number
         elif i == 3:
-            full_arr.append(number_dict[char])
+            full_arr.update({i:number_dict[char]})
         # Tense
         elif i == 4:
-            full_arr.append(tense_dict[char])
+            full_arr.update({i:tense_dict[char]})
         # Mood
         elif i == 5:
-            full_arr.append(mood_dict[char])
+            full_arr.update({i:mood_dict[char]})
         # Voice
         elif i == 6:
-            full_arr.append(voice_dict[char])
+            full_arr.update({i:voice_dict[char]})
         # Gender
         elif i == 7:
-            full_arr.append(gender_dict[char])
+            full_arr.update({i:gender_dict[char]})
         # Case
         elif i == 8:
-            full_arr.append(case_dict[char])
+            full_arr.update({i:case_dict[char]})
         # Degree
         elif i == 9:
-            full_arr.append(degree_dict[char])
+            full_arr.update({i:degree_dict[char]})
         else:
             break
             
-    return jsonify(full_arr)
+    return full_arr
 
 @app.route('/AntigoneApp/lines/<startLine>', defaults={'endLine':None})   
 @app.route('/AntigoneApp/lines/<startLine>/<endLine>', methods=['GET'])
@@ -240,7 +240,7 @@ def get_word_details(word):
         if not result_def: return []
 
         this_row = {'form':form, 'line_number':line_number, 'postag':postag}
-        this_row.update(case_list)
+        this_row.update({'case':case_list})
         row_dict.update(this_row)
 
         def_list = {}
