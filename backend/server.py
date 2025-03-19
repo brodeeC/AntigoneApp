@@ -115,38 +115,35 @@ def parse_postag(postag):
             continue
         # Part of speech
         if i == 1:
-            pos = pos_dict[char]
-            full_arr.append(pos)
+            full_arr.append(pos_dict[char])
         # Person
         elif i == 2:
-            None
+            full_arr.append(person_dict[char])
         # Number
         elif i == 3:
-            None
+            full_arr.append(number_dict[char])
         # Tense
         elif i == 4:
-            None
+            full_arr.append(tense_dict[char])
         # Mood
         elif i == 5:
-            None
+            full_arr.append(mood_dict[char])
         # Voice
         elif i == 6:
-            None
+            full_arr.append(voice_dict[char])
         # Gender
         elif i == 7:
-            None
+            full_arr.append(gender_dict[char])
         # Case
         elif i == 8:
-            None
+            full_arr.append(case_dict[char])
         # Degree
         elif i == 9:
-            None
+            full_arr.append(degree_dict[char])
         else:
             break
             
-
-    
-    return None
+    return jsonify(full_arr)
 
 @app.route('/AntigoneApp/lines/<startLine>', defaults={'endLine':None})   
 @app.route('/AntigoneApp/lines/<startLine>/<endLine>', methods=['GET'])
@@ -237,12 +234,13 @@ def get_word_details(word):
         line_number = row['line_number']
         postag = row['postag']
 
-        # Need to parse postag
+        case_list = parse_postag(postag)
         
         result_def = get_word_defs(lemma_id)
         if not result_def: return []
 
         this_row = {'form':form, 'line_number':line_number, 'postag':postag}
+        this_row.update(case_list)
         row_dict.update(this_row)
 
         def_list = {}
