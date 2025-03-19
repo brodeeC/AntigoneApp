@@ -1,6 +1,6 @@
 import sqlite3
 
-def test_database_integrity(db_name="antigone.db"):
+def test_database_integrity(db_name='backend/database/antigone.db'):
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
     
@@ -33,7 +33,7 @@ def test_database_integrity(db_name="antigone.db"):
             SELECT line_number, line_text FROM full_text WHERE eng_speaker LIKE '%Kre%';
         """,
         "Word-details query":"""
-            SELECT lemma_id, form, line_number, postag  FROM lemma_data WHERE lemma='κοινός' or form='κοινός'
+            SELECT lemma_id, lemma, form, line_number, postag  FROM lemma_data WHERE lemma='κοινός' or form='κοινός'
         """
     }
 ## Use LIKE in a query

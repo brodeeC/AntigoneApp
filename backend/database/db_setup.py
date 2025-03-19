@@ -1,7 +1,7 @@
 import sqlite3
 import pandas as pd
 
-def create_database(db_name="antigone.db"):
+def create_database(db_name='backend/database/antigone.db'):
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
 
@@ -55,7 +55,7 @@ def create_database(db_name="antigone.db"):
     conn.commit()
     conn.close()
 
-def insert_data(wordList_csv, defList_csv, lines_csv, db_name="antigone.db"):
+def insert_data(wordList_csv, defList_csv, lines_csv, db_name='backend/database/antigone.db'):
     conn = sqlite3.connect(db_name)
     
     # Load CSVs into DataFrames
