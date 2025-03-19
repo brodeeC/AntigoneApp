@@ -41,9 +41,9 @@ def is_ancient_greek(word):
             return False
     return True
     
-def get_speaker(eng_speaker):
+def get_speaker(lineNum):
     conn = get_db_connection()
-    query = f'SELECT line_text, line_number FROM full_text WHERE eng_speaker LIKE %{eng_speaker}%'
+    query = f'SELECT speaker FROM full_text WHERE line_number={lineNum}'
     data = conn.execute(query).fetchall()
     conn.close()
 
@@ -51,11 +51,9 @@ def get_speaker(eng_speaker):
     if data:    
         row = data[0]  
 
-        line_text = row["line_text"]
-        lineNum = row["line_number"]
-        
+        speaker = row["speaker"]        
 
-        return lineNum, line_text
+        return speaker
     
     else:
         return None
@@ -235,12 +233,14 @@ def get_word_details(word):
         line_number = row['line_number']
         postag = row['postag']
 
+        speaker = get_speaker(line_number)
+
         case_list = parse_postag(postag)
         
         result_def = get_word_defs(lemma_id)
         if not result_def: return []
 
-        this_row = {'lemma_id':lemma_id, 'lemma':lemma, 'form':form, 'line_number':line_number, 'postag':postag}
+        this_row = {'lemma_id':lemma_id, 'lemma':lemma, 'form':form, 'line_number':line_number, 'postag':postag, 'speaker':speaker}
         row_dict.update(this_row)
         row_dict.update({'case':case_list})
 
@@ -255,6 +255,13 @@ def get_word_details(word):
         row_dict.update(def_list)
 
     return jsonify(row_dict)
+
+# Search api needs to identify if input is grk or eng,
+# If grk -> grk_to_eng() -> hash_word() to get lemma_id
+# Use full_eng, normalized, and lemma_id as search conditions
+# Or determine what the word is supposed to be and search with it
+# Will need to build this as frontend implementation grows, start with simple search that
+# Redirects to word-details then as it grows make it it's own page.
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
