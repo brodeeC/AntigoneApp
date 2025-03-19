@@ -225,7 +225,7 @@ def get_word_details(word):
 
     if not data: return {}
 
-    row_dict = {}
+    row_dict = []
     for row in data:
         lemma_id = row['lemma_id']
         lemma = row['lemma']
@@ -241,8 +241,8 @@ def get_word_details(word):
         if not result_def: return []
 
         this_row = {'lemma_id':lemma_id, 'lemma':lemma, 'form':form, 'line_number':line_number, 'postag':postag, 'speaker':speaker}
-        row_dict.update(this_row)
-        row_dict.update({'case':case_list})
+        row_dict.append(this_row)
+        row_dict.append({f'case{line_number}':case_list})
 
         def_list = {}
         for definition in result_def:
@@ -252,7 +252,7 @@ def get_word_details(word):
             this_def = {'def_num':def_num, 'short_def':short_def, 'queries':queries}
             def_list.update(this_def)
 
-        row_dict.update(def_list)
+        row_dict.append(def_list)
 
     return jsonify(row_dict)
 
