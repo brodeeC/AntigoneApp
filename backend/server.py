@@ -215,7 +215,8 @@ def get_speaker_lines(speaker, linesNear=None):
 
 ### Need routes for advanced searching, will have to make these as frontend develops to gauge needs
 ### Make raw csv's downloadable?
-### 
+
+# Would it be beneficial to send full_eng up with this data? I don't think it makes sense
 @app.route('/AntigoneApp/word-details/<word>', methods=['GET'])
 def get_word_details(word):
     conn = get_db_connection()
@@ -262,6 +263,8 @@ def get_word_details(word):
 # Or determine what the word is supposed to be and search with it
 # Will need to build this as frontend implementation grows, start with simple search that
 # Redirects to word-details then as it grows make it it's own page.
+
+# This may be frontend, but need to have something like I did with CarInfo typing into search bar.
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
