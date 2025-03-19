@@ -240,8 +240,8 @@ def get_word_details(word):
         if not result_def: return []
 
         this_row = {'form':form, 'line_number':line_number, 'postag':postag}
-        this_row.update({'case':case_list})
         row_dict.update(this_row)
+        row_dict.update({'case':case_list})
 
         def_list = {}
         for definition in result_def:
