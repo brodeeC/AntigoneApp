@@ -240,7 +240,7 @@ def get_word_details(word):
         result_def = get_word_defs(lemma_id)
         if not result_def: return []
 
-        this_row = {'lemma':lemma, 'form':form, 'line_number':line_number, 'postag':postag}
+        this_row = {'lemma_id':lemma_id, 'lemma':lemma, 'form':form, 'line_number':line_number, 'postag':postag}
         row_dict.update(this_row)
         row_dict.update({'case':case_list})
 
