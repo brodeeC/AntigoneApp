@@ -3,7 +3,12 @@ import { Text, View } from "react-native";
 
 export default function WordDetails() {
     const { word } = useLocalSearchParams(); 
-    // For data need to also pass the lineNum to this page
+    /**
+     * Will need a route for next and previous words
+     * - Passing lineNum to this page would be ideal to help <- ->
+     *
+     * Find a way to display the data, use containers for the different columns of data
+     * */ 
 
     return (
         <View>
