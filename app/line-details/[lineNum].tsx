@@ -116,6 +116,10 @@ export default function LineDetails() {
                         />
                     </TouchableOpacity>
                 </View>
+                {/**
+                 * Add <WordDisplay { word } /> here to allow the currently selected word to be displayed underneath
+                 * the arrows
+                 */}
             </SafeAreaView>
         </>
     );

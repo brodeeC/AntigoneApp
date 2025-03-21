@@ -79,8 +79,10 @@ export default function PageDisplay({ page }: PageDisplayProps) {
                                             onPress={() => router.push(`/word-details/${word}`)}
                                         >
                                             <Text style={[styles.word, dynamicStyles.word]}>{word} </Text>
-                                        </TouchableOpacity>
+                                        </TouchableOpacity>   
                                     ))}
+                                    {/** When click on word, display a little bit of details underneath
+                                    Also leave the word-details button as well, but change where it is. */}
                                 </Text>
                             </View>
                         </View>
