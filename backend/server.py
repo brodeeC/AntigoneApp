@@ -239,23 +239,28 @@ def get_word_details(word):
         case_list = parse_postag(postag)
         
         result_def = get_word_defs(lemma_id)
-        if not result_def: return []
 
         this_row = {'lemma_id':lemma_id, 'lemma':lemma, 'form':form, 'line_number':line_number, 'postag':postag, 'speaker':speaker}
         row_dict.append(this_row)
         row_dict.append({f'case{line_number}':case_list})
 
-        def_list = {}
-        for definition in result_def:
-            def_num = definition['def_num']
-            short_def = definition['short_def']
-            queries = definition['queries']
-            this_def = {'def_num':def_num, 'short_def':short_def, 'queries':queries}
-            def_list.update(this_def)
+        if result_def != [] and result_def not in row_dict:
+            row_dict = add_defs(row_dict, result_def)
 
-        row_dict.append(def_list)
 
     return jsonify(row_dict)
+
+def add_defs(data, result_def):
+    def_list = {}
+    for definition in result_def:
+        def_num = definition['def_num']
+        short_def = definition['short_def']
+        queries = definition['queries']
+        this_def = {'def_num':def_num, 'short_def':short_def, 'queries':queries}
+        def_list.update(this_def)
+
+    data.append(def_list)
+    return data
 
 # Search api needs to identify if input is grk or eng,
 # If grk -> grk_to_eng() -> hash_word() to get lemma_id
