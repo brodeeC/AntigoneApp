@@ -1,7 +1,8 @@
 import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, SafeAreaView, ScrollView, View, TouchableOpacity, useColorScheme } from "react-native";
-import { styles, getDynamicStyles } from "./read-styles/styles"; // Import styles
+import { styles, getDynamicStyles } from "./read-styles/styles";
+import WordDetails from "./wordDisplay"; // Import WordDetails
 
 type PageDisplayProps = {
     page: number;
@@ -17,9 +18,10 @@ export default function PageDisplay({ page }: PageDisplayProps) {
     const [data, setData] = useState<Line[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    
+    const [selectedWord, setSelectedWord] = useState<string | null>(null);
+
     const router = useRouter();
-    const isDarkMode = useColorScheme() === "dark"; // Detect light/dark mode
+    const isDarkMode = useColorScheme() === "dark";
     const dynamicStyles = getDynamicStyles(isDarkMode);
 
     useEffect(() => {
@@ -44,12 +46,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
     return (
         <SafeAreaView style={[styles.container, dynamicStyles.container]}>
             <Stack.Screen options={{ headerShown: false }} />
-
-            {/* ScrollView with padding to ensure content is fully visible */}
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.scrollViewContent} // Add padding to avoid cutoff
-            >
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
                 {data.map((line, index) => {
                     const prevSpeaker = index > 0 ? data[index - 1].speaker : null;
                     const showSpeaker = line.speaker && line.speaker !== prevSpeaker;
@@ -76,14 +73,24 @@ export default function PageDisplay({ page }: PageDisplayProps) {
                                     {line.line_text?.split(" ").map((word, i) => (
                                         <TouchableOpacity
                                             key={i}
-                                            onPress={() => router.push(`/word-details/${word}`)}
+                                            onPress={() => setSelectedWord(word === selectedWord ? null : word)}
                                         >
-                                            <Text style={[styles.word, dynamicStyles.word]}>{word} </Text>
-                                        </TouchableOpacity>   
+                                            <Text
+                                                style={[
+                                                    styles.word,
+                                                    dynamicStyles.word,
+                                                    selectedWord === word && { color: "#007AFF", fontWeight: "bold" }
+                                                ]}
+                                            >
+                                                {word}{" "}
+                                            </Text>
+                                        </TouchableOpacity>
                                     ))}
-                                    
                                 </Text>
-                            </View>
+                            </View>     
+                            {selectedWord && selectedWord === line.line_text?.split(" ").find(word => word === selectedWord) && (
+                                <WordDetails word={selectedWord} />
+                            )}                     
                         </View>
                     );
                 })}

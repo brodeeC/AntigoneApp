@@ -240,13 +240,16 @@ def get_word_details(word):
         
         result_def = get_word_defs(lemma_id)
 
-        this_row = {'lemma_id':lemma_id, 'lemma':lemma, 'form':form, 'line_number':line_number, 'postag':postag, 'speaker':speaker}
-        row_dict.append(this_row)
-        row_dict.append({f'case{line_number}':case_list})
+        this_row = []
 
+        this_row.append({'lemma_id':lemma_id, 'lemma':lemma, 'form':form, 'line_number':line_number, 'postag':postag, 'speaker':speaker})
+        
         if result_def != []:
-            row_dict = add_defs(row_dict, result_def)
+            this_row = add_defs(this_row, result_def)
 
+        this_row.append({f'case{line_number}':case_list})
+
+        row_dict.append(this_row)
 
     return jsonify(row_dict)
 
@@ -260,7 +263,7 @@ def add_defs(data, result_def):
         def_list.update(this_def)
 
     if def_list not in data: data.append(def_list)
-    
+
     return data
 
 # Search api needs to identify if input is grk or eng,

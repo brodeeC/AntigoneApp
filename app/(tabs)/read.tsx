@@ -15,7 +15,7 @@ export default function Read() {
             {/* Header */}
             <SafeAreaView>
                 <View style={styles.headerContainer}>
-                    <Text style={[styles.header, dynamicStyles.header]}>Antigone - A Tragedy by Sophocles</Text>
+                    <Text style={[styles.header, dynamicStyles.header]}>Sophocles, Antigone</Text>
                 </View>
             </SafeAreaView>
 
