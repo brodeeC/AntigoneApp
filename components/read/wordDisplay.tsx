@@ -57,7 +57,7 @@ export default function WordDetails({ word }: WordDetailsProps) {
                 <Text style={dynamicStyles.wordDetailsLabel}>Case Information:</Text>
                 {wordData[0][2].case && (
                     <View>
-                        {Object.entries(wordData.case as CaseInfo).map(([key, value], idx) => (
+                        {Object.entries(wordData[0][2].case as CaseInfo).map(([key, value], idx) => (
                             <Text key={idx} style={dynamicStyles.wordDetailsText}>
                                 {key}: {value}
                             </Text>
@@ -69,23 +69,28 @@ export default function WordDetails({ word }: WordDetailsProps) {
             {/* Definitions */}
             <View style={dynamicStyles.definitionsContainer}>
                 <Text style={dynamicStyles.wordDetailsLabel}>Definitions:</Text>
-                {wordData[0][1].definitions?.map((def: any, idx: number) => (
-                    <View key={idx} style={dynamicStyles.definitionContainer}>
-                        <Text style={dynamicStyles.definitionText}>{def.short_def}</Text>
-                        <Text style={dynamicStyles.definitionText}>
-                            <Text style={dynamicStyles.definitionLabel}>Sources: </Text>
-                            {def.queries.map((query: any, qIdx: number) => (
-                                <Text key={qIdx}>
-                                    <TouchableOpacity onPress={() => Linking.openURL(query.url)}>
-                                        <Text style={dynamicStyles.linkText}>{query.name}</Text>
-                                    </TouchableOpacity>
-                                    {qIdx < def.queries.length - 1 ? ", " : ""}
+                {wordData[0][1].definitions && Array.isArray(wordData[0][1].definitions) && (
+                    <View>
+                        {wordData[0][1].definitions.length === 1 ? (
+                            // If there's only one definition, show it directly
+                            <View key={0} style={dynamicStyles.definitionContainer}>
+                                <Text style={dynamicStyles.definitionText}>
+                                    {wordData[0][1].definitions[0].short_def}
                                 </Text>
-                            ))}
-                        </Text>
+                            </View>
+                        ) : (
+                            // If there are multiple definitions, map through them
+                            wordData[0][1].definitions.map((def: any, idx: number) => (
+                                <View key={idx} style={dynamicStyles.definitionContainer}>
+                                    <Text style={dynamicStyles.definitionText}>{def.short_def}</Text>
+                                </View>
+                            ))
+                        )}
                     </View>
-                ))}
+                )}
             </View>
+
+
 
             {/* Button to navigate to more details */}
             <TouchableOpacity
