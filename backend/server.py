@@ -244,7 +244,7 @@ def get_word_details(word):
         row_dict.append(this_row)
         row_dict.append({f'case{line_number}':case_list})
 
-        if result_def != [] and result_def not in row_dict:
+        if result_def != []:
             row_dict = add_defs(row_dict, result_def)
 
 
@@ -259,7 +259,8 @@ def add_defs(data, result_def):
         this_def = {'def_num':def_num, 'short_def':short_def, 'queries':queries}
         def_list.update(this_def)
 
-    data.append(def_list)
+    if def_list not in data: data.append(def_list)
+    
     return data
 
 # Search api needs to identify if input is grk or eng,
