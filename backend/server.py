@@ -247,7 +247,7 @@ def get_word_details(word):
         if result_def != []:
             this_row = add_defs(this_row, result_def)
 
-        this_row.append({f'case{line_number}':case_list})
+        this_row.append({'case':case_list})
 
         row_dict.append(this_row)
 
@@ -262,7 +262,7 @@ def add_defs(data, result_def):
         this_def = {'def_num':def_num, 'short_def':short_def, 'queries':queries}
         def_list.update(this_def)
 
-    if def_list not in data: data.append(def_list)
+    if def_list not in data: data.append({'definitions': def_list})
 
     return data
 

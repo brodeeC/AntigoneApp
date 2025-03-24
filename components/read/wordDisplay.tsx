@@ -40,23 +40,22 @@ export default function WordDetails({ word }: WordDetailsProps) {
     if (error) return <Text style={dynamicStyles.errorText}>{error}</Text>;
     if (!wordData) return null;
 
-    console.log(wordData[1])
     return (
         <View style={dynamicStyles.wordDetailsContainer}>
-            <Text style={dynamicStyles.wordDetailsTitle}>{wordData.lemma}</Text>
+            <Text style={dynamicStyles.wordDetailsTitle}>{wordData[0][0].lemma}</Text>
             <Text style={dynamicStyles.wordDetailsText}>
                 <Text style={dynamicStyles.wordDetailsLabel}>Speaker: </Text>
-                {wordData.speaker}
+                {wordData[0][0].speaker}
             </Text>
             <Text style={dynamicStyles.wordDetailsText}>
                 <Text style={dynamicStyles.wordDetailsLabel}>Word: </Text>
-                {wordData.form}
+                {wordData[0][0].form}
             </Text>
 
             {/* Case information */}
             <View style={dynamicStyles.caseContainer}>
                 <Text style={dynamicStyles.wordDetailsLabel}>Case Information:</Text>
-                {wordData.case && (
+                {wordData[0][2].case && (
                     <View>
                         {Object.entries(wordData.case as CaseInfo).map(([key, value], idx) => (
                             <Text key={idx} style={dynamicStyles.wordDetailsText}>
@@ -70,7 +69,7 @@ export default function WordDetails({ word }: WordDetailsProps) {
             {/* Definitions */}
             <View style={dynamicStyles.definitionsContainer}>
                 <Text style={dynamicStyles.wordDetailsLabel}>Definitions:</Text>
-                {wordData.definitions?.map((def: any, idx: number) => (
+                {wordData[0][1].definitions?.map((def: any, idx: number) => (
                     <View key={idx} style={dynamicStyles.definitionContainer}>
                         <Text style={dynamicStyles.definitionText}>{def.short_def}</Text>
                         <Text style={dynamicStyles.definitionText}>
