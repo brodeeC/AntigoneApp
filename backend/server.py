@@ -229,8 +229,8 @@ def get_speaker_lines(speaker, linesNear=None):
 @app.route('/AntigoneApp/word-details/<word>', methods=['GET'])
 def get_word_details(word):
     conn = get_db_connection()
-    norm = strip_accents(word)
-    if (len(norm) > 2): norm[:-1]
+    if (len(word) > 2): norm = word[:-1]
+    norm = strip_accents(norm)
     query = f"SELECT lemma_id, lemma, form, line_number, postag  FROM lemma_data WHERE lemma='{word}' or form='{word}' or normalized LIKE '{norm}%' or norm_form LIKE '{norm}%'"
     data = conn.execute(query).fetchall()
     conn.close()

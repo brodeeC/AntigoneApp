@@ -5,6 +5,8 @@ const LIGHT_GRAY = "#F9F9F9"; // Light gray for light mode backgrounds
 const DARK_GRAY = "#1C1C1E"; // Dark gray for dark mode backgrounds
 const WHITE = "#FFFFFF"; // White for text in dark mode
 const DARK_TEXT = "#333333"; // Dark gray for text in light mode
+const LIGHT_BLUE = "#1E88E5"; // Vibrant blue for words
+const DARK_BLUE = "#64B5F6"; // Lighter blue for dark mode words
 
 export default StyleSheet.create({
     // Container
@@ -32,7 +34,7 @@ export default StyleSheet.create({
         padding: 15,
         borderRadius: 12,
         alignItems: 'center',
-        backgroundColor: PRIMARY_COLOR,
+        backgroundColor: DARK_BLUE,
         shadowColor: '#000',
         shadowOpacity: 0.15,
         shadowRadius: 5,

@@ -5,6 +5,7 @@ const PRIMARY_COLOR = "#6A0DAD"; // Deep purple (main accent)
 const LIGHT_BLUE = "#1E88E5"; // Vibrant blue for words
 const DARK_BLUE = "#64B5F6"; // Lighter blue for dark mode words
 
+
 // Background & Text Colors
 const LIGHT_GRAY = "#F9F9F9"; // Light mode background
 const DARK_GRAY = "#1C1C1E"; // Dark mode background
@@ -57,7 +58,7 @@ export const styles = StyleSheet.create({
     arrowButton: {
         padding: 12,
         borderRadius: 8,
-        backgroundColor: PRIMARY_COLOR,
+        backgroundColor: LIGHT_BLUE,
         shadowColor: "#000",
         shadowOpacity: 0.2,
         shadowRadius: 4,
@@ -65,7 +66,7 @@ export const styles = StyleSheet.create({
         elevation: 3, // Android shadow
     },
     disabledArrowButton: {
-        backgroundColor: DISABLED_COLOR,
+        backgroundColor: DARK_BLUE,
     },
 
     // Line & Word Styling

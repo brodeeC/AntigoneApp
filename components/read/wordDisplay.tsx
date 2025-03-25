@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, TouchableOpacity, useColorScheme, Linking } from "react-native";
+import { View, Text, ActivityIndicator, TouchableOpacity, useColorScheme } from "react-native";
 import { getDynamicStyles } from "./read-styles/styles";
 import { router } from "expo-router";
 
@@ -36,34 +36,46 @@ export default function WordDetails({ word }: WordDetailsProps) {
         fetchWordDetails();
     }, [word]);
 
+    // Handling loading, error, or no data
     if (loading) return <ActivityIndicator size="small" color="#007AFF" />;
     if (error) return <Text style={dynamicStyles.errorText}>{error}</Text>;
-    if (!wordData) return null;
+    if (!wordData) return <Text style={dynamicStyles.errorText}>Data Unavailable</Text>;
+    console.log(wordData)
+
+    const lemma = wordData[0][0]?.lemma;
+    const form = wordData[0][0]?.form;
+    const caseInfo = wordData[0][2]?.case;
+    const definitions = wordData[0][1]?.definitions;
 
     return (
         <View style={dynamicStyles.wordDetailsContainer}>
-            <Text style={dynamicStyles.wordDetailsTitle}>{wordData[0][0].lemma}</Text>
+            {/* Lemma */}
+            <Text style={dynamicStyles.wordDetailsTitle}>
+                {lemma || "Word data not found"}
+            </Text>
             
+            {/* Form */}
             <Text style={dynamicStyles.wordDetailsLabel}>
-                {wordData[0][0].form}
+                {form || "Form data unavailable"}
             </Text>
 
-            {/* Case information */}
+            {/* Case Information */}
             <View style={dynamicStyles.caseContainer}>
-                {wordData[0][2].case && (
-                    <View>
-                        <Text style={dynamicStyles.wordDetailsText}>
-                        {Object.entries(wordData[0][2].case as CaseInfo)
+                {caseInfo ? (
+                    <Text style={dynamicStyles.wordDetailsText}>
+                        {Object.entries(caseInfo as CaseInfo)
                             .map(([key, value]) => (value !== '-' ? `${value}. ` : ''))
                             .join('')}
-                        </Text>
-                  </View>
+                    </Text>
+                ) : (
+                    <Text style={dynamicStyles.wordDetailsText}>Morphological data not found</Text>
                 )}
             </View>
 
+            {/* Definitions */}
             <View style={dynamicStyles.definitionsContainer}>
-                {Array.isArray(wordData[0][1]?.definitions) && wordData[0][1].definitions.length > 0 ? (
-                    wordData[0][1].definitions.slice(0, 3).map((def: any, idx: number) => (
+                {Array.isArray(definitions) && definitions.length > 0 ? (
+                    definitions.slice(0, 3).map((def: any, idx: number) => (
                         def.short_def !== "[unavailable]" && (
                             <View key={idx} style={dynamicStyles.definitionContainer}>
                                 <Text style={dynamicStyles.definitionText}>
@@ -73,7 +85,7 @@ export default function WordDetails({ word }: WordDetailsProps) {
                         )
                     ))
                 ) : (
-                    <Text style={dynamicStyles.definitionText}>No definitions found.</Text>
+                    <Text style={dynamicStyles.definitionText}>Definitions not found</Text>
                 )}
             </View>
 

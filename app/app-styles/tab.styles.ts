@@ -5,6 +5,8 @@ const LIGHT_GRAY = '#F9F9F9'; // Light gray for light mode backgrounds
 const DARK_GRAY = '#1C1C1E'; // Dark gray for dark mode backgrounds
 const WHITE = '#FFFFFF'; // White for text in dark mode
 const DARK_TEXT = '#333333'; // Dark gray for text in light mode
+const LIGHT_BLUE = "#1E88E5"; // Vibrant blue for words
+const DARK_BLUE = "#64B5F6"; // Lighter blue for dark mode words
 
 // Base styles (shared between light and dark modes)
 export const styles = StyleSheet.create({
@@ -23,10 +25,10 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             borderColor: isDarkMode ? '#3A3A3C' : '#E0E0E0', // Border color
         },
         activeTab: {
-            color: PRIMARY_COLOR, // Active tab text/icon color
+            color: LIGHT_BLUE, // Active tab text/icon color
         },
         inactiveTab: {
-            color: isDarkMode ? '#A0A0A0' : DARK_TEXT, // Inactive tab text/icon color
+            color: '#A0A0A0', // Inactive tab text/icon color
         },
     });
 };
