@@ -19,6 +19,7 @@ def xml_parse(file):
         postag = elem.get('postag')
         if lemma not in PUNCTUATION and lemma != None:
             normalized = strip_accents(lemma)
+            norm_form = strip_accents(form)
             eng_lemma = grk_to_eng(normalized)
 
             line = urn.split(':')[-1]
@@ -28,7 +29,7 @@ def xml_parse(file):
             lemma_id = hash_word(full_eng)
 
             row = {'lemma_id': lemma_id, 'lemma': lemma, 'full_eng': full_eng, 'urn': urn, 'line_number': line,
-                    'normalized': normalized, 'eng_lemma': eng_lemma, 'form':form, 'postag':postag}
+                    'normalized': normalized, 'eng_lemma': eng_lemma, 'form':form, 'norm_form':norm_form, 'postag':postag}
 
             if lemma_id != 0:
                 duplicate = False
