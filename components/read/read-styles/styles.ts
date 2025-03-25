@@ -121,6 +121,12 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             shadowRadius: 4,
             elevation: 3,
         },
+        highlightedWord: {
+            backgroundColor: "#64B5F6", // Darker blue highlight
+            borderRadius: 5,
+            padding: 2,
+        },
+        
 
         // Word Details Title
         wordDetailsTitle: {

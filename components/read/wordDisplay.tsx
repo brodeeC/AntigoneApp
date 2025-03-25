@@ -23,7 +23,6 @@ export default function WordDetails({ word }: WordDetailsProps) {
             setError(null);
             try {
                 const response = await fetch(`http://brodeeclontz.com/AntigoneApp/word-details/${word}`);
-                console.log(response)
                 if (!response.ok) throw new Error("Failed to load word details");
                 const json = await response.json();
                 setWordData(json);
@@ -64,7 +63,7 @@ export default function WordDetails({ word }: WordDetailsProps) {
 
             <View style={dynamicStyles.definitionsContainer}>
                 {Array.isArray(wordData[0][1]?.definitions) && wordData[0][1].definitions.length > 0 ? (
-                    wordData[0][1].definitions.map((def: any, idx: number) => (
+                    wordData[0][1].definitions.slice(0, 3).map((def: any, idx: number) => (
                         def.short_def !== "[unavailable]" && (
                             <View key={idx} style={dynamicStyles.definitionContainer}>
                                 <Text style={dynamicStyles.definitionText}>
@@ -77,10 +76,6 @@ export default function WordDetails({ word }: WordDetailsProps) {
                     <Text style={dynamicStyles.definitionText}>No definitions found.</Text>
                 )}
             </View>
-
-
-
-
 
             {/* Button to navigate to more details */}
             <TouchableOpacity

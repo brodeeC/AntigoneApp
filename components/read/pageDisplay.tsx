@@ -14,11 +14,18 @@ interface Line {
     speaker: string | null;
 }
 
+// Track both word, lineNum, and index
+type SelectedWordType = {
+    word: string;
+    lineNum: number;
+    index: number;
+} | null;
+
 export default function PageDisplay({ page }: PageDisplayProps) {
     const [data, setData] = useState<Line[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [selectedWord, setSelectedWord] = useState<string | null>(null);
+    const [selectedWord, setSelectedWord] = useState<SelectedWordType>(null);
 
     const router = useRouter();
     const isDarkMode = useColorScheme() === "dark";
@@ -47,8 +54,8 @@ export default function PageDisplay({ page }: PageDisplayProps) {
         <SafeAreaView style={[styles.container, dynamicStyles.container]}>
             <Stack.Screen options={{ headerShown: false }} />
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
-                {data.map((line, index) => {
-                    const prevSpeaker = index > 0 ? data[index - 1].speaker : null;
+                {data.map((line, lineIndex) => {
+                    const prevSpeaker = lineIndex > 0 ? data[lineIndex - 1].speaker : null;
                     const showSpeaker = line.speaker && line.speaker !== prevSpeaker;
 
                     return (
@@ -70,27 +77,40 @@ export default function PageDisplay({ page }: PageDisplayProps) {
                                     </Text>
                                 </TouchableOpacity>
                                 <Text style={[styles.lineText, dynamicStyles.lineText]}>
-                                    {line.line_text?.split(" ").map((word, i) => (
-                                        <TouchableOpacity
-                                            key={i}
-                                            onPress={() => setSelectedWord(word === selectedWord ? null : word)}
-                                        >
-                                            <Text
-                                                style={[
-                                                    styles.word,
-                                                    dynamicStyles.word,
-                                                    selectedWord === word && { color: "#007AFF", fontWeight: "bold" }
-                                                ]}
+                                    {line.line_text?.split(" ").map((word, wordIndex) => {
+                                        const isSelected =
+                                            selectedWord?.word === word &&
+                                            selectedWord?.lineNum === line.lineNum &&
+                                            selectedWord?.index === wordIndex;
+
+                                        return (
+                                            <TouchableOpacity
+                                                key={`${line.lineNum}-${wordIndex}`}
+                                                onPress={() =>
+                                                    setSelectedWord(
+                                                        isSelected ? null : { word, lineNum: line.lineNum, index: wordIndex }
+                                                    )
+                                                }
                                             >
-                                                {word}{" "}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    ))}
+                                                <Text
+                                                    style={[
+                                                        styles.word,
+                                                        dynamicStyles.word,
+                                                        isSelected && { color: "#007AFF", fontWeight: "bold" }
+                                                    ]}
+                                                >
+                                                    {word}{" "}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        );
+                                    })}
                                 </Text>
-                            </View>     
-                            {selectedWord && selectedWord === line.line_text?.split(" ").find(word => word === selectedWord) && (
-                                <WordDetails word={selectedWord} />
-                            )}                     
+                            </View>
+                            {selectedWord &&
+                                selectedWord.lineNum === line.lineNum &&
+                                selectedWord.word === line.line_text?.split(" ")[selectedWord.index] && (
+                                    <WordDetails word={selectedWord.word} />
+                                )}
                         </View>
                     );
                 })}
