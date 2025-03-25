@@ -1,10 +1,9 @@
 import { StyleSheet, Platform } from "react-native";
 
 // Primary Colors
-const PRIMARY_COLOR = "#6A0DAD"; // Deep purple (main accent)
-const LIGHT_BLUE = "#1E88E5"; // Vibrant blue for words
-const DARK_BLUE = "#64B5F6"; // Lighter blue for dark mode words
-
+const PRIMARY_COLOR = "#1E88E5"; // Using your bookmark blue
+const LIGHT_BLUE = "#1E88E5"; // Now same as primary
+const DARK_BLUE = "#64B5F6"; // Lighter blue for dark mode
 
 // Background & Text Colors
 const LIGHT_GRAY = "#F9F9F9"; // Light mode background
@@ -14,59 +13,76 @@ const DARK_TEXT = "#333333"; // Dark gray for text in light mode
 const MUTED_GRAY = "#888888"; // Muted gray for line numbers
 const DISABLED_COLOR = "#A0A0A0"; // Gray for disabled state
 
+
 // Shared Base Styles
 export const styles = StyleSheet.create({
     // Main Container
     container: {
         flex: 1,
-        padding: 20,
+        padding: Platform.select({
+            ios: 24,
+            android: 20
+        }),
+        paddingBottom: Platform.select({
+            ios: 100, // Extra space at bottom for iOS
+            android: 80
+        }),
     },
 
-    // Header
+    // Header - Perfectly centered
     headerContainer: {
         alignItems: "center",
+        justifyContent: "center",
         marginBottom: 20,
+        width: "100%", // Ensure full width for centering
     },
     header: {
-        fontSize: 24,
+        fontSize: Platform.select({
+            ios: 28,  // Slightly larger on iOS
+            android: 24
+        }),
         fontWeight: "bold",
         textAlign: "center",
+        letterSpacing: Platform.select({
+            ios: 0.5,  // More elegant spacing
+            android: 0
+        })
     },
 
-    // Pagination Container
+    // Pagination Container - Fixed positioning
     paginationBottomContainer: {
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        width: "100%",
+        width: Platform.OS == 'ios'? 'auto' :"100%",
         paddingVertical: 16,
-        paddingHorizontal: 20,
-        borderTopWidth: 1,
         position: "absolute",
-        bottom: Platform.OS === "ios" ? 60 : 5,
-        left: 20,
+        bottom: 0, // Stick to bottom
+        left: Platform.OS == 'ios'? 0 : 20,
         right: 0,
         backgroundColor: LIGHT_GRAY,
+        borderTopWidth: 1,
     },
+
+    // Arrow Buttons - Centered with new color
+    arrowButton: {
+        padding: 12,
+        borderRadius: 12,
+        backgroundColor: PRIMARY_COLOR, // Using bookmark blue
+        marginHorizontal: 8, // Space between buttons and text
+    },
+
+    // Page Number - Perfectly centered
     pageNumber: {
         fontSize: 18,
         fontWeight: "600",
-        marginHorizontal: 20,
+        marginHorizontal: 24,
+        textAlign: "center", // Ensure text centering
+        width: 60, // Fixed width for perfect centering
     },
 
-    // Arrow Buttons
-    arrowButton: {
-        padding: 12,
-        borderRadius: 8,
-        backgroundColor: LIGHT_BLUE,
-        shadowColor: "#000",
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        shadowOffset: { width: 0, height: 2 },
-        elevation: 3, // Android shadow
-    },
     disabledArrowButton: {
-        backgroundColor: DARK_BLUE,
+        backgroundColor: DISABLED_COLOR,
     },
 
     // Line & Word Styling
@@ -90,13 +106,25 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
         },
         header: {
             color: isDarkMode ? WHITE : DARK_TEXT,
+            textShadowColor: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)',
+            textShadowOffset: { width: 0, height: 1 },
+            textShadowRadius: 2
         },
         pageNumber: {
             color: isDarkMode ? WHITE : DARK_TEXT,
+            fontFamily: Platform.select({ ios: 'Helvetica Neue', android: 'sans-serif' }) // Platform fonts
         },
         paginationBottomContainer: {
             backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
             borderColor: isDarkMode ? "#3A3A3C" : "#E0E0E0",
+            ...Platform.select({
+                ios: {
+                    shadowColor: '#000',
+                    shadowOpacity: 0.1,
+                    shadowRadius: 10,
+                    shadowOffset: { width: 0, height: -5 }
+                }
+            })
         },
         disabledArrowIcon: {
             color: isDarkMode ? "#666666" : "#A0A0A0",
