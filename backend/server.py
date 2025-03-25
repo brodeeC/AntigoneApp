@@ -1,10 +1,12 @@
 import json
 from flask import Flask, jsonify
+from flask_cors import CORS
 import sqlite3
 import unicodedata
 from backend.database.raw_data.treebank_parse import grk_to_eng, hash_word, strip_accents
 
 app = Flask(__name__)
+CORS(app)
 FIRST_PAGE = 1
 LAST_PAGE = 123
 MIN_LINE = 1

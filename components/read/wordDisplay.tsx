@@ -40,6 +40,8 @@ export default function WordDetails({ word }: WordDetailsProps) {
     if (error) return <Text style={dynamicStyles.errorText}>{error}</Text>;
     if (!wordData) return null;
 
+    console.log(wordData)
+
     return (
         <View style={dynamicStyles.wordDetailsContainer}>
             <Text style={dynamicStyles.wordDetailsTitle}>{wordData[0][0].lemma}</Text>
@@ -61,22 +63,22 @@ export default function WordDetails({ word }: WordDetailsProps) {
                 )}
             </View>
 
-            {/* Definitions */}
             <View style={dynamicStyles.definitionsContainer}>
-                {wordData[0][1]?.definitions?.length > 0 ? (
-                    <View>
-                        {wordData[0][1].definitions.map((def: any, idx: number) => (
+                {Array.isArray(wordData[0][1]?.definitions) && wordData[0][1].definitions.length > 0 ? (
+                    wordData[0][1].definitions.map((def: any, idx: number) => (
+                        def.short_def !== "[unavailable]" && (
                             <View key={idx} style={dynamicStyles.definitionContainer}>
                                 <Text style={dynamicStyles.definitionText}>
-                                    {def.short_def ?? 'No definition available'}
+                                    {def.short_def}
                                 </Text>
                             </View>
-                        ))}
-                    </View>
+                        )
+                    ))
                 ) : (
                     <Text style={dynamicStyles.definitionText}>No definitions found.</Text>
                 )}
             </View>
+
 
 
 
