@@ -22,7 +22,8 @@ export default function WordDetails({ word }: WordDetailsProps) {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`http://brodeeclontz.com/AntigoneApp/word-details/${word}`);
+                const norm_word = word.normalize("NFC");
+                const response = await fetch(`http://brodeeclontz.com/AntigoneApp/word-details/${norm_word}`);
                 if (!response.ok) throw new Error("Failed to load word details");
                 const json = await response.json();
                 setWordData(json);
