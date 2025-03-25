@@ -230,8 +230,7 @@ def get_speaker_lines(speaker, linesNear=None):
 def get_word_details(word):
     conn = get_db_connection()
     norm = strip_accents(word)
-    print(norm)
-    query = f"SELECT lemma_id, lemma, form, line_number, postag  FROM lemma_data WHERE lemma='{word}' or form='{word}' or normalized='{norm}' or norm_form='{norm}'"
+    query = f"SELECT lemma_id, lemma, form, line_number, postag  FROM lemma_data WHERE lemma='{word}' or form='{word}' or normalized LIKE '{norm[:-2]}' or norm_form LIKE '{norm[:-2]}'"
     data = conn.execute(query).fetchall()
     conn.close()
 
