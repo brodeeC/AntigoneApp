@@ -231,7 +231,7 @@ def get_word_details(word):
     conn = get_db_connection()
     if (len(word) > 2): norm = word[:-1]
     norm = strip_accents(norm)
-    query =   f"SELECT lemma_id, lemma, form, line_number, postag
+    query =(f"""SELECT lemma_id, lemma, form, line_number, postag
                 FROM lemma_data
                 WHERE lemma = '{word}'
                 OR form = '{word}'
@@ -247,7 +247,7 @@ def get_word_details(word):
                 END,
                 LENGTH(lemma),   -- Prefer shorter lemmas if priorities match
                 LENGTH(form),    -- Prefer shorter forms
-                line_number;"
+                line_number;""")
     data = conn.execute(query).fetchall()
     conn.close()
 
