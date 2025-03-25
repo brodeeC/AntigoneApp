@@ -2,6 +2,7 @@ import json
 from flask import Flask, jsonify
 #from flask_cors import CORS
 import sqlite3
+from unicodedata import normalize, category
 import unicodedata
 from backend.database.raw_data.treebank_parse import grk_to_eng, hash_word, strip_accents
 
@@ -17,6 +18,11 @@ def get_db_connection():
     conn = sqlite3.connect('backend/database/antigone.db')  # Update path to your DB
     conn.row_factory = sqlite3.Row
     return conn
+
+# Stack Overflow: https://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-normalize-in-a-python-unicode-string
+def strip_accents(s):
+   return ''.join(c for c in normalize('NFD', s)
+        if category(c) != 'Mn' and c != "'")
 
 def get_line(lineNum):
     conn = get_db_connection()
