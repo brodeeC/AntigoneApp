@@ -4,7 +4,7 @@ from flask import Flask, jsonify
 import sqlite3
 from unicodedata import normalize, category
 import unicodedata
-from backend.database.raw_data.treebank_parse import grk_to_eng, hash_word, strip_accents
+from backend.database.raw_data.treebank_parse import grk_to_eng, hash_word
 
 app = Flask(__name__)
 #CORS(app, supports_credentials=True)
