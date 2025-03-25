@@ -254,13 +254,13 @@ def get_word_details(word):
     return jsonify(row_dict)
 
 def add_defs(data, result_def):
-    def_list = {}
+    def_list = []
     for definition in result_def:
         def_num = definition['def_num']
         short_def = definition['short_def']
         queries = definition['queries']
         this_def = {'def_num':def_num, 'short_def':short_def, 'queries':queries}
-        def_list.update(this_def)
+        def_list.append(this_def)
 
     if def_list not in data: data.append({'definitions': def_list})
 

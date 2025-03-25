@@ -144,6 +144,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
         },
         wordDetailsLabel: {
             fontWeight: "bold",
+            color: isDarkMode ? WHITE : DARK_TEXT,
         },
         caseContainer: {
             marginTop: 12,

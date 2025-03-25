@@ -43,52 +43,41 @@ export default function WordDetails({ word }: WordDetailsProps) {
     return (
         <View style={dynamicStyles.wordDetailsContainer}>
             <Text style={dynamicStyles.wordDetailsTitle}>{wordData[0][0].lemma}</Text>
-            <Text style={dynamicStyles.wordDetailsText}>
-                <Text style={dynamicStyles.wordDetailsLabel}>Speaker: </Text>
-                {wordData[0][0].speaker}
-            </Text>
-            <Text style={dynamicStyles.wordDetailsText}>
-                <Text style={dynamicStyles.wordDetailsLabel}>Word: </Text>
+            
+            <Text style={dynamicStyles.wordDetailsLabel}>
                 {wordData[0][0].form}
             </Text>
 
             {/* Case information */}
             <View style={dynamicStyles.caseContainer}>
-                <Text style={dynamicStyles.wordDetailsLabel}>Case Information:</Text>
                 {wordData[0][2].case && (
                     <View>
-                        {Object.entries(wordData[0][2].case as CaseInfo).map(([key, value], idx) => (
-                            <Text key={idx} style={dynamicStyles.wordDetailsText}>
-                                {key}: {value}
-                            </Text>
-                        ))}
-                    </View>
+                        <Text style={dynamicStyles.wordDetailsText}>
+                        {Object.entries(wordData[0][2].case as CaseInfo)
+                            .map(([key, value]) => (value !== '-' ? `${value}. ` : ''))
+                            .join('')}
+                        </Text>
+                  </View>
                 )}
             </View>
 
             {/* Definitions */}
             <View style={dynamicStyles.definitionsContainer}>
-                <Text style={dynamicStyles.wordDetailsLabel}>Definitions:</Text>
-                {wordData[0][1].definitions && Array.isArray(wordData[0][1].definitions) && (
+                {wordData[0][1]?.definitions?.length > 0 ? (
                     <View>
-                        {wordData[0][1].definitions.length === 1 ? (
-                            // If there's only one definition, show it directly
-                            <View key={0} style={dynamicStyles.definitionContainer}>
+                        {wordData[0][1].definitions.map((def: any, idx: number) => (
+                            <View key={idx} style={dynamicStyles.definitionContainer}>
                                 <Text style={dynamicStyles.definitionText}>
-                                    {wordData[0][1].definitions[0].short_def}
+                                    {def.short_def ?? 'No definition available'}
                                 </Text>
                             </View>
-                        ) : (
-                            // If there are multiple definitions, map through them
-                            wordData[0][1].definitions.map((def: any, idx: number) => (
-                                <View key={idx} style={dynamicStyles.definitionContainer}>
-                                    <Text style={dynamicStyles.definitionText}>{def.short_def}</Text>
-                                </View>
-                            ))
-                        )}
+                        ))}
                     </View>
+                ) : (
+                    <Text style={dynamicStyles.definitionText}>No definitions found.</Text>
                 )}
             </View>
+
 
 
 
