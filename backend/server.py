@@ -231,7 +231,23 @@ def get_word_details(word):
     conn = get_db_connection()
     if (len(word) > 2): norm = word[:-1]
     norm = strip_accents(norm)
-    query = f"SELECT lemma_id, lemma, form, line_number, postag  FROM lemma_data WHERE lemma='{word}' or form='{word}' or normalized LIKE '{norm}%' or norm_form LIKE '{norm}%'"
+    query =   f"SELECT lemma_id, lemma, form, line_number, postag
+                FROM lemma_data
+                WHERE lemma = '{word}'
+                OR form = '{word}'
+                OR normalized LIKE '{norm}%'
+                OR norm_form LIKE '{norm}%'
+                ORDER BY 
+                CASE 
+                    WHEN lemma = '{word}' THEN 1  -- Exact match on lemma (highest priority)
+                    WHEN form = '{word}' THEN 2   -- Exact match on form
+                    WHEN normalized LIKE '{norm}%' THEN 3  -- Partial match on normalized
+                    WHEN norm_form LIKE '{norm}%' THEN 4  -- Partial match on norm_form
+                    ELSE 5
+                END,
+                LENGTH(lemma),   -- Prefer shorter lemmas if priorities match
+                LENGTH(form),    -- Prefer shorter forms
+                line_number;"
     data = conn.execute(query).fetchall()
     conn.close()
 
