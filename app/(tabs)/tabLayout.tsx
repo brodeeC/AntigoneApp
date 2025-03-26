@@ -5,7 +5,7 @@ import EnIcon from 'react-native-vector-icons/Entypo';
 import FoIcon from 'react-native-vector-icons/Foundation';
 import { styles, getDynamicStyles } from '../app-styles/tab.styles';
 
-export default function TabLayout() {
+export default function TabLayout({ children }: { children: React.ReactNode }) {
     const isDarkMode = useColorScheme() === 'dark';
     const dynamicStyles = getDynamicStyles(isDarkMode);
     const router = useRouter();
@@ -68,6 +68,8 @@ export default function TabLayout() {
                     <Animated.View style={[styles.overlayBackground, { opacity: overlayOpacity }]} />
                 </TouchableOpacity>
             )}
+            <View style={{ flex: 1 }}>
+                {children}
 
             <View style={styles.container}>
                 <TouchableOpacity 
@@ -113,6 +115,7 @@ export default function TabLayout() {
                         </TouchableOpacity>
                     </Animated.View>
                 )}
+            </View>
             </View>
         </>
     );

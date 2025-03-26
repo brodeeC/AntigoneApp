@@ -7,30 +7,24 @@ export const styles = StyleSheet.create({
     container: {
         position: 'absolute',
         top: Platform.select({
-            ios: 50,  // Lower on iOS (below status bar)
-            android: 20,  // Higher on Android
-            default: 30   // Fallback
+            ios: 50,
+            android: 20
         }),
         left: 20,
-        zIndex: 100,
+        zIndex: 100, // Higher than content
     },
     bookmarkButton: {
         backgroundColor: 'transparent',
-        // Add platform-specific adjustments if needed
-        paddingTop: Platform.select({
-            ios: 4,  // Small adjustment for iOS
-            android: 0
-        })
+        zIndex: 101, // Highest priority
     },
     expandingMenu: {
         position: 'absolute',
         top: Platform.select({
-            ios: 90,  // Adjusted to match new bookmark position
+            ios: 90,
             android: 60
         }),
         left: 0,
-        zIndex: 99,
-        width: '100%',
+        zIndex: 99, // Below button but above content
     },
     menuContent: {
         borderRadius: 20,

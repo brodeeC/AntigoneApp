@@ -40,7 +40,6 @@ export default function WordDetails({ word }: WordDetailsProps) {
     if (loading) return <ActivityIndicator size="small" color="#007AFF" />;
     if (error) return <Text style={dynamicStyles.errorText}>{error}</Text>;
     if (!wordData) return <Text style={dynamicStyles.errorText}>Data Unavailable</Text>;
-    console.log(wordData)
 
     const lemma = wordData[0][0]?.lemma;
     const form = wordData[0][0]?.form;
