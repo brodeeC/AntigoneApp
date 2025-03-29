@@ -51,7 +51,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         fontWeight: '700',
         color: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
         paddingTop: Platform.select({
-            ios: 40,
+            ios: 20,
             android: 20
         }),
         paddingBottom: 20,
@@ -176,4 +176,37 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         letterSpacing: 0.5,
         textTransform: 'uppercase',
     },
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 16,
+        paddingHorizontal: 16, // Match your content padding
+        paddingTop: Platform.select({
+            ios: 40,
+            android: 20
+        }),
+      },
+      
+      backButton: {
+        marginRight: 12,
+        padding: 8,
+        borderRadius: 8, // Match your button style
+        backgroundColor: isDarkMode ? Colors.dark.buttonBackground : Colors.light.buttonBackground,
+      },
+      
+      backButtonPressed: {
+        opacity: 0.7, // Feedback when pressed
+      },
 });
+export const Colors = {
+    light: {
+      // ... your existing light colors ...
+      buttonBackground: '#e0e0e0', // Example - adjust to match your theme
+      buttonText: '#1E88E5',
+    },
+    dark: {
+      // ... your existing dark colors ...
+      buttonBackground: '#333', // Example - adjust to match your theme
+      buttonText: '#1E88E5',
+    }
+  };

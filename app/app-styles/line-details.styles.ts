@@ -165,6 +165,28 @@ export const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '600',
     },
+    backButton: {
+        padding: 12,
+        borderRadius: 12,
+        backgroundColor: 'rgba(30, 136, 229, 0.1)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 48,
+        height: 48,
+    },
+    backButtonContainer: {
+        position: 'absolute',
+        top: Platform.select({
+            ios: 50,  // Adjust to match your bookmark position
+            android: 30
+        }),
+        left: 20,
+        zIndex: 10,
+    },
+      
+      backButtonPressed: {
+        opacity: 0.7, // Feedback when pressed
+      },
 });
 
 // Dynamic styles for light/dark mode
@@ -207,6 +229,24 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
 
         lineNumberBadge: {
             backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.2)' : 'rgba(30, 136, 229, 0.1)',
-        }
+        },
+        // Updated back button style
+        
+          backButton: {
+            backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
+        },
     });
+};
+
+export const Colors = {
+    light: {
+      // ... your existing light colors ...
+      buttonBackground: '#e0e0e0', // Example - adjust to match your theme
+      buttonText: '1E88E5',
+    },
+    dark: {
+      // ... your existing dark colors ...
+      buttonBackground: '#333', // Example - adjust to match your theme
+      buttonText: '1E88E5',
+    }
 };

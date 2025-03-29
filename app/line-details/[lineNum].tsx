@@ -1,8 +1,8 @@
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated } from "react-native";
-import { styles, getDynamicStyles } from "../app-styles/line-details.styles";
-import { MaterialIcons } from "@expo/vector-icons";
+import { styles, getDynamicStyles, Colors } from "../app-styles/line-details.styles";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import WordDisplay from "../../components/read/wordDisplay"; 
 import TabLayout from "../(tabs)/tabLayout";
 
@@ -29,6 +29,7 @@ export default function LineDetails() {
     const dynamicStyles = getDynamicStyles(isDarkMode);
     const { lineNum } = useLocalSearchParams(); 
     const currentLine = Number(lineNum);
+    const [isBackPressed, setIsBackPressed] = useState(false);
 
     const handlePressIn = () => {
         Animated.spring(buttonScale, {
@@ -47,6 +48,15 @@ export default function LineDetails() {
     const goToLine = (line: number) => {
         router.replace(`/line-details/${line}`);
     };
+
+    const handleGoBack = () => {
+        if (router.canGoBack()) {
+          router.back();
+        } else {
+          // Fallback to home if no history
+          router.replace('/');
+        }
+      };
 
     useEffect(() => {
         const loadData = async () => {
@@ -77,6 +87,26 @@ export default function LineDetails() {
             
             <TabLayout>
                 <SafeAreaView style={[styles.container, dynamicStyles.container]}>
+
+                <View style={styles.backButtonContainer}>
+                    <TouchableOpacity 
+                        onPressIn={() => setIsBackPressed(true)}
+                        onPressOut={() => setIsBackPressed(false)}
+                        onPress={handleGoBack}
+                        style={[
+                            styles.backButton,
+                            dynamicStyles.backButton,
+                            isBackPressed && { opacity: 0.7 }
+                        ]}
+                        activeOpacity={0.7}
+                    >
+                        <Feather 
+                            name="chevron-left" 
+                            size={24} 
+                            color={isDarkMode ? "#1E88E5" : "#1E88E5"} 
+                        />
+                    </TouchableOpacity>
+                </View>
                     {/* Header Section */}
                     <View style={styles.headerContainer}>
                         <View style={styles.headerContent}>

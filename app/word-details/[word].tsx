@@ -7,9 +7,10 @@ import {
     ScrollView, 
     useColorScheme 
 } from "react-native";
-import { getDynamicStyles } from "../app-styles/word-details.styles";
+import { Colors, getDynamicStyles } from "../app-styles/word-details.styles";
 import { router, useLocalSearchParams, useRouter } from "expo-router";
 import TabLayout from "../(tabs)/tabLayout";
+import { Feather } from "@expo/vector-icons";
 
 // Define types for word details response
 interface WordEntry {
@@ -41,13 +42,22 @@ interface WordDetailsProps {
 
 export default function WordDetails() {
     const { word } = useLocalSearchParams();  
-    console.log("Fetching data for word:", word);
     const [wordData, setWordData] = useState<WordDataEntry[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [isBackPressed, setIsBackPressed] = useState(false);
 
     const isDarkMode = useColorScheme() === "dark";
     const dynamicStyles = getDynamicStyles(isDarkMode);
+
+    const handleGoBack = () => {
+        if (router.canGoBack()) {
+          router.back();
+        } else {
+          // Fallback to home if no history
+          router.replace('/');
+        }
+      };
 
     useEffect(() => {
         const fetchWordDetails = async () => {
@@ -88,7 +98,25 @@ export default function WordDetails() {
     return (
         <TabLayout>
         <View style={dynamicStyles.wordDetailsContainer}>
-            <Text style={dynamicStyles.header}>{word}</Text>
+            <View style={dynamicStyles.headerContainer}>
+                <TouchableOpacity 
+                onPressIn={() => setIsBackPressed(true)}
+                onPressOut={() => setIsBackPressed(false)}
+                onPress={handleGoBack}
+                style={[
+                    dynamicStyles.backButton,
+                    isBackPressed && dynamicStyles.backButtonPressed
+                ]}
+                activeOpacity={0.7}
+                >
+                <Feather 
+                    name="chevron-left" 
+                    size={24} 
+                    color={isDarkMode ? Colors.dark.buttonText : Colors.light.buttonText} 
+                />
+                </TouchableOpacity>
+                <Text style={dynamicStyles.header}>{word}</Text>
+            </View>
             <ScrollView
                 contentContainerStyle={{ paddingBottom: 40 }}
                 showsVerticalScrollIndicator={false}
