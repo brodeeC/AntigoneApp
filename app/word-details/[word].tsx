@@ -15,7 +15,7 @@ import TabLayout from "../(tabs)/tabLayout";
 interface WordEntry {
     form: string;
     lemma: string;
-    line_number: number;
+    line_number: string;
     postag: string;
     speaker: string;
 }
@@ -97,7 +97,8 @@ export default function WordDetails() {
                     if (!entry || !entry[0]) return null; // Prevent errors
 
                     const { form, lemma, line_number, postag, speaker } = entry[0];
-                    const lineNum = line_number;
+                    let lineNum = line_number;
+                    if (lineNum == '161.1') lineNum = '161b'
                     const caseInfo: CaseInfo | null = entry[2]?.case ?? null;
                     const definitions: Definition[] = entry[1]?.definitions ?? [];
 
