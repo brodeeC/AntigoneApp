@@ -92,7 +92,7 @@ export default function WordDetails({ word }: WordDetailsProps) {
             <TouchableOpacity
                 onPress={() => {
                     // Route to the WordDetails page
-                    router.push(`/word-details/${word}`);
+                    router.push(`/word-details/${lemma}`);
                 }}
                 style={dynamicStyles.moreDetailsButton}
             >
