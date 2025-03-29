@@ -75,7 +75,6 @@ export default function LineDetails() {
         <>
             <Stack.Screen options={{ headerShown: false, animation: 'none' }} />
             
-            {/* Wrap your SafeAreaView with the TabLayout */}
             <TabLayout>
                 <SafeAreaView style={[styles.container, dynamicStyles.container]}>
                     {/* Header Section */}

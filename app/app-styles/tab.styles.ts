@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
             ios: 50,
             android: 20
         }),
-        left: 20,
+        right: 20,
         zIndex: 100, // Higher than content
     },
     bookmarkButton: {

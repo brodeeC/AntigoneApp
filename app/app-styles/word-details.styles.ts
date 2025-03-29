@@ -33,7 +33,18 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
             android: 10
         }),
     },
-
+    goButton: {
+        backgroundColor: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
+        borderRadius: 8,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        marginTop: 8,
+        alignSelf: 'flex-start',
+    },
+    goButtonText: {
+        color: '#FFFFFF',
+        fontWeight: '600',
+    },
     // Header
     header: {
         fontSize: 28,
@@ -58,12 +69,15 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         backgroundColor: isDarkMode ? "#2C2C2E" : "#F8F8F8",
         borderRadius: 12,
         padding: 16,
-        marginBottom: 16,
         shadowColor: isDarkMode ? "#000" : "#CCC",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 6,
         elevation: 3,
+        flexDirection: "row",
+        marginBottom: 8,
+        alignItems: "center", // Vertically center items
+        flexWrap: 'wrap',
     },
 
     // Entry Title (entry number)

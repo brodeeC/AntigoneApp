@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { getDynamicStyles } from "../app-styles/word-details.styles";
 import { router, useLocalSearchParams, useRouter } from "expo-router";
+import TabLayout from "../(tabs)/tabLayout";
 
 // Define types for word details response
 interface WordEntry {
@@ -25,7 +26,7 @@ interface CaseInfo {
 
 interface Definition {
     def_num: number;
-    text: string;
+    short_def: string;
 }
 
 interface WordDataEntry {
@@ -85,6 +86,7 @@ export default function WordDetails() {
     if (!wordData) return <Text style={dynamicStyles.errorText}>Data Unavailable</Text>;
 
     return (
+        <TabLayout>
         <View style={dynamicStyles.wordDetailsContainer}>
             <Text style={dynamicStyles.header}>{word}</Text>
             <ScrollView
@@ -113,6 +115,12 @@ export default function WordDetails() {
                             <View style={dynamicStyles.entryContent}>
                                 <Text style={dynamicStyles.entryLabel}>Line Number: </Text>
                                 <Text style={dynamicStyles.entryValue}>{lineNum}</Text>
+                                <TouchableOpacity 
+                                    style={dynamicStyles.goButton}
+                                    onPress={() => router.push(`/line-details/${lineNum}`)}
+                                >
+                                    <Text style={dynamicStyles.goButtonText}>Go</Text>
+                                </TouchableOpacity>
                             </View>
                             <View style={dynamicStyles.entryContent}>
                                 <Text style={dynamicStyles.entryLabel}>POS Tag: </Text>
@@ -144,9 +152,9 @@ export default function WordDetails() {
                             {/* Definitions */}
                             <View style={dynamicStyles.definitionContainer}>
                                 {definitions.length > 0 ? (
-                                    definitions.map(({ def_num, text }) => (
+                                    definitions.map(({ def_num, short_def }) => (
                                         <Text key={def_num} style={dynamicStyles.definitionText}>
-                                            {def_num}. {text}
+                                            {def_num}. {short_def}
                                         </Text>
                                     ))
                                 ) : (
@@ -158,5 +166,6 @@ export default function WordDetails() {
                 })}
             </ScrollView>
         </View>
+        </TabLayout>
     );
 }

@@ -3,7 +3,18 @@ import { View, Text, ActivityIndicator, TouchableOpacity, useColorScheme } from 
 import { getDynamicStyles } from "./read-styles/styles";
 import { router } from "expo-router";
 
-type CaseInfo = { [key: string]: string };
+interface CaseInfo {
+    case?: string;
+    number?: string;
+    gender?: string;
+    person?: string;
+    tense?: string;
+    mood?: string;
+    voice?: string;
+    degree?: string;
+    // Add other possible morphological properties
+    [key: string]: string | undefined; // Index signature
+}
 
 type WordDetailsProps = {
     word: string;
@@ -61,11 +72,16 @@ export default function WordDetails({ word }: WordDetailsProps) {
             {/* Case Information */}
             <View style={dynamicStyles.caseContainer}>
                 {caseInfo ? (
-                    <Text style={dynamicStyles.wordDetailsText}>
-                        {Object.entries(caseInfo as CaseInfo)
-                            .map(([key, value]) => (value !== '-' ? `${value}. ` : ''))
-                            .join('')}
-                    </Text>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                        {Object.entries(caseInfo)
+                            .filter(([key, value]) => value && value !== '-')
+                            .map(([key, value]) => (
+                                <Text key={key} style={dynamicStyles.wordDetailsText}>
+                                    {`${value}. `}
+                                </Text>
+                            ))
+                        }
+                    </View>
                 ) : (
                     <Text style={dynamicStyles.wordDetailsText}>Morphological data not found</Text>
                 )}
