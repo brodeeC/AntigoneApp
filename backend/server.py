@@ -289,6 +289,8 @@ def add_defs(data, result_def):
         this_def = {'def_num':def_num, 'short_def':short_def, 'queries':queries}
         def_list.append(this_def)
 
+    data.append({'definitions': def_list})
+
     return data
 
 # Search api needs to identify if input is grk or eng,
