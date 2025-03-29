@@ -853,9 +853,9 @@ lemma_id,lemma,full_eng,urn,line_number,normalized,eng_lemma,form,norm_form,post
 160150839,γέρων,ge/rwn,urn:cts:greekLit:tlg0011.tlg002:160,160,γερων,gerwn,γερόντων,γεροντων,n-p---mg-
 232028405,προθέω,proq)e/w,urn:cts:greekLit:tlg0011.tlg002:161,161,προθεω,proq)ew,προὔθετο,προυθετο,v3saim---
 183837045,λέσχη,le/sxh,urn:cts:greekLit:tlg0011.tlg002:161,161,λεσχη,lesxh,λέσχην,λεσχην,n-s---fa-
-231442017,κοινός,koino/s,urn:cts:greekLit:tlg0011.tlg002:161.1,161b,κοινος,koinos,κοινῷ,κοινω,a-s---nd-
-185347557,κήρυγμα,kh/rugma,urn:cts:greekLit:tlg0011.tlg002:161.1,161b,κηρυγμα,khrugma,κηρύγματι,κηρυγματι,n-s---nd-
-354476767,πέμπω,pe/mpw,urn:cts:greekLit:tlg0011.tlg002:161.1,161b,πεμπω,pempw,πέμψας,πεμψας,v-sapamn-
+231442017,κοινός,koino/s,urn:cts:greekLit:tlg0011.tlg002:161.1,161.1,κοινος,koinos,κοινῷ,κοινω,a-s---nd-
+185347557,κήρυγμα,kh/rugma,urn:cts:greekLit:tlg0011.tlg002:161.1,161.1,κηρυγμα,khrugma,κηρύγματι,κηρυγματι,n-s---nd-
+354476767,πέμπω,pe/mpw,urn:cts:greekLit:tlg0011.tlg002:161.1,161.1,πεμπω,pempw,πέμψας,πεμψας,v-sapamn-
 117065382,ἀνήρ,a)nh/r,urn:cts:greekLit:tlg0011.tlg002:162,162,ανηρ,anhr,ἄνδρες,ανδρες,n-p---mv-
 152447041,ὁ,o(,urn:cts:greekLit:tlg0011.tlg002:162,162,ο,o,τὰ,τα,p-p---na-
 175978586,μέν,me/n,urn:cts:greekLit:tlg0011.tlg002:162,162,μεν,men,μὲν,μεν,g--------

@@ -25,6 +25,7 @@ def strip_accents(s):
         if category(c) != 'Mn' and c != "'")
 
 def get_line(lineNum):
+    if lineNum == 161.1: lineNum = '161b'
     conn = get_db_connection()
     query = f'SELECT line_text, speaker FROM full_text WHERE line_number={lineNum}'
     data = conn.execute(query).fetchall()
