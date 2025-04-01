@@ -1,18 +1,18 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Platform, FlatList, useColorScheme, ScrollView, Dimensions } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { searchStyles } from '@/assets/styles/search.styles';
-import TextSearch from '@/components/search/TextSearch';
 import LineSearch from '@/components/search/LineSearch';
 import SpeakerSearch from '@/components/search/SpeakerSearch';
 import { router, useLocalSearchParams } from 'expo-router';
+import WordSearch from '@/components/search/WordSearch';
 
-type ValidTab = 'Text Search' | 'Line Search' | 'Speaker Search';
+type ValidTab = 'Word Search' | 'Line Search' | 'Speaker Search';
 
 type TabButtonProps = {
-  name: ValidTab; // Changed from string to ValidTab
+  name: ValidTab;
   activeTab: ValidTab;
-  onPress: (name: ValidTab) => void; // Changed from string to ValidTab
+  onPress: (name: ValidTab) => void;
   isDark: boolean;
 };
 
@@ -32,18 +32,8 @@ const TabButton = ({ name, activeTab, onPress, isDark }: TabButtonProps) => {
   );
 };
 
-type TabsProps = {
-  activeTab: ValidTab;
-  setActiveTab: (tab: ValidTab) => void;
-  isDark: boolean;
-};
-
-type TabComponents = {
-  [key in ValidTab]: React.JSX.Element;
-};
-
-const Tabs = ({ activeTab, setActiveTab, isDark }: TabsProps) => {
-  const tabs: ValidTab[] = ['Text Search', 'Line Search', 'Speaker Search']; // Explicitly typed as ValidTab[]
+const Tabs = ({ activeTab, setActiveTab, isDark }: { activeTab: ValidTab; setActiveTab: (tab: ValidTab) => void; isDark: boolean }) => {
+  const tabs: ValidTab[] = ['Word Search', 'Line Search', 'Speaker Search'];
   const styles = searchStyles(isDark);
 
   return (
@@ -51,12 +41,7 @@ const Tabs = ({ activeTab, setActiveTab, isDark }: TabsProps) => {
       <FlatList
         data={tabs}
         renderItem={({ item }) => (
-          <TabButton
-            name={item}
-            activeTab={activeTab}
-            onPress={setActiveTab}
-            isDark={isDark}
-          />
+          <TabButton name={item} activeTab={activeTab} onPress={setActiveTab} isDark={isDark} />
         )}
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -71,30 +56,37 @@ export default function SearchScreen() {
   const theme = useColorScheme();
   const isDark = theme === 'dark';
   const { tab } = useLocalSearchParams();
-  
-  const [activeTab, setActiveTab] = React.useState<ValidTab>(
-    typeof tab === 'string' && ['Text Search', 'Line Search', 'Speaker Search'].includes(tab) 
-        ? tab as ValidTab 
-        : 'Text Search'
+  const scrollViewRef = useRef<ScrollView>(null);
+  const { width } = Dimensions.get('window');
+
+  const tabs: ValidTab[] = ['Word Search', 'Line Search', 'Speaker Search'];
+  const tabComponents: { [key in ValidTab]: React.JSX.Element } = {
+    'Word Search': <WordSearch />,
+    'Line Search': <LineSearch />,
+    'Speaker Search': <SpeakerSearch />,
+  };
+
+  // Set initial active tab from URL params
+  const [activeTab, setActiveTab] = useState<ValidTab>(
+    typeof tab === 'string' && tabs.includes(tab as ValidTab) ? (tab as ValidTab) : 'Word Search'
   );
 
-  // Sync with URL when tab changes
-  React.useEffect(() => {
+  console.log("Active Tab:", activeTab);
+
+  // Sync active tab with URL when changed manually
+  useEffect(() => {
     if (activeTab !== tab) {
       router.setParams({ tab: activeTab });
     }
   }, [activeTab]);
 
-  const scrollViewRef = useRef<ScrollView>(null);
-  const { width } = Dimensions.get('window');
-  const [isSwiping, setIsSwiping] = React.useState(false);
-
-  const tabs: ValidTab[] = ['Text Search', 'Line Search', 'Speaker Search'];
-  const tabComponents: TabComponents = {
-    'Text Search': <TextSearch />,
-    'Line Search': <LineSearch />,
-    'Speaker Search': <SpeakerSearch />,
-  };
+  // Scroll to correct tab when activeTab changes
+  useEffect(() => {
+    const tabIndex = tabs.indexOf(activeTab);
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ x: width * tabIndex, animated: true });
+    }
+  }, [activeTab]);
 
   const handleTabPress = (tabName: ValidTab) => {
     setActiveTab(tabName);
@@ -111,7 +103,7 @@ export default function SearchScreen() {
   return (
     <View style={{ flex: 1 }}>
       <Tabs activeTab={activeTab} setActiveTab={handleTabPress} isDark={isDark} />
-      
+
       <ScrollView
         ref={scrollViewRef}
         horizontal
@@ -120,8 +112,6 @@ export default function SearchScreen() {
         onMomentumScrollEnd={handleScrollEnd}
         scrollEventThrottle={16}
         style={{ flex: 1 }}
-        onScrollBeginDrag={() => setIsSwiping(true)}
-        onScrollEndDrag={() => setIsSwiping(false)}
       >
         {tabs.map((tab) => (
           <View key={tab} style={{ width }}>

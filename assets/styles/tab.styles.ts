@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
             ios: 90,
             android: 60
         }),
-        left: 0,
+        right: 10,
         zIndex: 99, // Below button but above content
     },
     menuContent: {

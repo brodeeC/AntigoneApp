@@ -15,18 +15,18 @@ export default function HomeScreen() {
         {
             icon: 'search',
             title: 'Text Search',
-            onPress: () => router.push('/search?tab=Text%20Search')
+            onPress: () => router.push('/search?tab=Word%20Search')
         },
-        {
-            icon: 'list',
-            title: 'Line Search',
-            onPress: () => router.push('/search?tab=Line%20Search')
-        },
-        {
-            icon: 'record-voice-over',
-            title: 'Speaker Search',
-            onPress: () => router.push('/search?tab=Speaker%20Search')
-        }
+        // {
+        //     icon: 'list',
+        //     title: 'Line Search',
+        //     onPress: () => router.push('/search?tab=Line%20Search')
+        // },
+        // {
+        //     icon: 'record-voice-over',
+        //     title: 'Speaker Search',
+        //     onPress: () => router.push('/search?tab=Speaker%20Search')
+        // }
     ];
 
     return (
