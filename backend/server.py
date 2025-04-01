@@ -5,6 +5,7 @@ import sqlite3
 from unicodedata import normalize, category
 import unicodedata
 from backend.database.raw_data.treebank_parse import grk_to_eng, hash_word
+import re
 
 app = Flask(__name__)
 #CORS(app, supports_credentials=True)
@@ -23,6 +24,10 @@ def get_db_connection():
 def strip_accents(s):
    return ''.join(c for c in normalize('NFD', s)
         if category(c) != 'Mn' and c != "'")
+
+
+def clean_word(word):
+    return re.sub(r'\u0313$', '', word)
 
 def get_line(lineNum):
     conn = get_db_connection()
@@ -229,7 +234,8 @@ def get_speaker_lines(speaker, linesNear=None):
 @app.route('/AntigoneApp/word-details/<word>', methods=['GET'])
 def get_word_details(word):
     conn = get_db_connection()
-    if (len(word) > 2): norm = word[:-1]
+    #if (len(word) > 2): norm = word[:-1]
+    word = clean_word(word)
     norm = strip_accents(norm)
     query =(f"""SELECT lemma_id, lemma, form, line_number, postag
                 FROM lemma_data
