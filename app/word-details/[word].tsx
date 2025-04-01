@@ -73,12 +73,10 @@ export default function WordDetails() {
             setLoading(true);
             setError(null);
             try {
-                console.log(`Fetching: http://brodeeclontz.com/AntigoneApp/word-details/${word}`);
                 const response = await fetch(`http://brodeeclontz.com/AntigoneApp/word-details/${word}`);
                 if (!response.ok) throw new Error("Failed to load word details");
                 
                 const json: WordDataEntry[] = await response.json();
-                console.log("Fetched data:", json); // Log the response
 
                 if (!json || json.length === 0) {
                     setError("No data available for this word");
@@ -142,7 +140,7 @@ export default function WordDetails() {
 
                     return (
                         <View key={index} style={dynamicStyles.entryContainer}>
-                            <Text style={dynamicStyles.entryTitle}>{index + 1}</Text> {/* Displaying entry number */}
+                            <Text style={dynamicStyles.entryTitle}>{index + 1}</Text> 
                             <View style={dynamicStyles.entryContent}>
                                 <Text style={dynamicStyles.entryLabel}>Form: </Text>
                                 <Text style={dynamicStyles.entryValue}>{form}</Text>
@@ -190,12 +188,10 @@ export default function WordDetails() {
                             <View style={dynamicStyles.definitionContainer}>
                                 {definitions.length > 0 ? (
                                     <>
-                                    {/* Always show first definition */}
                                     <Text style={dynamicStyles.definitionText}>
                                         {`1. ${definitions[0].short_def}`}
                                     </Text>
                                     
-                                    {/* Collapsible section for additional definitions */}
                                     {definitions.length > 1 && (
                                         <>
                                             {!isCollapsed && definitions.slice(1).map(({ def_num, short_def }) => (

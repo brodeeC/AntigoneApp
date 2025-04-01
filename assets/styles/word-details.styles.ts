@@ -116,9 +116,11 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
     // Definition Container
     definitionContainer: {
         marginTop: 16,
-        backgroundColor: isDarkMode ? "#3A3A3C" : "#EEE",
         borderRadius: 8,
         padding: 12,
+        backgroundColor: isDarkMode ? "#2A2A2C" : "#F0F0F0",
+        borderLeftWidth: 4,
+        borderLeftColor: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
     },
 
     // Definition Text

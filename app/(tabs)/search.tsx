@@ -37,7 +37,7 @@ const Tabs = ({ activeTab, setActiveTab, isDark }: { activeTab: ValidTab; setAct
   const styles = searchStyles(isDark);
 
   return (
-    <View style={[styles.tabBar, { paddingTop: Platform.OS === 'ios' ? 100 : 0 }]}>
+    <View style={[styles.tabBar, { paddingTop: Platform.OS === 'ios' ? 100 : 70 }]}>
       <FlatList
         data={tabs}
         renderItem={({ item }) => (
