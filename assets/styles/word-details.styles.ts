@@ -150,6 +150,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: isDarkMode ? Colors.dark.background : Colors.light.background,
     },
     caseContainer: {
         marginTop: 16,
@@ -197,16 +198,31 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
       backButtonPressed: {
         opacity: 0.7, // Feedback when pressed
       },
+      toggleButton: {
+        marginTop: 8,
+        paddingVertical: 4,
+    },
+    toggleButtonText: {
+        color: isDarkMode ? Colors.dark.secondaryText : Colors.light.secondaryText,
+        fontSize: 14,
+        fontStyle: 'italic',
+    },
 });
 export const Colors = {
     light: {
       // ... your existing light colors ...
       buttonBackground: '#e0e0e0', // Example - adjust to match your theme
       buttonText: '#1E88E5',
+      primaryText: '#1E88E5',       // Blue 600 (your existing color)
+      secondaryText: '#64B5F6',
+      background: '#F9F9F9',
     },
     dark: {
       // ... your existing dark colors ...
       buttonBackground: '#333', // Example - adjust to match your theme
       buttonText: '#1E88E5',
+      primaryText: '#64B5F6',       // Blue 300 (your existing color)
+      secondaryText: '#90CAF9',
+      background: '#121212',
     }
   };

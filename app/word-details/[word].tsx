@@ -50,6 +50,15 @@ export default function WordDetails() {
     const isDarkMode = useColorScheme() === "dark";
     const dynamicStyles = getDynamicStyles(isDarkMode);
 
+    const [collapsedEntries, setCollapsedEntries] = useState<Record<number, boolean>>({});
+
+    const toggleDefinitionCollapse = (index: number) => {
+        setCollapsedEntries(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }));
+    };
+
     const handleGoBack = () => {
         if (router.canGoBack()) {
           router.back();
@@ -115,7 +124,7 @@ export default function WordDetails() {
                     color={isDarkMode ? Colors.dark.buttonText : Colors.light.buttonText} 
                 />
                 </TouchableOpacity>
-                <Text style={dynamicStyles.header}>{word}</Text>
+                <Text style={dynamicStyles.header}>{word ?? 'Unknown'}</Text>
             </View>
             <ScrollView
                 contentContainerStyle={{ paddingBottom: 40 }}
@@ -123,6 +132,8 @@ export default function WordDetails() {
             >
                 {wordData.map((entry, index) => {
                     if (!entry || !entry[0]) return null; // Prevent errors
+
+                    const isCollapsed = collapsedEntries[index] !== false;
 
                     const { form, lemma, line_number, postag, speaker } = entry[0];
                     const lineNum = line_number;
@@ -162,16 +173,14 @@ export default function WordDetails() {
                             <View style={dynamicStyles.caseContainer}>
                                 <Text style={dynamicStyles.wordDetailsLabel}>Morphology:</Text>
                                 {caseInfo ? (
-                                    <Text style={dynamicStyles.wordDetailsText}>
-                                        {Object.entries(caseInfo)
-                                            .filter(([_, value]) => value !== '-')
-                                            .map(([key, value]) => (
-                                                <Text key={key}>
-                                                    {value}. {' '}
-                                                </Text>
-                                            ))
-                                        }
-                                    </Text>
+                                    <View>
+                                        <Text style={dynamicStyles.wordDetailsText}>
+                                            {Object.entries(caseInfo)
+                                                .filter(([_, value]) => value !== '-')
+                                                .map(([key, value]) => `${String(value)}. `)
+                                                .join(" ")}
+                                        </Text>
+                                    </View>
                                 ) : (
                                     <Text style={dynamicStyles.noDataText}>No morphological data available</Text>
                                 )}
@@ -180,11 +189,33 @@ export default function WordDetails() {
                             {/* Definitions */}
                             <View style={dynamicStyles.definitionContainer}>
                                 {definitions.length > 0 ? (
-                                    definitions.map(({ def_num, short_def }) => (
-                                        <Text key={def_num} style={dynamicStyles.definitionText}>
-                                            {def_num}. {short_def}
-                                        </Text>
-                                    ))
+                                    <>
+                                    {/* Always show first definition */}
+                                    <Text style={dynamicStyles.definitionText}>
+                                        {`1. ${definitions[0].short_def}`}
+                                    </Text>
+                                    
+                                    {/* Collapsible section for additional definitions */}
+                                    {definitions.length > 1 && (
+                                        <>
+                                            {!isCollapsed && definitions.slice(1).map(({ def_num, short_def }) => (
+                                                <Text key={def_num} style={dynamicStyles.definitionText}>
+                                                    {`${def_num}. ${short_def}`}
+                                                </Text>
+                                            ))}
+                                            <TouchableOpacity 
+                                                onPress={() => toggleDefinitionCollapse(index)}
+                                                style={dynamicStyles.toggleButton}
+                                            >
+                                                <Text style={dynamicStyles.toggleButtonText}>
+                                                    {isCollapsed 
+                                                        ? `Show ${definitions.length - 1} more...` 
+                                                        : 'Show less'}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </>
+                                    )}
+                                </>
                                 ) : (
                                     <Text style={dynamicStyles.noDataText}>No definitions found</Text>
                                 )}

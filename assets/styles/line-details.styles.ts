@@ -184,9 +184,18 @@ export const styles = StyleSheet.create({
         zIndex: 10,
     },
       
-      backButtonPressed: {
+    backButtonPressed: {
         opacity: 0.7, // Feedback when pressed
-      },
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingText: {
+        marginTop: 16,
+        fontSize: 16,
+    },
 });
 
 // Dynamic styles for light/dark mode
@@ -235,6 +244,9 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
           backButton: {
             backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
         },
+        loadingContainer: {
+            backgroundColor: isDarkMode ? Colors.dark.loadingBackground : Colors.light.loadingBackground,
+        },
     });
 };
 
@@ -243,10 +255,16 @@ export const Colors = {
       // ... your existing light colors ...
       buttonBackground: '#e0e0e0', // Example - adjust to match your theme
       buttonText: '1E88E5',
+      background: '#FFFFFF',
+      loadingBackground: '#FFFFFF',
+      loadingIndicator: '#1E88E5',
     },
     dark: {
       // ... your existing dark colors ...
       buttonBackground: '#333', // Example - adjust to match your theme
       buttonText: '1E88E5',
+      background: '#121212',
+      loadingBackground: '#1C1C1E',
+      loadingIndicator: '#64B5F6',
     }
 };

@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
-import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated } from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated, ActivityIndicator } from "react-native";
 import { styles, getDynamicStyles, Colors } from "../../assets/styles/line-details.styles";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import WordDisplay from "../../components/read/wordDisplay"; 
@@ -75,7 +75,16 @@ export default function LineDetails() {
         loadData();
     }, [currentLine]);
 
-    if (loading) return <Text>Loading...</Text>;
+    if (loading) return (
+        <TabLayout>
+            <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
+                <ActivityIndicator 
+                    size="large" 
+                    color={isDarkMode ? Colors.dark.loadingIndicator : Colors.light.loadingIndicator} 
+                />
+            </View>
+        </TabLayout>
+    );
     if (error) return <Text>{error}</Text>;
     if (!data) return <Text>No line data found.</Text>;
 

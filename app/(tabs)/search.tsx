@@ -71,7 +71,6 @@ export default function SearchScreen() {
     typeof tab === 'string' && tabs.includes(tab as ValidTab) ? (tab as ValidTab) : 'Word Search'
   );
 
-  console.log("Active Tab:", activeTab);
 
   // Sync active tab with URL when changed manually
   useEffect(() => {
