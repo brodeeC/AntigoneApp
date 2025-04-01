@@ -27,7 +27,7 @@ def strip_accents(s):
 
 
 def clean_word(word):
-    return re.sub(r'[\u0313\u02BC]$', '', word)
+    return re.sub(r'[\u0313\u02BC\u00B7\u002C\u002E\u037E\u0387]+$', '', word)
 
 def get_line(lineNum):
     conn = get_db_connection()
