@@ -33,6 +33,7 @@ export default function WordDetails({ word }: WordDetailsProps) {
             setLoading(true);
             setError(null);
             try {
+                console.log(word)
                 const response = await fetch(`http://brodeeclontz.com/AntigoneApp/word-details/${word}`);
                 if (!response.ok) throw new Error("Failed to load word details");
                 const json = await response.json();
@@ -51,6 +52,7 @@ export default function WordDetails({ word }: WordDetailsProps) {
     if (loading) return <ActivityIndicator size="small" color="#007AFF" />;
     if (error) return <Text style={dynamicStyles.errorText}>{error}</Text>;
     if (!wordData) return <Text style={dynamicStyles.errorText}>Data Unavailable</Text>;
+    console.log(wordData)
 
     const lemma = wordData[0][0]?.lemma;
     const form = wordData[0][0]?.form;
