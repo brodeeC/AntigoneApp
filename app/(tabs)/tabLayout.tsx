@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Animated, useColorScheme, Easing } from 'react-
 import { useRouter } from 'expo-router';
 import EnIcon from 'react-native-vector-icons/Entypo';
 import FoIcon from 'react-native-vector-icons/Foundation';
-import { styles, getDynamicStyles } from '../app-styles/tab.styles';
+import { styles, getDynamicStyles } from '../../assets/styles/tab.styles';
 
 export default function TabLayout({ children }: { children: React.ReactNode }) {
     const isDarkMode = useColorScheme() === 'dark';
@@ -96,23 +96,29 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
                         }
                     ]}>
                         <TouchableOpacity 
+                            onPress={() => { router.push('/(tabs)'); toggleMenu(); }} 
+                            style={styles.menuItem}
+                        >
+                            <EnIcon name="home" size={30} color={dynamicStyles.activeTab.color} />
+                        </TouchableOpacity>
+                        <TouchableOpacity 
                             onPress={() => { router.navigate('/(tabs)/read'); toggleMenu(); }} 
                             style={styles.menuItem}
                         >
                             <EnIcon name="book" size={30} color={dynamicStyles.activeTab.color} />
                         </TouchableOpacity>
                         <TouchableOpacity 
-                            onPress={() => { router.push('/search'); toggleMenu(); }} 
+                            onPress={() => { router.push('/(tabs)/search'); toggleMenu(); }} 
                             style={styles.menuItem}
                         >
-                            <FoIcon name="page-search" size={30} color={dynamicStyles.activeTab.color} />
+                            <FoIcon name="magnifying-glass" size={30} color={dynamicStyles.activeTab.color} />
                         </TouchableOpacity>
-                        <TouchableOpacity 
+                        {/* <TouchableOpacity 
                             onPress={() => { router.push('/favorites'); toggleMenu(); }} 
                             style={styles.menuItem}
                         >
                             <EnIcon name="bookmark" size={30} color={dynamicStyles.activeTab.color} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </Animated.View>
                 )}
             </View>

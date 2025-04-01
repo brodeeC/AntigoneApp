@@ -7,7 +7,7 @@ import {
     ScrollView, 
     useColorScheme 
 } from "react-native";
-import { Colors, getDynamicStyles } from "../app-styles/word-details.styles";
+import { Colors, getDynamicStyles } from "../../assets/styles/word-details.styles";
 import { router, useLocalSearchParams, useRouter } from "expo-router";
 import TabLayout from "../(tabs)/tabLayout";
 import { Feather } from "@expo/vector-icons";
@@ -55,7 +55,7 @@ export default function WordDetails() {
           router.back();
         } else {
           // Fallback to home if no history
-          router.replace('/');
+          router.push('/(tabs)');
         }
       };
 
@@ -125,8 +125,7 @@ export default function WordDetails() {
                     if (!entry || !entry[0]) return null; // Prevent errors
 
                     const { form, lemma, line_number, postag, speaker } = entry[0];
-                    let lineNum = line_number;
-                    if (lineNum == '161.1') lineNum = '161b'
+                    const lineNum = line_number;
                     const caseInfo: CaseInfo | null = entry[2]?.case ?? null;
                     const definitions: Definition[] = entry[1]?.definitions ?? [];
 

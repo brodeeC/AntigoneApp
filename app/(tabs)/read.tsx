@@ -2,7 +2,8 @@ import { useState } from "react";
 import { View, Text, TouchableOpacity, useColorScheme, SafeAreaView, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons"; // Import icons
 import PageDisplay from "@/components/read/pageDisplay";
-import { styles, getDynamicStyles } from "../app-styles/read.styles";
+import { styles, getDynamicStyles } from "../../assets/styles/read.styles";
+import { router } from "expo-router";
 
 export default function Read() {
     const [page, setPage] = useState(1);

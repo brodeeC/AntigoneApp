@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated } from "react-native";
-import { styles, getDynamicStyles, Colors } from "../app-styles/line-details.styles";
+import { styles, getDynamicStyles, Colors } from "../../assets/styles/line-details.styles";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import WordDisplay from "../../components/read/wordDisplay"; 
 import TabLayout from "../(tabs)/tabLayout";
@@ -46,7 +46,7 @@ export default function LineDetails() {
     };
 
     const goToLine = (line: number) => {
-        router.replace(`/line-details/${line}`);
+        router.push(`/line-details/${line}`);
     };
 
     const handleGoBack = () => {
