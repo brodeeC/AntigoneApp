@@ -78,14 +78,6 @@ export default function SearchScreen() {
     }
   }, [activeTab]);
 
-  // Scroll to correct tab when activeTab changes
-  useEffect(() => {
-    const tabIndex = tabs.indexOf(activeTab);
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({ x: width * tabIndex, animated: true });
-    }
-  }, [activeTab]);
-
   const handleTabPress = (tabName: ValidTab) => {
     setActiveTab(tabName);
     const tabIndex = tabs.indexOf(tabName);
