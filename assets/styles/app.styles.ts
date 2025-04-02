@@ -31,7 +31,7 @@ export default StyleSheet.create({
         gap: 12,
     },
     buttonHalf: {
-        width: '48%', // Slightly less than half to account for gap
+        width: '48%', 
         minHeight: 120,
         borderRadius: 12,
         padding: 16,

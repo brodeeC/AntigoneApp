@@ -1,6 +1,5 @@
 import { Platform, StyleSheet } from "react-native";
 
-// Color Scheme - Using your bookmark blue (#1E88E5) as primary
 const PRIMARY_COLOR = "#1E88E5"; // Bookmark blue
 const SECONDARY_COLOR = "#64B5F6"; // Lighter blue for accents
 const LIGHT_BACKGROUND = "#FFFFFF"; // Pure white
@@ -10,13 +9,11 @@ const DARK_TEXT = "#E5E5E5"; // Off-white for dark mode
 const DISABLED_COLOR = "#555555"; // Gray for disabled state
 
 export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
-    // Main Container
     mainContainer: {
         flex: 1,
         backgroundColor: isDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
     },
 
-    // Safe area padding for iOS notch/camera
     safeAreaPadding: {
         paddingTop: Platform.select({
             ios: 44, // Extra space for iOS camera bar
@@ -24,7 +21,6 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         }),
     },
 
-    // Word Details Container
     wordDetailsContainer: {
         flex: 1,
         backgroundColor: isDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
@@ -45,7 +41,6 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         color: '#FFFFFF',
         fontWeight: '600',
     },
-    // Header
     header: {
         fontSize: 28,
         fontWeight: '700',
@@ -61,10 +56,9 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
     },
     scrollContent: {
         padding: 20,
-        paddingBottom: 100, // Space for navigation
+        paddingBottom: 100, 
     },
 
-    // Entry Container
     entryContainer: {
         backgroundColor: isDarkMode ? "#2C2C2E" : "#F8F8F8",
         borderRadius: 12,
@@ -76,11 +70,10 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         elevation: 3,
         flexDirection: "row",
         marginBottom: 8,
-        alignItems: "center", // Vertically center items
+        alignItems: "center", 
         flexWrap: 'wrap',
     },
 
-    // Entry Title (entry number)
     entryTitle: {
         fontSize: 20,
         fontWeight: "600",
@@ -91,29 +84,25 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         paddingBottom: 8,
     },
 
-    // Entry Content Row
     entryContent: {
         flexDirection: "row",
         marginBottom: 8,
         alignItems: "flex-start",
     },
 
-    // Entry Label
     entryLabel: {
         fontWeight: "600",
         fontSize: 16,
         color: isDarkMode ? DARK_TEXT : LIGHT_TEXT,
-        minWidth: 100, // Ensures consistent alignment
+        minWidth: 100, 
     },
 
-    // Entry Value
     entryValue: {
         fontSize: 16,
         flex: 1,
         color: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
         lineHeight: 22,
     },
-    // Definition Container
     definitionContainer: {
         marginTop: 16,
         borderRadius: 8,
@@ -123,7 +112,6 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         borderLeftColor: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
     },
 
-    // Definition Text
     definitionText: {
         fontSize: 15,
         lineHeight: 22,
@@ -131,7 +119,6 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         marginBottom: 6,
     },
 
-    // No Data Text
     noDataText: {
         fontSize: 14,
         fontStyle: "italic",
@@ -139,7 +126,6 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         marginTop: 4,
     },
 
-    // Error Text
     errorText: {
         fontSize: 16,
         color: "#FF3B30",
@@ -147,7 +133,6 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         marginTop: 20,
     },
 
-    // Loading Indicator
     loadingContainer: {
         flex: 1,
         justifyContent: "center",
@@ -163,8 +148,6 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         borderLeftColor: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
     },
     
-
-    // Word Details Text (for case information)
     wordDetailsText: {
         fontSize: 15,
         lineHeight: 22,
@@ -183,7 +166,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 16,
-        paddingHorizontal: 16, // Match your content padding
+        paddingHorizontal: 16, 
         paddingTop: Platform.select({
             ios: 40,
             android: 20
@@ -193,12 +176,12 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
       backButton: {
         marginRight: 12,
         padding: 8,
-        borderRadius: 8, // Match your button style
+        borderRadius: 8, 
         backgroundColor: isDarkMode ? Colors.dark.buttonBackground : Colors.light.buttonBackground,
       },
       
       backButtonPressed: {
-        opacity: 0.7, // Feedback when pressed
+        opacity: 0.7, 
       },
       toggleButton: {
         marginTop: 8,
@@ -212,18 +195,16 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
 });
 export const Colors = {
     light: {
-      // ... your existing light colors ...
-      buttonBackground: '#e0e0e0', // Example - adjust to match your theme
+      buttonBackground: '#e0e0e0', 
       buttonText: '#1E88E5',
-      primaryText: '#1E88E5',       // Blue 600 (your existing color)
+      primaryText: '#1E88E5',       
       secondaryText: '#64B5F6',
       background: '#F9F9F9',
     },
     dark: {
-      // ... your existing dark colors ...
-      buttonBackground: '#333', // Example - adjust to match your theme
+      buttonBackground: '#333', 
       buttonText: '#1E88E5',
-      primaryText: '#64B5F6',       // Blue 300 (your existing color)
+      primaryText: '#64B5F6',      
       secondaryText: '#90CAF9',
       background: '#121212',
     }

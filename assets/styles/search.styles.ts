@@ -16,7 +16,7 @@ export const searchStyles = (isDark: boolean) => {
       flex: 1,
       backgroundColor: colors.background,
     },
-    // Tab bar styles
+    
     tabBar: {
       flexDirection: 'row',
       backgroundColor: colors.tabBarBackground,
@@ -27,7 +27,7 @@ export const searchStyles = (isDark: boolean) => {
       flexGrow: 1,
       justifyContent: 'space-around',
     },
-    // Tab item styles
+    
     tabItem: {
       alignItems: 'center',
       paddingVertical: 16,
@@ -35,9 +35,9 @@ export const searchStyles = (isDark: boolean) => {
       position: 'relative',
     },
     activeTabItem: {
-      // Additional styles for active tab if needed
+      
     },
-    // Text styles
+    
     label: {
       fontSize: 14,
       fontWeight: 'bold',
@@ -47,7 +47,7 @@ export const searchStyles = (isDark: boolean) => {
     activeTabText: {
       color: colors.activeTab,
     },
-    // Indicator styles
+    
     indicator: {
       position: 'absolute',
       bottom: 0,
@@ -57,17 +57,17 @@ export const searchStyles = (isDark: boolean) => {
       backgroundColor: colors.indicator,
       borderRadius: 2,
     },
-    // Content styles
+    
     contentContainer: {
       flex: 1,
       backgroundColor: colors.background,
       paddingHorizontal: 16,
     },
-    // Add these if you need scrollable tabs
+    
     scrollableTabContainer: {
       paddingHorizontal: 8,
     },
-    // Add these for tab button states
+    
     tabButtonPressed: {
       opacity: 0.8,
     },

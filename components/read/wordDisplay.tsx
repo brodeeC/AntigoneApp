@@ -12,8 +12,7 @@ interface CaseInfo {
     mood?: string;
     voice?: string;
     degree?: string;
-    // Add other possible morphological properties
-    [key: string]: string | undefined; // Index signature
+    [key: string]: string | undefined; 
 }
 
 type WordDetailsProps = {
@@ -106,7 +105,6 @@ export default function WordDetails({ word }: WordDetailsProps) {
                 )}
             </View>
 
-            {/* Button to navigate to more details */}
             <TouchableOpacity
                 onPress={() => {
                     // Route to the WordDetails page

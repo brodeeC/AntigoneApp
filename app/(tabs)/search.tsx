@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Platform, FlatList, useColorScheme, ScrollView, Dimensions } from 'react-native';
-import { useTheme } from '@react-navigation/native';
 import { searchStyles } from '@/assets/styles/search.styles';
 import LineSearch from '@/components/search/LineSearch';
 import SpeakerSearch from '@/components/search/SpeakerSearch';

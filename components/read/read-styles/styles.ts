@@ -1,11 +1,9 @@
 import { StyleSheet } from "react-native";
 
-// Primary Colors
-const PRIMARY_COLOR = "#6A0DAD"; // Deep purple (main accent)
-const LIGHT_BLUE = "#1E88E5"; // Vibrant blue for words
-const DARK_BLUE = "#64B5F6"; // Lighter blue for dark mode words
+const PRIMARY_COLOR = "#6A0DAD"; 
+const LIGHT_BLUE = "#1E88E5"; 
+const DARK_BLUE = "#64B5F6"; 
 
-// Background & Text Colors
 const LIGHT_GRAY = "#F9F9F9"; // Light mode background
 const DARK_GRAY = "#1C1C1E"; // Dark mode background
 const WHITE = "#FFFFFF"; // White for text in dark mode
@@ -14,76 +12,67 @@ const MUTED_GRAY = "#888888"; // Muted gray for line numbers
 const DISABLED_COLOR = "#A0A0A0"; // Gray for disabled state
 
 export const styles = StyleSheet.create({
-    // Container
     container: {
         flex: 1,
         padding: 20,
     },
 
-    // ScrollView Content
     scrollViewContent: {
-        paddingBottom: 80, // Add padding to ensure the last line is visible
+        paddingBottom: 80, 
     },
 
-    // Header
     header: {
         fontSize: 24,
         fontWeight: "bold",
         textAlign: "center",
         marginBottom: 20,
-        color: DARK_TEXT, // Header text in dark gray (light mode)
+        color: DARK_TEXT, 
     },
 
-    // Speaker Styles
     speaker: {
         fontSize: 20,
         fontWeight: "600",
-        color: DARK_TEXT, // Speaker text in dark gray (light mode)
+        color: DARK_TEXT, 
         marginTop: 16,
         marginBottom: 8,
         paddingLeft: 8,
     },
 
-    // Line Container
     lineContainer: {
         flexDirection: "row",
         alignItems: "flex-start",
-        marginBottom: 16, // Increased space between lines
+        marginBottom: 16, 
         paddingLeft: 16,
     },
 
-    // Line Number
     lineNumber: {
-        fontSize: 16, // Increased font size
-        fontWeight: "bold", // Made bolder
-        color: DARK_TEXT, // Line numbers in dark gray (light mode)
+        fontSize: 16,
+        fontWeight: "bold", 
+        color: DARK_TEXT,
         width: 40,
         textAlign: "right",
-        marginRight: 16, // Increased space between line number and text
+        marginRight: 16, 
     },
 
-    // Line Text
     lineText: {
         flex: 1,
-        fontSize: 18, // Increased font size
-        fontWeight: "600", // Made bolder
-        color: DARK_TEXT, // Line text in dark gray (light mode)
-        lineHeight: 28, // Increased line height for better spacing
+        fontSize: 18, 
+        fontWeight: "600", 
+        color: DARK_TEXT, 
+        lineHeight: 28,
     },
 
-    // Word Styles
     word: {
-        fontSize: 18, // Increased font size
-        fontWeight: "600", // Made bolder
-        color: DARK_TEXT, // Words in dark gray (light mode)
+        fontSize: 18, 
+        fontWeight: "600", 
+        color: DARK_TEXT, 
     },
 
-    // Loading and Error Text
     text: {
         fontSize: 16,
         textAlign: "center",
         marginTop: 20,
-        color: DARK_TEXT, // Loading/error text in dark gray (light mode)
+        color: DARK_TEXT, 
     },
 });
 
@@ -93,24 +82,23 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
         },
         header: {
-            color: isDarkMode ? WHITE : DARK_TEXT, // Header text in white (dark mode) or dark gray (light mode)
+            color: isDarkMode ? WHITE : DARK_TEXT, 
         },
         speaker: {
-            color: isDarkMode ? WHITE : DARK_TEXT, // Speaker text in white (dark mode) or dark gray (light mode)
+            color: isDarkMode ? WHITE : DARK_TEXT, 
         },
         lineNumber: {
-            color: isDarkMode ? WHITE : DARK_TEXT, // Line numbers in white (dark mode) or dark gray (light mode)
+            color: isDarkMode ? WHITE : DARK_TEXT, 
         },
         lineText: {
-            color: isDarkMode ? WHITE : DARK_TEXT, // Line text in white (dark mode) or dark gray (light mode)
+            color: isDarkMode ? WHITE : DARK_TEXT, 
         },
         word: {
-            color: isDarkMode ? DARK_BLUE : LIGHT_BLUE, // Words in white (dark mode) or dark gray (light mode)
+            color: isDarkMode ? DARK_BLUE : LIGHT_BLUE, 
         },
         text: {
-            color: isDarkMode ? WHITE : DARK_TEXT, // Loading/error text in white (dark mode) or dark gray (light mode)
+            color: isDarkMode ? WHITE : DARK_TEXT, 
         },
-        // Word Details Container
         wordDetailsContainer: {
             backgroundColor: isDarkMode ? "#1E1E1E" : "#F5F5F5",
             padding: 12,
@@ -122,30 +110,27 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             elevation: 3,
         },
         highlightedWord: {
-            backgroundColor: "#64B5F6", // Darker blue highlight
+            backgroundColor: "#64B5F6", 
             borderRadius: 5,
             padding: 2,
         },
         
 
-        // Word Details Title
         wordDetailsTitle: {
             fontSize: 18,
             fontWeight: "bold",
-            color: isDarkMode ? "#FFD54F" : "#F57C00", // Gold vs. Orange
+            color: isDarkMode ? "#FFD54F" : "#F57C00", 
             marginBottom: 4,
         },
 
-        // Word Details Text
         wordDetailsText: {
             fontSize: 16,
             color: isDarkMode ? WHITE : DARK_TEXT,
         },
 
-        // Error Message Styling
         errorText: {
             fontSize: 14,
-            color: "#D32F2F", // Red for errors
+            color: "#D32F2F", 
             marginTop: 8,
         },
         wordDetailsLabel: {

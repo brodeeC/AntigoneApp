@@ -1,6 +1,5 @@
 import { StyleSheet, Platform } from "react-native";
 
-// Color Scheme - Using your bookmark blue (#1E88E5) as primary
 const PRIMARY_COLOR = "#1E88E5"; // Bookmark blue
 const SECONDARY_COLOR = "#64B5F6"; // Lighter blue for accents
 const LIGHT_BACKGROUND = "#FFFFFF"; // Pure white
@@ -10,7 +9,6 @@ const DARK_TEXT = "#E5E5E5"; // Off-white for dark mode
 const DISABLED_COLOR = "#555555"; // Gray for disabled state
 
 export const styles = StyleSheet.create({
-    // Main Container
     container: {
         flex: 1,
         paddingTop: Platform.select({
@@ -42,7 +40,7 @@ export const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '600',
         marginTop: 8,
-        color: PRIMARY_COLOR, // Will be overridden by dynamic styles
+        color: PRIMARY_COLOR, 
     },
 
     speaker: {
@@ -55,7 +53,7 @@ export const styles = StyleSheet.create({
     contentWrapper: {
         flex: 1,
         marginTop: Platform.select({
-            ios: 60,  // Space for header
+            ios: 60,  
             android: 40
         }),
     },
@@ -67,7 +65,6 @@ export const styles = StyleSheet.create({
         }),
     },
 
-    // Line Text Container
     lineTextContainer: {
         flexDirection: "row",
         flexWrap: "wrap",
@@ -75,7 +72,6 @@ export const styles = StyleSheet.create({
         marginBottom: 30
     },
 
-    // Word Styling
     word: {
         fontSize: 20,
         fontWeight: "500",
@@ -88,7 +84,6 @@ export const styles = StyleSheet.create({
         transitionProperty: 'background-color, transform'
     },
 
-    // Navigation Container
     navigationContainer: {
         position: "absolute",
         bottom: Platform.select({
@@ -106,7 +101,6 @@ export const styles = StyleSheet.create({
         borderTopWidth: 1
     },
 
-    // Navigation Buttons
     navButton: {
         padding: 15,
         borderRadius: 12,
@@ -123,13 +117,11 @@ export const styles = StyleSheet.create({
         elevation: 5
     },
 
-    // Disabled Button
     disabledNavButton: {
         backgroundColor: DISABLED_COLOR,
         shadowOpacity: 0.1
     },
 
-    // Selected Word Highlight
     selectedWord: {
         backgroundColor: "rgba(30, 136, 229, 0.2)",
         borderRadius: 6
@@ -177,7 +169,7 @@ export const styles = StyleSheet.create({
     backButtonContainer: {
         position: 'absolute',
         top: Platform.select({
-            ios: 50,  // Adjust to match your bookmark position
+            ios: 50, 
             android: 30
         }),
         left: 20,
@@ -185,7 +177,7 @@ export const styles = StyleSheet.create({
     },
       
     backButtonPressed: {
-        opacity: 0.7, // Feedback when pressed
+        opacity: 0.7, 
     },
     loadingContainer: {
         flex: 1,
@@ -198,7 +190,6 @@ export const styles = StyleSheet.create({
     },
 });
 
-// Dynamic styles for light/dark mode
 export const getDynamicStyles = (isDarkMode: boolean) => {
     return StyleSheet.create({
         container: {
@@ -252,16 +243,14 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
 
 export const Colors = {
     light: {
-      // ... your existing light colors ...
-      buttonBackground: '#e0e0e0', // Example - adjust to match your theme
+      buttonBackground: '#e0e0e0',
       buttonText: '1E88E5',
       background: '#FFFFFF',
       loadingBackground: '#FFFFFF',
       loadingIndicator: '#1E88E5',
     },
     dark: {
-      // ... your existing dark colors ...
-      buttonBackground: '#333', // Example - adjust to match your theme
+      buttonBackground: '#333', 
       buttonText: '1E88E5',
       background: '#121212',
       loadingBackground: '#1C1C1E',

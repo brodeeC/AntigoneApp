@@ -13,14 +13,14 @@ export default function Read() {
     return (
         <View style={[styles.container, dynamicStyles.container]}>
           
-            {/* Header */}
+            
             <SafeAreaView>
                 <View style={styles.headerContainer}>
                     <Text style={[styles.header, dynamicStyles.header]}>Sophocles, Antigone</Text>
                 </View>
             </SafeAreaView>
 
-            {/* PageDisplay with flex: 1 to take up available space */}
+            
             <ScrollView
                 style={{ flex: 1 }}
                 contentContainerStyle={{ paddingBottom: 80 }} // Add padding to avoid overlap
@@ -28,38 +28,36 @@ export default function Read() {
                 <PageDisplay page={page} />
             </ScrollView>
 
-            {/* Pagination Controls at the Bottom */}
+            
             <View style={[styles.paginationBottomContainer, dynamicStyles.paginationBottomContainer]}>
-                {/* Previous Button */}
+                
                 <TouchableOpacity
                     style={[
                         styles.arrowButton,
-                        page === 1 && styles.disabledArrowButton, // Apply disabled style if on first page
+                        page === 1 && styles.disabledArrowButton, 
                     ]}
                     onPress={() => setPage(page - 1)}
                     disabled={page === 1} // Disable button if on first page
                 >
                     <MaterialIcons
-                        name="arrow-back" // Sleek icon for "Previous"
+                        name="arrow-back" 
                         size={24}
                         color={page === 1 ? dynamicStyles.disabledArrowIcon.color : '#FFFFFF'}
                     />
                 </TouchableOpacity>
 
-                {/* Page Number */}
                 <Text style={[styles.pageNumber, dynamicStyles.pageNumber]}>{page}/123</Text>
 
-                {/* Next Button */}
                 <TouchableOpacity
                     style={[
                         styles.arrowButton,
-                        page === 123 && styles.disabledArrowButton, // Apply disabled style if on last page
+                        page === 123 && styles.disabledArrowButton, 
                     ]}
                     onPress={() => setPage(page + 1)}
                     disabled={page === 123} // Disable button if on last page
                 >
                     <MaterialIcons
-                        name="arrow-forward" // Sleek icon for "Next"
+                        name="arrow-forward" 
                         size={24}
                         color={page === 123 ? dynamicStyles.disabledArrowIcon.color : '#FFFFFF'}
                     />

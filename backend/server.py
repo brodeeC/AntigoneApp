@@ -221,6 +221,8 @@ def get_speaker_lines(speaker, linesNear=None):
     speaker_dict = []
     lineNum, line_text = result
 
+    ### NEW: Look for specific word from speaker
+
     ## So far I'm thinking, first iterate over lineNear - 50 through linesNear + 50
     # and see if speaker is present, return speaker_dict
 

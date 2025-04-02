@@ -2,7 +2,7 @@ import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, SafeAreaView, ScrollView, View, TouchableOpacity, useColorScheme } from "react-native";
 import { styles, getDynamicStyles } from "./read-styles/styles";
-import WordDetails from "./wordDisplay"; // Import WordDetails
+import WordDetails from "./wordDisplay"; 
 
 type PageDisplayProps = {
     page: number;
@@ -14,7 +14,6 @@ interface Line {
     speaker: string | null;
 }
 
-// Track both word, lineNum, and index
 type SelectedWordType = {
     word: string;
     lineNum: number;

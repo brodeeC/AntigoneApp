@@ -8,11 +8,10 @@ import {
     useColorScheme 
 } from "react-native";
 import { Colors, getDynamicStyles } from "../../assets/styles/word-details.styles";
-import { router, useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import TabLayout from "../(tabs)/tabLayout";
 import { Feather } from "@expo/vector-icons";
 
-// Define types for word details response
 interface WordEntry {
     form: string;
     lemma: string;
@@ -63,7 +62,6 @@ export default function WordDetails() {
         if (router.canGoBack()) {
           router.back();
         } else {
-          // Fallback to home if no history
           router.push('/(tabs)');
         }
       };
@@ -129,7 +127,7 @@ export default function WordDetails() {
                 showsVerticalScrollIndicator={false}
             >
                 {wordData.map((entry, index) => {
-                    if (!entry || !entry[0]) return null; // Prevent errors
+                    if (!entry || !entry[0]) return null; 
 
                     const isCollapsed = collapsedEntries[index] !== false;
 
@@ -184,7 +182,6 @@ export default function WordDetails() {
                                 )}
                             </View>
 
-                            {/* Definitions */}
                             <View style={dynamicStyles.definitionContainer}>
                                 {definitions.length > 0 ? (
                                     <>

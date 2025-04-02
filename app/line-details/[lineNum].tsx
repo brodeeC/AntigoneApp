@@ -53,8 +53,7 @@ export default function LineDetails() {
         if (router.canGoBack()) {
           router.back();
         } else {
-          // Fallback to home if no history
-          router.replace('/');
+          router.replace('/(tabs)');
         }
       };
 
@@ -116,7 +115,6 @@ export default function LineDetails() {
                         />
                     </TouchableOpacity>
                 </View>
-                    {/* Header Section */}
                     <View style={styles.headerContainer}>
                         <View style={styles.headerContent}>
                             {data.speaker && (
