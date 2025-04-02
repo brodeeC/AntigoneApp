@@ -282,10 +282,10 @@ def get_word_details(word):
 
         this_row.append({'lemma_id':lemma_id, 'lemma':lemma, 'form':form, 'line_number':line_number, 'postag':postag, 'speaker':speaker})
         
+        this_row.append({'case':case_list})
+
         if result_def != []:
             this_row = add_defs(this_row, result_def)
-
-        this_row.append({'case':case_list})
 
         row_dict.append(this_row)
 

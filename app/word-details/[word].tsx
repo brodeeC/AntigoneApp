@@ -31,8 +31,8 @@ interface Definition {
 
 interface WordDataEntry {
     [0]: WordEntry;
-    [1]?: { definitions?: Definition[] };
-    [2]?: { case?: CaseInfo };
+    [1]?: { case?: CaseInfo };
+    [2]?: { definitions?: Definition[] };
 }
 
 interface WordDetailsProps {
@@ -133,8 +133,9 @@ export default function WordDetails() {
 
                     const { form, lemma, line_number, postag, speaker } = entry[0];
                     const lineNum = line_number;
-                    const caseInfo: CaseInfo | null = entry[2]?.case ?? null;
-                    const definitions: Definition[] = entry[1]?.definitions ?? [];
+                    const caseInfo: CaseInfo | null = entry[1]?.case ?? null;
+
+                    const definitions: Definition[] = entry[2]?.definitions ?? [];
 
                     return (
                         <View key={index} style={dynamicStyles.entryContainer}>
