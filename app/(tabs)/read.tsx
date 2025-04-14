@@ -32,6 +32,7 @@ export default function Read() {
             <View style={[styles.paginationBottomContainer, dynamicStyles.paginationBottomContainer]}>
                 
                 <TouchableOpacity
+                //Need to add +- 10 page button
                     style={[
                         styles.arrowButton,
                         page === 1 && styles.disabledArrowButton, 
