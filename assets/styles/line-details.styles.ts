@@ -1,93 +1,69 @@
 import { StyleSheet, Platform } from "react-native";
 
-const PRIMARY_COLOR = "#1E88E5"; // Bookmark blue
-const SECONDARY_COLOR = "#64B5F6"; // Lighter blue for accents
-const LIGHT_BACKGROUND = "#FFFFFF"; // Pure white
-const DARK_BACKGROUND = "#121212"; // True black background
-const LIGHT_TEXT = "#333333"; // Dark gray for light mode
-const DARK_TEXT = "#E5E5E5"; // Off-white for dark mode
-const DISABLED_COLOR = "#555555"; // Gray for disabled state
+// Modern color palette
+const PRIMARY_COLOR = "#4361EE"; // Vibrant blue
+const SECONDARY_COLOR = "#3A0CA3"; // Deep purple-blue
+const ACCENT_COLOR = "#4CC9F0"; // Bright cyan
+const LIGHT_BACKGROUND = "#F8F9FA"; // Soft white
+const DARK_BACKGROUND = "#0F0F1B"; // Deep space blue
+const LIGHT_TEXT = "#2B2D42"; // Dark blue-gray
+const DARK_TEXT = "#F8F9FA"; // Off-white
+const DISABLED_COLOR = "#6C757D"; // Modern gray
+
+// Gradient colors
+const GRADIENT_START = "#4361EE";
+const GRADIENT_END = "#3A0CA3";
 
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: Platform.select({
-            ios: 90,  // Space for status bar and bookmark
-            android: 70
+            ios: 100,  
+            android: 80  
         }),
-        paddingHorizontal: 20,
+        paddingHorizontal: 24,
         paddingBottom: 100,
     },
-
     headerContainer: {
-        marginTop: Platform.select({
-            ios: 20,
-            android: 10
-        }),
-        marginBottom: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#EEE',
+        marginBottom: 20,
         paddingBottom: 10,
         alignItems: 'center',
     },
-
-    headerContent: {
-        alignItems: 'center',
-        padding: 10,
+    speaker: {
+        fontSize: 22,
+        fontFamily: 'Inter-Bold',
+        textAlign: 'center',
+        marginBottom: 8,
+        letterSpacing: 0.5,
+        textTransform: 'uppercase',
     },
-
     lineNumber: {
         fontSize: 18,
-        fontWeight: '600',
+        fontFamily: 'Inter-SemiBold',
         marginTop: 8,
-        color: PRIMARY_COLOR, 
+        color: PRIMARY_COLOR,
+        letterSpacing: 0.5,
     },
-
-    speaker: {
-        fontSize: 20,
-        fontWeight: '600',
-        textAlign: 'center',
-        marginBottom: 5,
+    word: {
+        fontSize: 22,
+        fontFamily: 'Inter-Medium',
+        lineHeight: 32,
+        marginRight: 8,
+        marginVertical: 2,
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        borderRadius: 8,
     },
-
-    contentWrapper: {
-        flex: 1,
-        marginTop: Platform.select({
-            ios: 60,  
-            android: 40
-        }),
-    },
-    contentContainer: {
-        flex: 1,
-        marginTop: Platform.select({
-            ios: 10,
-            android: 5
-        }),
-    },
-
     lineTextContainer: {
         flexDirection: "row",
         flexWrap: "wrap",
-        paddingHorizontal: 5,
-        marginBottom: 30
+        paddingHorizontal: 8,
+        marginBottom: 30,
     },
-
-    word: {
-        fontSize: 20,
-        fontWeight: "500",
-        lineHeight: 30,
-        marginRight: 6,
-        marginVertical: 2,
-        paddingHorizontal: 4,
-        borderRadius: 4,
-        transitionDuration: '200ms',
-        transitionProperty: 'background-color, transform'
-    },
-
     navigationContainer: {
         position: "absolute",
         bottom: Platform.select({
-            ios: 40,
+            ios: 1,
             android: 20
         }),
         left: 0,
@@ -95,89 +71,65 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-        backgroundColor: LIGHT_BACKGROUND,
-        borderTopWidth: 1
+        paddingHorizontal: 24,
+        paddingVertical: 16,
     },
-
     navButton: {
-        padding: 15,
-        borderRadius: 12,
-        backgroundColor: PRIMARY_COLOR,
-        width: 60,
-        height: 60,
+        padding: 16,
+        borderRadius: 16,
+        width: 64,
+        height: 64,
         justifyContent: "center",
         alignItems: "center",
-        marginHorizontal: 30,
+        marginHorizontal: 32,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 3 },
+        shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
-        shadowRadius: 5,
-        elevation: 5
+        shadowRadius: 6,
+        elevation: 8,
     },
-
     disabledNavButton: {
-        backgroundColor: DISABLED_COLOR,
-        shadowOpacity: 0.1
+        opacity: 0.5,
     },
-
     selectedWord: {
-        backgroundColor: "rgba(30, 136, 229, 0.2)",
-        borderRadius: 6
+        backgroundColor: "rgba(67, 97, 238, 0.2)",
+        transform: [{ scale: 1.05 }],
     },
     wordDetailsContainer: {
-        backgroundColor: LIGHT_BACKGROUND,
-        borderRadius: 12,
-        padding: 16,
-        marginTop: 20,
-        marginHorizontal: 5,
+        borderRadius: 16,
+        padding: 20,
+        marginTop: 24,
+        marginHorizontal: 8,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 6,
-        elevation: 3,
-        marginBottom: 20
-    },
-    lineNumberBadge: {
-        position: 'absolute',
-        bottom: Platform.select({
-            ios: 100,
-            android: 80
-        }),
-        right: 20,
-        backgroundColor: 'rgba(30, 136, 229, 0.1)',
-        borderRadius: 20,
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        zIndex: 10
-    },
-
-    lineNumberText: {
-        fontSize: 18,
-        fontWeight: '600',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 6,
+        marginBottom: 24,
+        borderWidth: 1,
+        borderColor: 'rgba(67, 97, 238, 0.1)',
     },
     backButton: {
-        padding: 12,
-        borderRadius: 12,
-        backgroundColor: 'rgba(30, 136, 229, 0.1)',
+        padding: 14,
+        borderRadius: 14,
         justifyContent: 'center',
         alignItems: 'center',
-        width: 48,
-        height: 48,
+        width: 52,
+        height: 52,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 4,
     },
     backButtonContainer: {
         position: 'absolute',
         top: Platform.select({
-            ios: 50, 
+            ios: 50,
             android: 30
         }),
-        left: 20,
+        left: 24,
         zIndex: 10,
-    },
-      
-    backButtonPressed: {
-        opacity: 0.7, 
     },
     loadingContainer: {
         flex: 1,
@@ -185,8 +137,30 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     loadingText: {
-        marginTop: 16,
-        fontSize: 16,
+        marginTop: 20,
+        fontSize: 18,
+        fontWeight: '500',
+    },
+    floatingLineNumber: {
+        position: 'absolute',
+        top: Platform.select({
+            ios: 50,
+            android: 30
+        }),
+        left: 80,
+        backgroundColor: 'rgba(67, 97, 238, 0.1)',
+        borderRadius: 20,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        zIndex: 24,
+        borderWidth: 1,
+        borderColor: 'rgba(67, 97, 238, 0.2)',
+    },
+    divider: {
+        height: 1,
+        marginVertical: 16,
+        width: '40%',
+        alignSelf: 'center',
     },
 });
 
@@ -195,65 +169,62 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
         container: {
             backgroundColor: isDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
         },
-        headerContainer: {
-            borderBottomColor: isDarkMode ? '#333' : '#EEE'
-        },
         lineNumber: {
-            color: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
-        },
-        headerContent: {
-            backgroundColor: isDarkMode ? 'rgba(30,30,30,0.8)' : 'rgba(255,255,255,0.8)',
+            color: isDarkMode ? ACCENT_COLOR : PRIMARY_COLOR,
         },
         speaker: {
             color: isDarkMode ? DARK_TEXT : LIGHT_TEXT,
         },
         word: {
-            color: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
+            color: isDarkMode ? ACCENT_COLOR : PRIMARY_COLOR,
         },
         navigationContainer: {
             backgroundColor: isDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
-            borderTopColor: isDarkMode ? "#333" : "#E0E0E0"
         },
         wordDetailsContainer: {
-            backgroundColor: isDarkMode ? "#1E1E1E" : "#FFFFFF",
-            shadowColor: isDarkMode ? "#000" : "#CCC",
+            backgroundColor: isDarkMode ? "#1A1A2E" : "#FFFFFF",
+            borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.2)' : 'rgba(67, 97, 238, 0.1)',
         },
-        
         selectedWord: {
-            color: "#007AFF", 
-            fontWeight: "bold"
+            backgroundColor: isDarkMode ? "rgba(76, 201, 240, 0.2)" : "rgba(67, 97, 238, 0.2)",
+            color: isDarkMode ? ACCENT_COLOR : PRIMARY_COLOR,
         },
-        lineNumberText: {
-            color: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
-        },
-
-        lineNumberBadge: {
-            backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.2)' : 'rgba(30, 136, 229, 0.1)',
-        },
-        // Updated back button style
-        
-          backButton: {
-            backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
+        backButton: {
+            backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
         },
         loadingContainer: {
-            backgroundColor: isDarkMode ? Colors.dark.loadingBackground : Colors.light.loadingBackground,
+            backgroundColor: isDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
+        },
+        floatingLineNumber: {
+            backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
+            borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.3)' : 'rgba(67, 97, 238, 0.2)',
+        },
+        divider: {
+            backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+        },
+        text: {
+            fontFamily: 'Inter-Medium',
+            fontSize: 16,
+            color: isDarkMode ? DARK_TEXT : LIGHT_TEXT,
         },
     });
 };
 
 export const Colors = {
     light: {
-      buttonBackground: '#e0e0e0',
-      buttonText: '1E88E5',
-      background: '#FFFFFF',
-      loadingBackground: '#FFFFFF',
-      loadingIndicator: '#1E88E5',
+        buttonBackground: PRIMARY_COLOR,
+        buttonText: '#FFFFFF',
+        background: LIGHT_BACKGROUND,
+        loadingBackground: LIGHT_BACKGROUND,
+        loadingIndicator: PRIMARY_COLOR,
+        text: LIGHT_TEXT,
     },
     dark: {
-      buttonBackground: '#333', 
-      buttonText: '1E88E5',
-      background: '#121212',
-      loadingBackground: '#1C1C1E',
-      loadingIndicator: '#64B5F6',
+        buttonBackground: ACCENT_COLOR,
+        buttonText: '#FFFFFF',
+        background: DARK_BACKGROUND,
+        loadingBackground: '#121212',
+        loadingIndicator: ACCENT_COLOR,
+        text: DARK_TEXT,
     }
 };

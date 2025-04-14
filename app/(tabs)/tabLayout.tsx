@@ -1,60 +1,101 @@
 import React, { useState, useRef } from 'react';
-import { View, TouchableOpacity, Animated, useColorScheme, Easing } from 'react-native';
+import { View, TouchableOpacity, Animated, useColorScheme, Easing, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import EnIcon from 'react-native-vector-icons/Entypo';
 import FoIcon from 'react-native-vector-icons/Foundation';
 import { styles, getDynamicStyles } from '../../assets/styles/tab.styles';
-
+import * as Haptics from 'expo-haptics';
 export default function TabLayout({ children }: { children: React.ReactNode }) {
     const isDarkMode = useColorScheme() === 'dark';
     const dynamicStyles = getDynamicStyles(isDarkMode);
     const router = useRouter();
     const [expanded, setExpanded] = useState(false);
+    
+    // Animation values
     const animation = useRef(new Animated.Value(0)).current;
     const overlayOpacity = useRef(new Animated.Value(0)).current;
-    const bookmarkRotation = useRef(new Animated.Value(0)).current;
+    const bookmarkScale = useRef(new Animated.Value(1)).current;
+
+    // Fast animation config
+    const fastConfig = {
+        damping: 15,
+        stiffness: 300,  // Faster response
+        useNativeDriver: true,
+    };
+
+    // Smooth menu animation config
+    const menuConfig = {
+        damping: 15,
+        stiffness: 150,
+        useNativeDriver: true,
+    };
 
     const toggleMenu = () => {
         const toValue = expanded ? 0 : 1;
         
+        // Immediate visual feedback
+        setExpanded(!expanded);
+        overlayOpacity.setValue(toValue); // Jump to target opacity
+        
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        
         Animated.parallel([
-            Animated.timing(animation, {
+            // Fast overlay fade (already at target)
+            Animated.spring(overlayOpacity, {
                 toValue,
-                duration: 300,
-                easing: Easing.out(Easing.cubic),
-                useNativeDriver: true,
+                ...fastConfig,
             }),
-            Animated.timing(overlayOpacity, {
+            // Smooth menu movement
+            Animated.spring(animation, {
                 toValue,
-                duration: 300,
-                useNativeDriver: true,
+                ...menuConfig,
             }),
-            Animated.timing(bookmarkRotation, {
-                toValue: expanded ? 0 : 1,
-                duration: 300,
-                useNativeDriver: true,
+            // Fast button scale
+            Animated.spring(bookmarkScale, {
+                toValue: expanded ? 1 : 1.1,
+                ...fastConfig,
             })
-        ]).start(() => {
-            setExpanded(!expanded);
-        });
+        ]).start();
     };
 
+    const handleMenuItemPress = (route: 
+        | '/(tabs)'
+        | '/(tabs)/read' 
+        | '/(tabs)/search'
+      ) => {
+        Haptics.selectionAsync();
+        
+        // Immediate close
+        setExpanded(false);
+        overlayOpacity.setValue(0);
+        
+        Animated.parallel([
+            Animated.spring(overlayOpacity, {
+                toValue: 0,
+                ...fastConfig,
+            }),
+            Animated.spring(animation, {
+                toValue: 0,
+                ...fastConfig, // Faster close
+            }),
+            Animated.spring(bookmarkScale, {
+                toValue: 1,
+                ...fastConfig,
+            })
+        ]).start();
+        
+        router.push(route);
+    };
+
+    // Animation interpolations
     const translateY = animation.interpolate({
         inputRange: [0, 1],
-        outputRange: [-20, 0],
+        outputRange: [-30, 0],
     });
 
-    const rotate = bookmarkRotation.interpolate({
+    const scale = bookmarkScale.interpolate({
         inputRange: [0, 1],
-        outputRange: ['0deg', '180deg']
-    });
-
-    const menuBackgroundColor = animation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [
-            'rgba(255, 255, 255, 0)',
-            isDarkMode ? 'rgba(30, 30, 30, 0.95)' : 'rgba(255, 255, 255, 0.95)'
-        ]
+        outputRange: [1, 1.1]
     });
 
     return (
@@ -65,63 +106,70 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
                     onPress={toggleMenu}
                     style={styles.overlay}
                 >
-                    <Animated.View style={[styles.overlayBackground, { opacity: overlayOpacity }]} />
+                    <Animated.View style={[styles.overlayBackground, { 
+                        opacity: overlayOpacity 
+                    }]} />
                 </TouchableOpacity>
             )}
+            
             <View style={{ flex: 1 }}>
                 {children}
+                
+                <View style={styles.container}>
+                    <TouchableOpacity onPress={toggleMenu} activeOpacity={0.8}>
+                        <Animated.View style={[
+                            styles.bookmarkButton,
+                            { 
+                                transform: [{ scale }], 
+                                borderColor: dynamicStyles.activeTabColor 
+                            }
+                        ]}>
+                            <EnIcon 
+                                name={expanded ? "cross" : "bookmark"} 
+                                size={28} 
+                                color={dynamicStyles.activeTabColor} 
+                            />
+                        </Animated.View>
+                    </TouchableOpacity>
 
-            <View style={styles.container}>
-                <TouchableOpacity 
-                    onPress={toggleMenu} 
-                    style={styles.bookmarkButton}
-                    activeOpacity={0.7}
-                >
-                    <Animated.View style={{ transform: [{ rotate }] }}>
-                        <EnIcon 
-                            name="bookmark" 
-                            size={50} 
-                            color={dynamicStyles.activeTab.color} 
-                        />
-                    </Animated.View>
-                </TouchableOpacity>
-
-                {expanded && (
+                    {/* Menu - smooth animation */}
                     <Animated.View style={[
                         styles.expandingMenu, 
+                        dynamicStyles.expandingMenuStyle,
                         { 
                             transform: [{ translateY }],
-                            backgroundColor: menuBackgroundColor,
-                            opacity: animation,
+                            opacity: overlayOpacity, // Sync with overlay
                         }
                     ]}>
                         <TouchableOpacity 
-                            onPress={() => { router.push('/(tabs)'); toggleMenu(); }} 
-                            style={styles.menuItem}
+                            onPress={() => handleMenuItemPress('/(tabs)')} 
+                            style={[styles.menuItem, dynamicStyles.menuItemStyle]}
                         >
-                            <EnIcon name="home" size={30} color={dynamicStyles.activeTab.color} />
+                            <EnIcon name="home" size={24} color={dynamicStyles.activeTabColor} />
+                            <Text style={[styles.menuItemText, dynamicStyles.menuItemTextStyle]}>Home</Text>
                         </TouchableOpacity>
+                        
+                        <View style={[styles.menuDivider, dynamicStyles.menuDividerStyle]} />
+                        
                         <TouchableOpacity 
-                            onPress={() => { router.navigate('/(tabs)/read'); toggleMenu(); }} 
-                            style={styles.menuItem}
+                            onPress={() => handleMenuItemPress('/(tabs)/read')} 
+                            style={[styles.menuItem, dynamicStyles.menuItemStyle]}
                         >
-                            <EnIcon name="book" size={30} color={dynamicStyles.activeTab.color} />
+                            <EnIcon name="book" size={24} color={dynamicStyles.activeTabColor} />
+                            <Text style={[styles.menuItemText, dynamicStyles.menuItemTextStyle]}>Read</Text>
                         </TouchableOpacity>
+                        
+                        <View style={[styles.menuDivider, dynamicStyles.menuDividerStyle]} />
+                        
                         <TouchableOpacity 
-                            onPress={() => { router.push('/(tabs)/search'); toggleMenu(); }} 
-                            style={styles.menuItem}
+                            onPress={() => handleMenuItemPress('/(tabs)/search')} 
+                            style={[styles.menuItem, dynamicStyles.menuItemStyle]}
                         >
-                            <FoIcon name="magnifying-glass" size={30} color={dynamicStyles.activeTab.color} />
+                            <FoIcon name="magnifying-glass" size={24} color={dynamicStyles.activeTabColor} />
+                            <Text style={[styles.menuItemText, dynamicStyles.menuItemTextStyle]}>Search</Text>
                         </TouchableOpacity>
-                        {/* <TouchableOpacity 
-                            onPress={() => { router.push('/favorites'); toggleMenu(); }} 
-                            style={styles.menuItem}
-                        >
-                            <EnIcon name="bookmark" size={30} color={dynamicStyles.activeTab.color} />
-                        </TouchableOpacity> */}
                     </Animated.View>
-                )}
-            </View>
+                </View>
             </View>
         </>
     );

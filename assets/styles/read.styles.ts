@@ -27,14 +27,14 @@ export const styles = StyleSheet.create({
 
     
     headerContainer: {
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "center",
         marginBottom: 20,
         width: "100%", 
     },
     header: {
         fontSize: Platform.select({
-            ios: 28,  
+            ios: 26,  
             android: 24
         }),
         fontWeight: "bold",

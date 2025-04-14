@@ -66,8 +66,8 @@ export default function PageDisplay({ page }: PageDisplayProps) {
                                 <TouchableOpacity
                                     onPress={() =>
                                         router.push({
-                                            pathname: "/line-details/[lineNum]",
-                                            params: { lineNum: line.lineNum.toString() },
+                                            pathname: "/line-details/[start]/[[end]]",
+                                            params: { start: line.lineNum.toString() },
                                         })
                                     }
                                 >

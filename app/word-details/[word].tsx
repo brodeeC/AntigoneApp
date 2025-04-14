@@ -153,7 +153,10 @@ export default function WordDetails() {
                                 <Text style={dynamicStyles.entryValue}>{lineNum}</Text>
                                 <TouchableOpacity 
                                     style={dynamicStyles.goButton}
-                                    onPress={() => router.push(`/line-details/${lineNum}`)}
+                                    onPress={() => router.push({ 
+                                        pathname: "/line-details/[start]/[[end]]", 
+                                        params: { start: lineNum } 
+                                      })}
                                 >
                                     <Text style={dynamicStyles.goButtonText}>Go</Text>
                                 </TouchableOpacity>
