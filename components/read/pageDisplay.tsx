@@ -11,7 +11,7 @@ type PageDisplayProps = {
 interface Line {
     lineNum: number;
     line_text: string | null;
-    speaker: string | null;
+    speaker: string;
 }
 
 type SelectedWordType = {
@@ -58,58 +58,61 @@ export default function PageDisplay({ page }: PageDisplayProps) {
                     const showSpeaker = line.speaker && line.speaker !== prevSpeaker;
 
                     return (
-                        <View key={line.lineNum}>
+                        <View key={line.lineNum} style={styles.lineBlock}>
                             {showSpeaker && (
-                                <Text style={[styles.speaker, dynamicStyles.speaker]}>{line.speaker}</Text>
+                                <>
+                                    {lineIndex > 0 && (  // Only show divider if not the first speaker on page
+                                        <View style={[styles.speakerDivider, dynamicStyles.speakerDivider]} />
+                                    )}
+                                    <Text style={[styles.speaker, dynamicStyles.speaker]}>
+                                        {line.speaker.toUpperCase()}
+                                    </Text>
+                                </>
                             )}
                             <View style={styles.lineContainer}>
                                 <TouchableOpacity
-                                    onPress={() =>
-                                        router.push({
-                                            pathname: "/line-details/[start]/[[end]]",
-                                            params: { start: line.lineNum.toString() },
-                                        })
-                                    }
+                                    style={[styles.lineNumberButton, dynamicStyles.lineNumberButton]}
+                                    onPress={() => router.push({
+                                        pathname: "/line-details/[start]/[[end]]",
+                                        params: { start: line.lineNum.toString() },
+                                    })}
                                 >
-                                    <Text style={[styles.lineNumber, dynamicStyles.lineNumber]}>
+                                    <Text style={[styles.lineNumberText, dynamicStyles.lineNumberText]}>
                                         {line.lineNum}
                                     </Text>
                                 </TouchableOpacity>
-                                <Text style={[styles.lineText, dynamicStyles.lineText]}>
+                                <View style={styles.lineTextContainer}>
                                     {line.line_text?.split(" ").map((word, wordIndex) => {
-                                        const isSelected =
-                                            selectedWord?.word === word &&
+                                        const isSelected = selectedWord?.word === word &&
                                             selectedWord?.lineNum === line.lineNum &&
                                             selectedWord?.index === wordIndex;
 
                                         return (
                                             <TouchableOpacity
                                                 key={`${line.lineNum}-${wordIndex}`}
-                                                onPress={() =>
+                                                onPress={() => 
                                                     setSelectedWord(
                                                         isSelected ? null : { word, lineNum: line.lineNum, index: wordIndex }
                                                     )
                                                 }
                                             >
-                                                <Text
-                                                    style={[
-                                                        styles.word,
-                                                        dynamicStyles.word,
-                                                        isSelected && { color: "#007AFF", fontWeight: "bold" }
-                                                    ]}
-                                                >
+                                                <Text style={[
+                                                    styles.word,
+                                                    dynamicStyles.word,
+                                                    isSelected && dynamicStyles.selectedWord
+                                                ]}>
                                                     {word}{" "}
                                                 </Text>
                                             </TouchableOpacity>
                                         );
                                     })}
-                                </Text>
+                                </View>
                             </View>
-                            {selectedWord &&
-                                selectedWord.lineNum === line.lineNum &&
-                                selectedWord.word === line.line_text?.split(" ")[selectedWord.index] && (
+                            {selectedWord?.lineNum === line.lineNum && (
+                                <View style={[styles.wordDetailsContainer, dynamicStyles.wordDetailsContainer]}>
                                     <WordDetails word={selectedWord.word} />
-                                )}
+                                </View>
+                            )}
                         </View>
                     );
                 })}

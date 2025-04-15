@@ -14,11 +14,64 @@ const DISABLED_COLOR = "#A0A0A0"; // Gray for disabled state
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        paddingHorizontal: 24,
+        paddingTop: 16,
     },
-
     scrollViewContent: {
-        paddingBottom: 80, 
+        paddingBottom: 100,
+    },
+    lineBlock: {
+        marginBottom: 24,
+    },
+    speakerDivider: {
+        height: 1,
+        width: '40%',
+        marginBottom: 12,
+        alignSelf: 'center',
+    },
+    speaker: {
+        fontSize: 16,
+        fontFamily: 'Inter-Bold',
+        letterSpacing: 1,
+        marginBottom: 12,
+        textAlign: 'center',
+    },
+    lineContainer: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+    },
+    lineNumberButton: {
+        paddingVertical: 4,
+        paddingHorizontal: 8,
+        borderRadius: 6,
+        marginRight: 12,
+        minWidth: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1,
+        backgroundColor: 'transparent', 
+        marginTop: 4,
+        marginLeft: 4,
+    },
+    lineNumberText: {
+        fontSize: 14,
+        fontFamily: 'Inter-SemiBold',
+    },
+    lineTextContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    word: {
+        fontSize: 18,
+        fontFamily: 'Inter-Medium',
+        lineHeight: 28,
+        marginRight: 6,
+        marginVertical: 2,
+    },
+    wordDetailsContainer: {
+        marginTop: 12,
+        marginLeft: 52, // Align with text
     },
 
     header: {
@@ -28,23 +81,6 @@ export const styles = StyleSheet.create({
         marginBottom: 20,
         color: DARK_TEXT, 
     },
-
-    speaker: {
-        fontSize: 20,
-        fontWeight: "600",
-        color: DARK_TEXT, 
-        marginTop: 16,
-        marginBottom: 8,
-        paddingLeft: 8,
-    },
-
-    lineContainer: {
-        flexDirection: "row",
-        alignItems: "flex-start",
-        marginBottom: 16, 
-        paddingLeft: 16,
-    },
-
     lineNumber: {
         fontSize: 16,
         fontWeight: "bold", 
@@ -62,12 +98,6 @@ export const styles = StyleSheet.create({
         lineHeight: 28,
     },
 
-    word: {
-        fontSize: 18, 
-        fontWeight: "600", 
-        color: DARK_TEXT, 
-    },
-
     text: {
         fontSize: 16,
         textAlign: "center",
@@ -77,14 +107,45 @@ export const styles = StyleSheet.create({
 });
 
 export const getDynamicStyles = (isDarkMode: boolean) => {
+    const accentColor = isDarkMode ? '#4CC9F0' : '#4361EE';
+    const mutedColor = isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)';
+
     return StyleSheet.create({
         container: {
-            backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
+            backgroundColor: 'transparent',
         },
-        header: {
-            color: isDarkMode ? WHITE : DARK_TEXT, 
+        speakerDivider: {
+            backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
         },
         speaker: {
+            color: accentColor,
+        },
+        lineNumberButton: {
+            backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
+            borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+        },
+        lineNumberText: {
+            color: isDarkMode ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.6)',
+            fontSize: 12,
+            fontFamily: 'Inter-Medium',
+        },
+        word: {
+            color: isDarkMode ? '#E5E5E5' : '#2B2D42',
+        },
+        selectedWord: {
+            color: accentColor,
+            backgroundColor: mutedColor,
+            borderRadius: 4,
+            paddingHorizontal: 2,
+        },
+        wordDetailsContainer: {
+            backgroundColor: isDarkMode ? 'rgba(26, 26, 46, 0.8)' : 'rgba(248, 249, 250, 0.8)',
+            borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.2)' : 'rgba(67, 97, 238, 0.1)',
+            borderWidth: 1,
+            borderRadius: 12,
+            padding: 16,
+        },
+        header: {
             color: isDarkMode ? WHITE : DARK_TEXT, 
         },
         lineNumber: {
@@ -93,21 +154,8 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
         lineText: {
             color: isDarkMode ? WHITE : DARK_TEXT, 
         },
-        word: {
-            color: isDarkMode ? DARK_BLUE : LIGHT_BLUE, 
-        },
         text: {
             color: isDarkMode ? WHITE : DARK_TEXT, 
-        },
-        wordDetailsContainer: {
-            backgroundColor: isDarkMode ? "#1E1E1E" : "#F5F5F5",
-            padding: 12,
-            marginTop: 6,
-            borderRadius: 8,
-            shadowColor: isDarkMode ? "#000" : "#CCC",
-            shadowOpacity: 0.2,
-            shadowRadius: 4,
-            elevation: 3,
         },
         highlightedWord: {
             backgroundColor: "#64B5F6", 

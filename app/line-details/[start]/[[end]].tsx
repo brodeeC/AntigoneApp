@@ -1,6 +1,7 @@
+// Updated line-details.tsx with new styling
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
-import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated, ActivityIndicator } from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated, ActivityIndicator, ScrollView } from "react-native";
 import { styles, getDynamicStyles, Colors } from "../../../assets/styles/line-details.styles";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import WordDisplay from "../../../components/read/wordDisplay"; 
@@ -19,9 +20,6 @@ type SelectedWordType = {
     word: string;
     index: number;
 } | null;
-
-
-
 
 export default function LineDetails() {
     const [data, setData] = useState<LineData[] | null>(null);
@@ -48,7 +46,6 @@ export default function LineDetails() {
         'Inter-Bold': Inter_700Bold,
     });
 
-
     const [isBackPressed, setIsBackPressed] = useState(false);
 
     const handlePressIn = () => {
@@ -73,7 +70,6 @@ export default function LineDetails() {
     };
 
     const goToLines = (start: number, end: number) => {
-        console.log(start, end)
         if (end === start){ 
             goToLine(start) 
         }
@@ -128,8 +124,7 @@ export default function LineDetails() {
                 const response = await fetch(url);
                 if (!response.ok) throw new Error("Failed to load data");
                 const json = await response.json();
-                console.log(json)
-                setData(Array.isArray(json) ? json : [json]); // always an array
+                setData(Array.isArray(json) ? json : [json]);
             } catch (err) {
                 setError("Error loading data");
             } finally {
@@ -149,7 +144,6 @@ export default function LineDetails() {
         );
     }
 
-
     if (loading) return (
         <TabLayout>
             <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
@@ -160,6 +154,7 @@ export default function LineDetails() {
             </View>
         </TabLayout>
     );
+    
     if (error) return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
             <Text style={[dynamicStyles.text, { color: '#FF3B30', marginBottom: 10 }]}>Unable to load text</Text>
@@ -169,150 +164,160 @@ export default function LineDetails() {
 
     if (!data) return <Text style={[dynamicStyles.text, { textAlign: 'center', margin: 20 }]}>No text found for these lines</Text>;
 
-    
-
     return (
         <>
             <Stack.Screen options={{ headerShown: false, animation: 'none' }} />
             
             <TabLayout>
-            <LinearGradient
-                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
-                style={{ flex: 1 }}
-            >
-                <View style={styles.backButtonContainer}>
-                    <TouchableOpacity 
-                        onPressIn={() => setIsBackPressed(true)}
-                        onPressOut={() => setIsBackPressed(false)}
-                        onPress={handleGoBack}
-                        style={[
-                            styles.backButton,
-                            dynamicStyles.backButton,
-                            isBackPressed && { opacity: 0.7 }
-                        ]}
-                        activeOpacity={0.7}
-                    >
-                        <Feather 
-                            name="chevron-left" 
-                            size={24} 
-                            color={isDarkMode ? "#1E88E5" : "#1E88E5"} 
-                        />
-                    </TouchableOpacity>
-                </View>
-                {data.map((line, i) => (
-                    <View key={i} style={{ marginTop: i === 0 ? 20 : 0 }}>
-                        {/* New Line Range Header */}
-                        <View style={styles.lineRangeContainer}>
-                            <Text style={[styles.lineRangeText, dynamicStyles.lineRangeText]}>
-                                {data.length === 1 ? `Line ${currentStart}` : `Lines ${currentStart}-${currentEnd}`}
-                            </Text>
-                        </View>
-
-                        {line.speaker && (
-                            <>
-                                <View style={[styles.divider, dynamicStyles.divider]} />
-                                <Text style={[styles.speaker, dynamicStyles.speaker]}>
-                                    {line.speaker}
-                                </Text>
-                            </>
-                        )}
-                        <TouchableOpacity
-                            style={[styles.lineNumberButton, dynamicStyles.lineNumberButton]}
-                            onPress={() => {
-                                if (data.length === 1) {
-                                    goToLine(line.lineNum);
-                                } else {
-                                    goToLines(line.lineNum, line.lineNum + span - 1);
-                                }
-                            }}
-                        >
-                            <Text style={[styles.lineNumberButtonText, dynamicStyles.lineNumberButtonText]}>
-                                Line {line.lineNum}
-                            </Text>
-                        </TouchableOpacity>
-                        <View style={styles.lineTextContainer}>
-                        {line.line_text.split(" ").map((word, index) => {
-                            const isSelected = selectedWord?.word === word && selectedWord?.index === index;
-                            return (
-                                <TouchableOpacity
-                                    key={`${word}-${index}`}
-                                    onPress={() => handleWordPress(isSelected, word, index)}
-                                >
-                                    <Text style={[
-                                        styles.word,
-                                        dynamicStyles.word,
-                                        isSelected && dynamicStyles.selectedWord
-                                    ]}>
-                                        {word}{" "}
-                                    </Text>
-                                </TouchableOpacity>
-                            );
-                        })}
-                        </View>
-                        {/* Word Display Panel */}
-                        {selectedWord && (
-                            <View style={[styles.wordDetailsContainer, dynamicStyles.wordDetailsContainer]}>
-                                <WordDisplay word={selectedWord.word} />
-                            </View>
-                        )}
-                    </View>
-                ))}
-
-
-                        
-                <View style={[styles.navigationContainer, dynamicStyles.navigationContainer]}>
-                <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
-                    <TouchableOpacity
-                        style={[styles.navButton, currentStart <= 1 && styles.disabledNavButton]}
-                        onPress={() => {
-                            handleNavPress(); // Haptic feedback
-                            const newStart = currentStart - span;
-                            const newEnd = currentEnd ? currentEnd - span : null;
-                            if (newStart >= 1) {
-                                newEnd ? goToLines(newStart, newEnd) : goToLine(newStart);
-                            }
-                        }}
-                        onPressIn={handlePressIn}
-                        onPressOut={handlePressOut}
-                        disabled={currentStart <= 1}
+                <LinearGradient
+                    colors={isDarkMode ? ['#1C1C1E', '#2C2C2E'] : ['#F9F9F9', '#FFFFFF']}
+                    style={{ flex: 1 }}
                 >
-                            <MaterialIcons
-                                name="arrow-back"
-                                size={26}
-                                color={currentStart <= 1 ? "#555555" : "#4361EE"}
-                            />
-                        </TouchableOpacity>
-                    </Animated.View>
-
-                    <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
-                        <TouchableOpacity
+                    <View style={styles.backButtonContainer}>
+                        <TouchableOpacity 
+                            onPressIn={() => setIsBackPressed(true)}
+                            onPressOut={() => setIsBackPressed(false)}
+                            onPress={handleGoBack}
                             style={[
-                                styles.navButton,
-                                currentEnd != null && currentEnd >= 1353 ? styles.disabledNavButton : null
+                                styles.backButton,
+                                dynamicStyles.backButton,
+                                isBackPressed && { opacity: 0.7 }
                             ]}
-                            onPress={() => {
-                                handleNavPress(); // Haptic feedback
-                                const newStart = currentStart + span;
-                                const newEnd = currentEnd ? currentEnd + span : null;
-                                if (!newEnd || newEnd <= 1353) {
-                                    newEnd ? goToLines(newStart, newEnd) : goToLine(newStart);
-                                }
-                            }}
-                            onPressIn={handlePressIn}
-                            onPressOut={handlePressOut}
-                            disabled={currentEnd ? currentEnd >= 1353 : currentStart >= 1353}
-                    >
-                            <MaterialIcons
-                                name="arrow-forward"
-                                size={26}
-                                color={
-                                    currentEnd ? currentEnd >= 1353 ? "#555555" : "#4361EE"
-                                    : currentStart >= 1353 ? "#555555" : "#4361EE"
-                                }
+                            activeOpacity={0.7}
+                        >
+                            <Feather 
+                                name="chevron-left" 
+                                size={24} 
+                                color={isDarkMode ? "#64B5F6" : "#1E88E5"} 
                             />
                         </TouchableOpacity>
-                    </Animated.View>
-                </View>
+                    </View>
+                    
+                    {data.map((line, i) => (
+                        <View key={i} style={{ marginTop: i === 0 ? 20 : 0 }}>
+                            <View style={[styles.lineRangeContainer, dynamicStyles.lineRangeContainer]}>
+                                <Text style={[styles.lineRangeText, dynamicStyles.lineRangeText]}>
+                                    {data.length === 1 ? `Line ${currentStart}` : `Lines ${currentStart}–${currentEnd}`}
+                                </Text>
+                            </View>
+
+                            {line.speaker && (
+                                <>
+                                    <View style={[styles.divider, dynamicStyles.divider]} />
+                                    <Text style={[styles.speaker, dynamicStyles.speaker]}>
+                                        {line.speaker}
+                                    </Text>
+                                </>
+                            )}
+                            
+                            <TouchableOpacity
+                                style={[styles.lineNumberButton, dynamicStyles.lineNumberButton]}
+                                onPress={() => {
+                                    if (data.length === 1) {
+                                        goToLine(line.lineNum);
+                                    } else {
+                                        goToLines(line.lineNum, line.lineNum + span - 1);
+                                    }
+                                }}
+                            >
+                                <Text style={[styles.lineNumberButtonText, dynamicStyles.lineNumberButtonText]}>
+                                    Line {line.lineNum}
+                                </Text>
+                            </TouchableOpacity>
+                            
+                            <View style={styles.lineTextContainer}>
+                                {line.line_text.split(" ").map((word, index) => {
+                                    const isSelected = selectedWord?.word === word && selectedWord?.index === index;
+                                    return (
+                                        <TouchableOpacity
+                                            key={`${word}-${index}`}
+                                            onPress={() => handleWordPress(isSelected, word, index)}
+                                        >
+                                            <Text style={[
+                                                styles.word,
+                                                dynamicStyles.word,
+                                                isSelected && dynamicStyles.selectedWord
+                                            ]}>
+                                                {word}{" "}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    );
+                                })}
+                            </View>
+                            
+                            {selectedWord && (
+                                <View style={[styles.wordDetailsContainer, dynamicStyles.wordDetailsContainer]}>
+                                    <WordDisplay word={selectedWord.word} />
+                                </View>
+                            )}
+                        </View>
+                    ))}
+
+                        <View style={[styles.navigationContainer, dynamicStyles.navigationContainer]}>
+                            <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+                                <TouchableOpacity
+                                    style={[
+                                        styles.navButton, 
+                                        dynamicStyles.navButton,
+                                        currentStart <= 1 && styles.disabledNavButton
+                                    ]}
+                                    onPress={() => {
+                                        handleNavPress(); 
+                                        const newStart = currentStart - span;
+                                        const newEnd = currentEnd ? currentEnd - span : null;
+                                        if (newStart >= 1) {
+                                            newEnd ? goToLines(newStart, newEnd) : goToLine(newStart);
+                                        }
+                                    }}
+                                    onPressIn={handlePressIn}
+                                    onPressOut={handlePressOut}
+                                    disabled={currentStart <= 1}
+                                >
+                                    <MaterialIcons
+                                        name="chevron-left"
+                                        size={24} // Slightly larger icon
+                                        color={currentStart <= 1 ? 
+                                            (isDarkMode ? "#555555" : "#AAAAAA") : 
+                                            (isDarkMode ? "#64B5F6" : "#1E88E5")}
+                                    />
+                                </TouchableOpacity>
+                            </Animated.View>
+
+                            <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+                                <TouchableOpacity
+                                    style={[
+                                        styles.navButton, 
+                                        dynamicStyles.navButton,
+                                        currentEnd != null && currentEnd >= 1353 ? styles.disabledNavButton : null
+                                    ]}
+                                    onPress={() => {
+                                        handleNavPress();
+                                        const newStart = currentStart + span;
+                                        const newEnd = currentEnd ? currentEnd + span : null;
+                                        if (!newEnd || newEnd <= 1353) {
+                                            newEnd ? goToLines(newStart, newEnd) : goToLine(newStart);
+                                        }
+                                    }}
+                                    onPressIn={handlePressIn}
+                                    onPressOut={handlePressOut}
+                                    disabled={currentEnd ? currentEnd >= 1353 : currentStart >= 1353}
+                                >
+                                    <MaterialIcons
+                                        name="chevron-right"
+                                        size={24} // Slightly larger icon
+                                        color={
+                                            currentEnd ? 
+                                                (currentEnd >= 1353 ? 
+                                                    (isDarkMode ? "#555555" : "#AAAAAA") : 
+                                                    (isDarkMode ? "#64B5F6" : "#1E88E5")) :
+                                                (currentStart >= 1353 ? 
+                                                    (isDarkMode ? "#555555" : "#AAAAAA") : 
+                                                    (isDarkMode ? "#64B5F6" : "#1E88E5"))
+                                        }
+                                    />
+                                </TouchableOpacity>
+                            </Animated.View>
+                        </View>
                 </LinearGradient>
             </TabLayout>
         </>

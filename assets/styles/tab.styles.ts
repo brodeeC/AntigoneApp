@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
     bookmarkButton: {
         //backgroundColor: 'rgba(67, 97, 238, 0.1)',
         width: 56,
-        height: 56,
+        height: 80,
         borderRadius: Platform.select({
             ios: 400,
             android: 26,
@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0,
         shadowRadius: 1,
         elevation: 6,
-        borderWidth: 3,
+        borderWidth: 0,
         borderColor: 'rgba(67, 97, 238, 0.2)',
     },
     expandingMenu: {

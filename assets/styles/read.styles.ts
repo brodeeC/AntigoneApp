@@ -15,36 +15,72 @@ const DISABLED_COLOR = "#A0A0A0"; // Gray for disabled state
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: Platform.select({
-            ios: 24,
-            android: 20
-        }),
-        paddingBottom: Platform.select({
-            ios: 100, 
-            android: 80
-        }),
+        paddingHorizontal: 24,
+        paddingTop: Platform.select({ ios: 60, android: 40 }),
     },
-
-    
     headerContainer: {
-        alignItems: "flex-start",
-        justifyContent: "center",
-        marginBottom: 20,
-        width: "100%", 
+        marginBottom: 24,
+        alignItems: 'center',
     },
     header: {
-        fontSize: Platform.select({
-            ios: 26,  
-            android: 24
-        }),
-        fontWeight: "bold",
-        textAlign: "center",
-        letterSpacing: Platform.select({
-            ios: 0.5,  
-            android: 0
-        })
+        fontSize: 32,
+        fontFamily: 'Inter-Bold',
+        letterSpacing: 0.5,
     },
-
+    author: {
+        fontSize: 18,
+        fontFamily: 'Inter-Medium',
+        opacity: 0.8,
+        marginTop: 4,
+    },
+    headerDivider: {
+        height: 1,
+        width: '40%',
+        marginTop: 16,
+    },
+    scrollView: {
+        flex: 1,
+    },
+    scrollContent: {
+        paddingBottom: 100,
+    },
+    paginationContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 16,
+        paddingHorizontal: 8,
+        borderTopWidth: 1,
+    },
+    navButton: {
+        padding: 16,
+        borderRadius: 12,
+        backgroundColor: 'rgba(67, 97, 238, 0.1)',
+    },
+    pageJumpButton: {
+        padding: 12,
+        borderRadius: 8,
+    },
+    pageNumberContainer: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
+    },
+    pageNumber: {
+        fontSize: 24,
+        fontFamily: 'Inter-SemiBold',
+    },
+    pageCount: {
+        fontSize: 16,
+        opacity: 0.6,
+    },
+    // Line number button styles
+    lineNumberButton: {
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 6,
+        marginRight: 8,
+        borderWidth: 1,
+    },
     paginationBottomContainer: {
         flexDirection: "row",
         justifyContent: "center",
@@ -65,15 +101,6 @@ export const styles = StyleSheet.create({
         backgroundColor: PRIMARY_COLOR, 
         marginHorizontal: 8, 
     },
-
-    pageNumber: {
-        fontSize: 18,
-        fontWeight: "600",
-        marginHorizontal: 24,
-        textAlign: "center", 
-        width: 60,
-    },
-
     disabledArrowButton: {
         backgroundColor: DISABLED_COLOR,
     },
@@ -88,23 +115,17 @@ export const styles = StyleSheet.create({
         fontWeight: "500",
         marginHorizontal: 1,
     },
+    pageJumpText: {
+        fontSize: 18,
+        fontFamily: 'Inter-SemiBold',
+        letterSpacing: -1,
+    },
 });
 
 export const getDynamicStyles = (isDarkMode: boolean) => {
+    const accentColor = isDarkMode ? '#4CC9F0' : '#4361EE';
+
     return StyleSheet.create({
-        container: {
-            backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
-        },
-        header: {
-            color: isDarkMode ? WHITE : DARK_TEXT,
-            textShadowColor: isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)',
-            textShadowOffset: { width: 0, height: 1 },
-            textShadowRadius: 2
-        },
-        pageNumber: {
-            color: isDarkMode ? WHITE : DARK_TEXT,
-            fontFamily: Platform.select({ ios: 'Helvetica Neue', android: 'sans-serif' }) 
-        },
         paginationBottomContainer: {
             backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
             borderColor: isDarkMode ? "#3A3A3C" : "#E0E0E0",
@@ -121,13 +142,6 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             color: isDarkMode ? "#666666" : "#A0A0A0",
         },
 
-        speaker: {
-            fontSize: 20,
-            fontWeight: "600",
-            color: isDarkMode ? "#BB86FC" : "#6200EE", 
-            marginBottom: 4,
-        },
-
         lineNumber: {
             fontSize: 14,
             fontWeight: "500",
@@ -140,10 +154,6 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             color: isDarkMode ? WHITE : DARK_TEXT,
             flexWrap: "wrap",
             flexShrink: 1,
-        },
-
-        word: {
-            color: isDarkMode ? DARK_BLUE : LIGHT_BLUE, 
         },
 
         wordDetailsContainer: {
@@ -173,6 +183,58 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             fontSize: 14,
             color: "#D32F2F", 
             marginTop: 8,
+        },
+        container: {
+            backgroundColor: 'transparent',
+        },
+        header: {
+            color: isDarkMode ? '#F8F9FA' : '#2B2D42',
+        },
+        author: {
+            color: isDarkMode ? 'rgba(248, 249, 250, 0.8)' : 'rgba(43, 45, 66, 0.8)',
+        },
+        headerDivider: {
+            backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+        },
+        paginationContainer: {
+            borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+            backgroundColor: isDarkMode ? 'rgba(26, 26, 46, 0.8)' : 'rgba(248, 249, 250, 0.8)',
+        },
+        pageNumber: {
+            color: accentColor,
+        },
+        pageCount: {
+            color: isDarkMode ? 'rgba(248, 249, 250, 0.6)' : 'rgba(43, 45, 66, 0.6)',
+        },
+        navIcon: {
+            color: accentColor,
+        },
+        pageJumpText: {
+            color: accentColor,
+            fontFamily: 'Inter-SemiBold',
+        },
+        // Line number styles
+        lineNumberButton: {
+            backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
+            borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.3)' : 'rgba(67, 97, 238, 0.2)',
+        },
+        lineNumberText: {
+            color: accentColor,
+            fontFamily: 'Inter-SemiBold',
+            fontSize: 14,
+        },
+        // Word and speaker styles
+        word: {
+            color: accentColor,
+            fontFamily: 'Inter-Medium',
+        },
+        speaker: {
+            color: accentColor,
+            fontFamily: 'Inter-Bold',
+            fontSize: 18,
+            marginBottom: 8,
+            textTransform: 'uppercase',
+            letterSpacing: 1,
         },
     });
 };

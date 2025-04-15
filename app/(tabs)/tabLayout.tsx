@@ -126,7 +126,7 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
                         ]}>
                             <EnIcon 
                                 name={expanded ? "cross" : "bookmark"} 
-                                size={28} 
+                                size={40} 
                                 color={dynamicStyles.activeTabColor} 
                             />
                         </Animated.View>

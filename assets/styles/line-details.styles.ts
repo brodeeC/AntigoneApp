@@ -1,18 +1,14 @@
+// Updated line-details.styles.ts
 import { StyleSheet, Platform } from "react-native";
 
-// Modern color palette
-const PRIMARY_COLOR = "#4361EE"; // Vibrant blue
-const SECONDARY_COLOR = "#3A0CA3"; // Deep purple-blue
-const ACCENT_COLOR = "#4CC9F0"; // Bright cyan
-const LIGHT_BACKGROUND = "#F8F9FA"; // Soft white
-const DARK_BACKGROUND = "#0F0F1B"; // Deep space blue
-const LIGHT_TEXT = "#2B2D42"; // Dark blue-gray
-const DARK_TEXT = "#F8F9FA"; // Off-white
-const DISABLED_COLOR = "#6C757D"; // Modern gray
-
-// Gradient colors
-const GRADIENT_START = "#4361EE";
-const GRADIENT_END = "#3A0CA3";
+// Updated color palette to match the subtle filled buttons
+const PRIMARY_COLOR = "#1E88E5"; // Lighter blue
+const DARK_BLUE = "#64B5F6"; // Even lighter blue for dark mode
+const LIGHT_BACKGROUND = "#F9F9F9"; // Slightly off-white
+const DARK_BACKGROUND = "#1C1C1E"; // Dark gray
+const LIGHT_TEXT = "#333333"; // Dark gray for light mode
+const DARK_TEXT = "#E5E5E5"; // Light gray for dark mode
+const DISABLED_COLOR = "#A0A0A0"; // Gray for disabled state
 
 export const styles = StyleSheet.create({
     container: {
@@ -72,26 +68,20 @@ export const styles = StyleSheet.create({
     },
     navButton: {
         padding: 16,
-        borderRadius: Platform.select({
-            ios: 16,
-            android: 31.9,
-        }),
-        width: 64,
-        height: 64,
+        borderRadius: 28, 
+        width: 56,
+        height: 56,
         justifyContent: "center",
         alignItems: "center",
-        marginHorizontal: 32,
-        shadowColor: "#FFF",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 6,
-        elevation: 8,
+        marginHorizontal: 24, 
+        backgroundColor: 'rgba(30, 136, 229, 0.1)', 
+        borderWidth: 1,
     },
     disabledNavButton: {
         opacity: 0.5,
     },
     selectedWord: {
-        backgroundColor: "rgba(67, 97, 238, 0.2)",
+        backgroundColor: "rgba(30, 136, 229, 0.2)",
         transform: [{ scale: 1.05 }],
     },
     wordDetailsContainer: {
@@ -106,28 +96,26 @@ export const styles = StyleSheet.create({
         elevation: 6,
         marginBottom: 24,
         borderWidth: 1,
-        borderColor: 'rgba(67, 97, 238, 0.1)',
     },
     backButton: {
-        padding: 14,
-        borderRadius: Platform.select({
-            ios: 14,
-            android: 26,
-        }),
+        padding: 16,
+        borderRadius: 28, // Fully rounded
+        width: 56,
+        height: 56,
         justifyContent: 'center',
         alignItems: 'center',
-        width: 52,
-        height: 52,
+        backgroundColor: 'rgba(30, 136, 229, 0.1)', // Matching fill
+        borderWidth: 1,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
+        shadowOpacity: 0.1,
         shadowRadius: 4,
-        elevation: 4,
-        shadowColor: '#FFF',
+        elevation: 3,
     },
     backButtonContainer: {
         position: 'absolute',
         top: Platform.select({
-            ios: 50,
+            ios: 65,
             android: 24
         }),
         left: 24,
@@ -150,13 +138,12 @@ export const styles = StyleSheet.create({
             android: 90
         }),
         textAlign: 'center',
-        backgroundColor: 'rgba(67, 97, 238, 0.1)',
+        backgroundColor: 'rgba(30, 136, 229, 0.1)',
         borderRadius: 20,
         paddingVertical: 11,
         paddingHorizontal: 16,
         zIndex: 24,
         borderWidth: 1,
-        borderColor: 'rgba(67, 97, 238, 0.2)',
     },
     divider: {
         height: 1,
@@ -165,39 +152,37 @@ export const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     lineRangeContainer: {
-        paddingVertical: 12,
-        paddingHorizontal: 20,
+        paddingVertical: 8,
+        paddingHorizontal: 24,
         borderRadius: 20,
         alignSelf: 'center',
-        marginBottom: 8,
+        marginBottom: 2,
         marginTop: Platform.select({
-            ios: 40,
+            ios: 50,
             android: 0
         }),
     },
     lineRangeText: {
-        fontSize: 18,
+        fontSize: 18, // Slightly larger
         fontFamily: 'Inter-SemiBold',
-        letterSpacing: 0.5,
+        letterSpacing: 0.3,
+        includeFontPadding: false, // Better vertical alignment
     },
     lineNumberButton: {
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: Platform.select({
-            ios: 16,
-            android: 26,
-        }),
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 6,
         alignSelf: 'flex-start',
         marginVertical: 8,
-        shadowColor: '#FFF',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        marginLeft: 8,
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        minWidth: 48,
+        alignItems: 'center',
     },
     lineNumberButtonText: {
-        fontSize: 16,
-        fontFamily: 'Inter-SemiBold',
+        fontSize: 14,
+        fontFamily: 'Inter-Medium',
     },
 });
 
@@ -207,34 +192,35 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             backgroundColor: isDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
         },
         lineNumber: {
-            color: isDarkMode ? ACCENT_COLOR : PRIMARY_COLOR,
+            color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
         },
         speaker: {
-            color: isDarkMode ? DARK_TEXT : LIGHT_TEXT,
+            color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
         },
         word: {
-            color: isDarkMode ? ACCENT_COLOR : PRIMARY_COLOR,
+            color: isDarkMode ? DARK_TEXT : LIGHT_TEXT,
         },
         navigationContainer: {
             backgroundColor: isDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
         },
         wordDetailsContainer: {
-            backgroundColor: isDarkMode ? "#1A1A2E" : "#FFFFFF",
-            borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.2)' : 'rgba(67, 97, 238, 0.1)',
+            backgroundColor: isDarkMode ? "#2C2C2E" : "#FFFFFF",
+            borderColor: isDarkMode ? 'rgba(100, 181, 246, 0.2)' : 'rgba(30, 136, 229, 0.1)',
         },
         selectedWord: {
-            backgroundColor: isDarkMode ? "rgba(76, 201, 240, 0.2)" : "rgba(67, 97, 238, 0.2)",
-            color: isDarkMode ? ACCENT_COLOR : PRIMARY_COLOR,
+            backgroundColor: isDarkMode ? "rgba(100, 181, 246, 0.2)" : "rgba(30, 136, 229, 0.2)",
+            color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
         },
         backButton: {
-            backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
+            backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
+            borderColor: isDarkMode ? 'rgba(100, 181, 246, 0.3)' : 'rgba(30, 136, 229, 0.3)',
         },
         loadingContainer: {
             backgroundColor: isDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
         },
         floatingLineNumber: {
-            backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
-            borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.3)' : 'rgba(67, 97, 238, 0.2)',
+            backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
+            borderColor: isDarkMode ? 'rgba(100, 181, 246, 0.3)' : 'rgba(30, 136, 229, 0.2)',
         },
         divider: {
             backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
@@ -245,15 +231,21 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             color: isDarkMode ? DARK_TEXT : LIGHT_TEXT,
         },
         lineRangeText: {
-            color: isDarkMode ? ACCENT_COLOR : PRIMARY_COLOR,
+            color: isDarkMode ? "#64B5F6" : "#1E88E5",
+        },
+        lineRangeContainer: {
+            backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
+            borderColor: isDarkMode ? 'rgba(100, 181, 246, 0.3)' : 'rgba(30, 136, 229, 0.3)',
         },
         lineNumberButton: {
-            backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
-            borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.3)' : 'rgba(67, 97, 238, 0.2)',
-            borderWidth: 1,
+            borderColor: isDarkMode ? 'rgba(100, 181, 246, 0.3)' : 'rgba(30, 136, 229, 0.3)',
         },
         lineNumberButtonText: {
-            color: isDarkMode ? ACCENT_COLOR : PRIMARY_COLOR,
+            color: isDarkMode ? 'rgba(100, 181, 246, 0.8)' : 'rgba(30, 136, 229, 0.8)',
+        },
+        navButton: {
+            backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
+            borderColor: isDarkMode ? 'rgba(100, 181, 246, 0.3)' : 'rgba(30, 136, 229, 0.3)',
         },
     });
 };
@@ -268,11 +260,11 @@ export const Colors = {
         text: LIGHT_TEXT,
     },
     dark: {
-        buttonBackground: ACCENT_COLOR,
+        buttonBackground: DARK_BLUE,
         buttonText: '#FFFFFF',
         background: DARK_BACKGROUND,
         loadingBackground: '#121212',
-        loadingIndicator: ACCENT_COLOR,
+        loadingIndicator: DARK_BLUE,
         text: DARK_TEXT,
     }
 };
