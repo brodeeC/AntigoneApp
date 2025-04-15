@@ -1,78 +1,99 @@
+import { Platform } from 'react-native';
 import { StyleSheet } from 'react-native';
 
-const PRIMARY_COLOR = "#6A0DAD"; // Deep purple
-const SECONDARY_COLOR = "#1E88E5"; // Vibrant blue
-const LIGHT_GRAY = "#F9F9F9";
-const DARK_GRAY = "#1C1C1E";
-const WHITE = "#FFFFFF";
-const DARK_TEXT = "#333333";
+const PRIMARY_COLOR = "#4361EE"; // Vibrant blue
+const SECONDARY_COLOR = "#3A0CA3"; // Deep purple-blue
+const ACCENT_COLOR = "#4CC9F0"; // Bright cyan
+const LIGHT_BACKGROUND = "#F8F9FA"; // Soft white
+const DARK_BACKGROUND = "#0F0F1B"; // Deep space blue
+const LIGHT_TEXT = "#2B2D42"; // Dark blue-gray
+const DARK_TEXT = "#F8F9FA"; // Off-white
 
 export default StyleSheet.create({
     container: {
-        flexGrow: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20,
+        flex: 1,
+    },
+    content: {
+        flex: 1,
+        paddingHorizontal: 24,
+        paddingTop: 80,
     },
     header: {
-        marginBottom: 30,
+        marginTop: Platform.select({
+            ios: 30,
+        }),
+        marginBottom: 40,
+        alignItems: 'center',
     },
     title: {
-        fontSize: 26,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 10,
+        fontSize: 32,
+        fontFamily: 'Inter-Bold',
+        letterSpacing: 0.5,
+        marginBottom: 8,
+    },
+    subtitle: {
+        fontSize: 16,
+        fontFamily: 'Inter-Medium',
+        opacity: 0.8,
     },
     buttonGrid: {
         width: '100%',
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
-        gap: 12,
+        gap: 16,
     },
-    buttonHalf: {
-        width: '48%', 
-        minHeight: 120,
-        borderRadius: 12,
-        padding: 16,
-        backgroundColor: SECONDARY_COLOR,
+    buttonCard: {
+        width: '100%',
+        height: 120,
+        borderRadius: 20,
+        padding: 24,
         justifyContent: 'center',
-        alignItems: 'center',
+        borderWidth: 1,
         shadowColor: '#000',
-        shadowOpacity: 0.15,
-        shadowRadius: 5,
-        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 5 },
         elevation: 5,
     },
-    buttonContent: {
-        alignItems: 'center',
-        gap: 8,
+    lightCard: {
+        backgroundColor: '#FFFFFF',
+        borderColor: 'rgba(67, 97, 238, 0.1)',
+    },
+    darkCard: {
+        backgroundColor: '#1A1A2E',
+        borderColor: 'rgba(76, 201, 240, 0.2)',
     },
     buttonText: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: WHITE,
-        textAlign: 'center',
+        fontSize: 18,
+        fontFamily: 'Inter-SemiBold',
+        marginTop: 16,
     },
     iconContainer: {
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        width: 48,
-        height: 48,
-        borderRadius: 24,
+        width: 56,
+        height: 56,
+        borderRadius: 28,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 8,
     },
     lightBackground: {
-        backgroundColor: LIGHT_GRAY,
+        backgroundColor: LIGHT_BACKGROUND,
     },
     darkBackground: {
-        backgroundColor: DARK_GRAY,
+        backgroundColor: DARK_BACKGROUND,
     },
     lightText: {
-        color: DARK_TEXT,
+        color: LIGHT_TEXT,
     },
     darkText: {
-        color: WHITE,
+        color: DARK_TEXT,
+    },
+    lightSubtext: {
+        color: LIGHT_TEXT,
+        opacity: 0.8,
+    },
+    darkSubtext: {
+        color: DARK_TEXT,
+        opacity: 0.8,
     },
 });

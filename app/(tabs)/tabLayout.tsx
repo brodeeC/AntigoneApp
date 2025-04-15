@@ -138,7 +138,7 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
                         dynamicStyles.expandingMenuStyle,
                         { 
                             transform: [{ translateY }],
-                            opacity: overlayOpacity, // Sync with overlay
+                            opacity: overlayOpacity, 
                         }
                     ]}>
                         <TouchableOpacity 

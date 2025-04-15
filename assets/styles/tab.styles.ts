@@ -19,26 +19,29 @@ export const styles = StyleSheet.create({
     container: {
         position: 'absolute',
         top: Platform.select({
-            ios: 60,
-            android: 40
+            ios: 50,
+            android: 20
         }),
         right: 24,
         zIndex: 100,
     },
     bookmarkButton: {
-        backgroundColor: 'rgba(67, 97, 238, 0.1)',
+        //backgroundColor: 'rgba(67, 97, 238, 0.1)',
         width: 56,
         height: 56,
-        borderRadius: 48,
+        borderRadius: Platform.select({
+            ios: 400,
+            android: 26,
+        }),
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 101,
-        shadowColor: '#000',
+        shadowColor: '#FFF',
         shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
+        shadowOpacity: 0,
+        shadowRadius: 1,
         elevation: 6,
-        borderWidth: 1,
+        borderWidth: 3,
         borderColor: 'rgba(67, 97, 238, 0.2)',
     },
     expandingMenu: {

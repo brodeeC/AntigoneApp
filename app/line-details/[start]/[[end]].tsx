@@ -180,12 +180,6 @@ export default function LineDetails() {
                 colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
                 style={{ flex: 1 }}
             >
-                <View style={[styles.floatingLineNumber, dynamicStyles.floatingLineNumber]}>
-                    <Text style={[styles.lineNumber, dynamicStyles.lineNumber]}>
-                        {currentStart}{currentEnd !== currentStart ? `-${currentEnd}` : ''}
-                    </Text>
-                </View>
-
                 <View style={styles.backButtonContainer}>
                     <TouchableOpacity 
                         onPressIn={() => setIsBackPressed(true)}
@@ -206,7 +200,14 @@ export default function LineDetails() {
                     </TouchableOpacity>
                 </View>
                 {data.map((line, i) => (
-                    <View key={i} style={{ marginTop: i === 0 ? 50 : 0 }}>
+                    <View key={i} style={{ marginTop: i === 0 ? 20 : 0 }}>
+                        {/* New Line Range Header */}
+                        <View style={styles.lineRangeContainer}>
+                            <Text style={[styles.lineRangeText, dynamicStyles.lineRangeText]}>
+                                {data.length === 1 ? `Line ${currentStart}` : `Lines ${currentStart}-${currentEnd}`}
+                            </Text>
+                        </View>
+
                         {line.speaker && (
                             <>
                                 <View style={[styles.divider, dynamicStyles.divider]} />
@@ -216,6 +217,7 @@ export default function LineDetails() {
                             </>
                         )}
                         <TouchableOpacity
+                            style={[styles.lineNumberButton, dynamicStyles.lineNumberButton]}
                             onPress={() => {
                                 if (data.length === 1) {
                                     goToLine(line.lineNum);
@@ -224,7 +226,7 @@ export default function LineDetails() {
                                 }
                             }}
                         >
-                            <Text style={[styles.lineNumber, dynamicStyles.lineNumber]}>
+                            <Text style={[styles.lineNumberButtonText, dynamicStyles.lineNumberButtonText]}>
                                 Line {line.lineNum}
                             </Text>
                         </TouchableOpacity>
@@ -276,8 +278,8 @@ export default function LineDetails() {
                 >
                             <MaterialIcons
                                 name="arrow-back"
-                                size={24}
-                                color={currentStart <= 1 ? "#555555" : "#FFF"}
+                                size={26}
+                                color={currentStart <= 1 ? "#555555" : "#4361EE"}
                             />
                         </TouchableOpacity>
                     </Animated.View>
@@ -302,10 +304,10 @@ export default function LineDetails() {
                     >
                             <MaterialIcons
                                 name="arrow-forward"
-                                size={24}
+                                size={26}
                                 color={
-                                    currentEnd ? currentEnd >= 1353 ? "#555555" : "#FFF"
-                                    : currentStart >= 1353 ? "#555555" : "#FFF"
+                                    currentEnd ? currentEnd >= 1353 ? "#555555" : "#4361EE"
+                                    : currentStart >= 1353 ? "#555555" : "#4361EE"
                                 }
                             />
                         </TouchableOpacity>
