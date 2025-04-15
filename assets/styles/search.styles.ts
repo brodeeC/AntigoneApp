@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 export const searchStyles = (isDark: boolean) => {
   const colors = {
@@ -7,14 +7,13 @@ export const searchStyles = (isDark: boolean) => {
     inactiveTab: isDark ? '#888' : '#999',
     indicator: isDark ? '#64B5F6' : '#1E88E5',
     text: isDark ? '#E5E5E5' : '#333333',
-    tabBarBackground: isDark ? '#1C1C1E' : '#F9F9F9',
-    border: isDark ? '#333' : '#e0e0e0',
+    tabBarBackground: isDark ? 'rgba(28, 28, 30, 0.9)' : 'rgba(249, 249, 249, 0.9)',
+    border: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
   };
 
   return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.background,
     },
     
     tabBar: {
@@ -22,7 +21,9 @@ export const searchStyles = (isDark: boolean) => {
       backgroundColor: colors.tabBarBackground,
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
+      zIndex: 5,
     },
+    
     tabList: {
       flexGrow: 1,
       justifyContent: 'space-around',
@@ -34,18 +35,22 @@ export const searchStyles = (isDark: boolean) => {
       paddingHorizontal: 12,
       position: 'relative',
     },
+    
     activeTabItem: {
-      
+      // Add any active tab specific styles
     },
     
     label: {
       fontSize: 14,
-      fontWeight: 'bold',
+      fontWeight: '600',
       textTransform: 'none',
       color: colors.inactiveTab,
+      fontFamily: 'Inter-Medium',
     },
+    
     activeTabText: {
       color: colors.activeTab,
+      fontFamily: 'Inter-SemiBold',
     },
     
     indicator: {
@@ -60,7 +65,6 @@ export const searchStyles = (isDark: boolean) => {
     
     contentContainer: {
       flex: 1,
-      backgroundColor: colors.background,
       paddingHorizontal: 16,
     },
     

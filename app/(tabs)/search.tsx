@@ -1,10 +1,21 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Platform, FlatList, useColorScheme, ScrollView, Dimensions } from 'react-native';
+import { 
+  View, 
+  Text, 
+  TouchableOpacity, 
+  Platform, 
+  FlatList, 
+  useColorScheme, 
+  ScrollView, 
+  Dimensions 
+} from 'react-native';
 import { searchStyles } from '@/assets/styles/search.styles';
 import LineSearch from '@/components/search/LineSearch';
 import SpeakerSearch from '@/components/search/SpeakerSearch';
 import { router, useLocalSearchParams } from 'expo-router';
 import WordSearch from '@/components/search/WordSearch';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Feather } from '@expo/vector-icons';
 
 type ValidTab = 'Word Search' | 'Line Search' | 'Speaker Search';
 
@@ -22,6 +33,7 @@ const TabButton = ({ name, activeTab, onPress, isDark }: TabButtonProps) => {
     <TouchableOpacity
       style={[styles.tabItem, activeTab === name && styles.activeTabItem]}
       onPress={() => onPress(name)}
+      activeOpacity={0.7}
     >
       <Text style={[styles.label, activeTab === name && styles.activeTabText]}>
         {name}
@@ -31,16 +43,25 @@ const TabButton = ({ name, activeTab, onPress, isDark }: TabButtonProps) => {
   );
 };
 
-const Tabs = ({ activeTab, setActiveTab, isDark }: { activeTab: ValidTab; setActiveTab: (tab: ValidTab) => void; isDark: boolean }) => {
+const Tabs = ({ activeTab, setActiveTab, isDark }: { 
+  activeTab: ValidTab; 
+  setActiveTab: (tab: ValidTab) => void; 
+  isDark: boolean 
+}) => {
   const tabs: ValidTab[] = ['Word Search', 'Line Search', 'Speaker Search'];
   const styles = searchStyles(isDark);
 
   return (
-    <View style={[styles.tabBar, { paddingTop: Platform.OS === 'ios' ? 100 : 70 }]}>
+    <View style={[styles.tabBar, { paddingTop: Platform.OS === 'ios' ? 120 : 40 }]}>
       <FlatList
         data={tabs}
         renderItem={({ item }) => (
-          <TabButton name={item} activeTab={activeTab} onPress={setActiveTab} isDark={isDark} />
+          <TabButton 
+            name={item} 
+            activeTab={activeTab} 
+            onPress={setActiveTab} 
+            isDark={isDark} 
+          />
         )}
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -65,13 +86,10 @@ export default function SearchScreen() {
     'Speaker Search': <SpeakerSearch />,
   };
 
-  // Set initial active tab from URL params
   const [activeTab, setActiveTab] = useState<ValidTab>(
     typeof tab === 'string' && tabs.includes(tab as ValidTab) ? (tab as ValidTab) : 'Word Search'
   );
 
-
-  // Sync active tab with URL when changed manually
   useEffect(() => {
     if (activeTab !== tab) {
       router.setParams({ tab: activeTab });
@@ -90,25 +108,38 @@ export default function SearchScreen() {
     setActiveTab(tabs[tabIndex]);
   };
 
-  return (
-    <View style={{ flex: 1 }}>
-      <Tabs activeTab={activeTab} setActiveTab={handleTabPress} isDark={isDark} />
+  const handleGoBack = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace('/(tabs)');
+    }
+  };
 
-      <ScrollView
-        ref={scrollViewRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={handleScrollEnd}
-        scrollEventThrottle={16}
+  return (
+    <LinearGradient
+        colors={isDark ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
         style={{ flex: 1 }}
-      >
-        {tabs.map((tab) => (
-          <View key={tab} style={{ width }}>
-            {tabComponents[tab]}
-          </View>
-        ))}
-      </ScrollView>
-    </View>
+    >
+      <View style={{ flex: 1 }}>        
+        <Tabs activeTab={activeTab} setActiveTab={handleTabPress} isDark={isDark} />
+
+        <ScrollView
+          ref={scrollViewRef}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onMomentumScrollEnd={handleScrollEnd}
+          scrollEventThrottle={16}
+          style={{ flex: 1 }}
+        >
+          {tabs.map((tab) => (
+            <View key={tab} style={{ width, paddingTop: 10 }}>
+              {tabComponents[tab]}
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+    </LinearGradient>
   );
 }

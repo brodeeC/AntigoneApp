@@ -61,11 +61,11 @@ export default function PageDisplay({ page }: PageDisplayProps) {
                         <View key={line.lineNum} style={styles.lineBlock}>
                             {showSpeaker && (
                                 <>
-                                    {lineIndex > 0 && (  // Only show divider if not the first speaker on page
+                                    {lineIndex > 0 && (  
                                         <View style={[styles.speakerDivider, dynamicStyles.speakerDivider]} />
                                     )}
                                     <Text style={[styles.speaker, dynamicStyles.speaker]}>
-                                        {line.speaker.toUpperCase()}
+                                        {line.speaker}
                                     </Text>
                                 </>
                             )}

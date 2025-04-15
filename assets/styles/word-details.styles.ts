@@ -1,143 +1,103 @@
 import { Platform, StyleSheet } from "react-native";
 
-const PRIMARY_COLOR = "#1E88E5"; // Bookmark blue
-const SECONDARY_COLOR = "#64B5F6"; // Lighter blue for accents
-const LIGHT_BACKGROUND = "#FFFFFF"; // Pure white
-const DARK_BACKGROUND = "#121212"; // True black background
-const LIGHT_TEXT = "#333333"; // Dark gray for light mode
-const DARK_TEXT = "#E5E5E5"; // Off-white for dark mode
-const DISABLED_COLOR = "#555555"; // Gray for disabled state
+const PRIMARY_COLOR = "#1E88E5";
+const LIGHT_BLUE = "#1E88E5";
+const DARK_BLUE = "#64B5F6";
+const LIGHT_GRAY = "#F9F9F9";
+const DARK_GRAY = "#1C1C1E";
+const WHITE = "#FFFFFF";
+const DARK_TEXT = "#333333";
+const MUTED_GRAY = "#888888";
+const DISABLED_COLOR = "#A0A0A0";
 
 export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
-    mainContainer: {
-        flex: 1,
-        backgroundColor: isDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
-    },
-
-    safeAreaPadding: {
-        paddingTop: Platform.select({
-            ios: 44, // Extra space for iOS camera bar
-            android: 0
-        }),
-    },
-
     wordDetailsContainer: {
         flex: 1,
-        backgroundColor: isDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
         paddingTop: Platform.select({
             ios: 20,
             android: 10
         }),
     },
-    goButton: {
-        backgroundColor: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
-        borderRadius: 8,
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        marginTop: 8,
-        alignSelf: 'flex-start',
+    loadingContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
-    goButtonText: {
-        color: '#FFFFFF',
-        fontWeight: '600',
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 16,
+        paddingHorizontal: 16,
+        paddingTop: Platform.select({
+            ios: 40,
+            android: 20
+        }),
     },
     header: {
         fontSize: 28,
         fontWeight: '700',
-        color: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
-        paddingTop: Platform.select({
-            ios: 20,
-            android: 20
-        }),
-        paddingBottom: 20,
-        paddingHorizontal: 20,
-        backgroundColor: isDarkMode ? DARK_BACKGROUND : LIGHT_BACKGROUND,
-        zIndex: 10,
+        color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
     },
-    scrollContent: {
-        padding: 20,
-        paddingBottom: 100, 
+    backButton: {
+        marginRight: 12,
+        padding: 8,
+        borderRadius: 8,
+        backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
     },
-
+    backButtonPressed: {
+        opacity: 0.7,
+    },
     entryContainer: {
         backgroundColor: isDarkMode ? "#2C2C2E" : "#F8F8F8",
         borderRadius: 12,
         padding: 16,
+        margin: 16,
+        marginBottom: 12,
         shadowColor: isDarkMode ? "#000" : "#CCC",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 6,
         elevation: 3,
-        flexDirection: "row",
-        marginBottom: 8,
-        alignItems: "center", 
-        flexWrap: 'wrap',
     },
-
     entryTitle: {
         fontSize: 20,
         fontWeight: "600",
-        color: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
+        color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
         marginBottom: 12,
         borderBottomWidth: 1,
         borderBottomColor: isDarkMode ? "#444" : "#EEE",
         paddingBottom: 8,
     },
-
     entryContent: {
         flexDirection: "row",
         marginBottom: 8,
-        alignItems: "flex-start",
+        alignItems: "center",
+        flexWrap: 'wrap',
     },
-
     entryLabel: {
         fontWeight: "600",
         fontSize: 16,
-        color: isDarkMode ? DARK_TEXT : LIGHT_TEXT,
-        minWidth: 100, 
+        color: isDarkMode ? WHITE : DARK_TEXT,
+        minWidth: 100,
     },
-
     entryValue: {
         fontSize: 16,
-        flex: 1,
-        color: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
+        color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
         lineHeight: 22,
     },
-    definitionContainer: {
-        marginTop: 16,
-        borderRadius: 8,
-        padding: 12,
-        backgroundColor: isDarkMode ? "#2A2A2C" : "#F0F0F0",
-        borderLeftWidth: 4,
-        borderLeftColor: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
+    goButton: {
+        backgroundColor: 'transparent',
+        borderRadius: 6,
+        borderWidth: 1,
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        marginLeft: 8,
+        borderColor: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
     },
-
-    definitionText: {
-        fontSize: 15,
-        lineHeight: 22,
-        color: isDarkMode ? "#DDD" : "#444",
-        marginBottom: 6,
-    },
-
-    noDataText: {
+    goButtonText: {
+        color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
         fontSize: 14,
-        fontStyle: "italic",
-        color: isDarkMode ? "#888" : "#999",
-        marginTop: 4,
-    },
-
-    errorText: {
-        fontSize: 16,
-        color: "#FF3B30",
-        textAlign: "center",
-        marginTop: 20,
-    },
-
-    loadingContainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: isDarkMode ? Colors.dark.background : Colors.light.background,
+        fontFamily: 'Inter-Medium',
     },
     caseContainer: {
         marginTop: 16,
@@ -145,14 +105,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         backgroundColor: isDarkMode ? "#2A2A2C" : "#F0F0F0",
         borderRadius: 8,
         borderLeftWidth: 4,
-        borderLeftColor: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
-    },
-    
-    wordDetailsText: {
-        fontSize: 15,
-        lineHeight: 22,
-        color: isDarkMode ? SECONDARY_COLOR : PRIMARY_COLOR,
-        fontWeight: '500',
+        borderLeftColor: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
     },
     wordDetailsLabel: {
         fontSize: 14,
@@ -162,50 +115,66 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         letterSpacing: 0.5,
         textTransform: 'uppercase',
     },
-    headerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 16,
-        paddingHorizontal: 16, 
-        paddingTop: Platform.select({
-            ios: 40,
-            android: 20
-        }),
-      },
-      
-      backButton: {
-        marginRight: 12,
-        padding: 8,
-        borderRadius: 8, 
-        backgroundColor: isDarkMode ? Colors.dark.buttonBackground : Colors.light.buttonBackground,
-      },
-      
-      backButtonPressed: {
-        opacity: 0.7, 
-      },
-      toggleButton: {
+    wordDetailsText: {
+        fontSize: 15,
+        lineHeight: 22,
+        color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
+        fontWeight: '500',
+    },
+    definitionContainer: {
+        marginTop: 16,
+        borderRadius: 8,
+        padding: 12,
+        backgroundColor: isDarkMode ? "#2A2A2C" : "#F0F0F0",
+        borderLeftWidth: 4,
+        borderLeftColor: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
+    },
+    definitionText: {
+        fontSize: 15,
+        lineHeight: 22,
+        color: isDarkMode ? "#DDD" : "#444",
+        marginBottom: 6,
+    },
+    noDataText: {
+        fontSize: 14,
+        fontStyle: "italic",
+        color: isDarkMode ? "#888" : "#999",
+        marginTop: 4,
+    },
+    errorText: {
+        fontSize: 16,
+        color: "#FF3B30",
+        textAlign: "center",
+        marginTop: 20,
+    },
+    toggleButton: {
         marginTop: 8,
-        paddingVertical: 4,
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 6,
+        alignSelf: 'flex-start',
+        backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
     },
     toggleButtonText: {
-        color: isDarkMode ? Colors.dark.secondaryText : Colors.light.secondaryText,
+        color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
         fontSize: 14,
-        fontStyle: 'italic',
+        fontFamily: 'Inter-Medium',
     },
 });
+
 export const Colors = {
     light: {
-      buttonBackground: '#e0e0e0', 
-      buttonText: '#1E88E5',
-      primaryText: '#1E88E5',       
-      secondaryText: '#64B5F6',
-      background: '#F9F9F9',
+        buttonBackground: 'rgba(30, 136, 229, 0.1)',
+        buttonText: PRIMARY_COLOR,
+        primaryText: PRIMARY_COLOR,
+        secondaryText: DARK_BLUE,
+        background: LIGHT_GRAY,
     },
     dark: {
-      buttonBackground: '#333', 
-      buttonText: '#1E88E5',
-      primaryText: '#64B5F6',      
-      secondaryText: '#90CAF9',
-      background: '#121212',
+        buttonBackground: 'rgba(100, 181, 246, 0.1)',
+        buttonText: DARK_BLUE,
+        primaryText: DARK_BLUE,
+        secondaryText: '#90CAF9',
+        background: DARK_GRAY,
     }
-  };
+};

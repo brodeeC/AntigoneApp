@@ -170,7 +170,7 @@ export default function LineDetails() {
             
             <TabLayout>
                 <LinearGradient
-                    colors={isDarkMode ? ['#1C1C1E', '#2C2C2E'] : ['#F9F9F9', '#FFFFFF']}
+                    colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
                     style={{ flex: 1 }}
                 >
                     <View style={styles.backButtonContainer}>
@@ -187,12 +187,14 @@ export default function LineDetails() {
                         >
                             <Feather 
                                 name="chevron-left" 
-                                size={24} 
+                                size={20} 
                                 color={isDarkMode ? "#64B5F6" : "#1E88E5"} 
                             />
+                            <Text style={[styles.backButtonText, dynamicStyles.backButtonText]}>
+                                Back
+                            </Text>
                         </TouchableOpacity>
                     </View>
-                    
                     {data.map((line, i) => (
                         <View key={i} style={{ marginTop: i === 0 ? 20 : 0 }}>
                             <View style={[styles.lineRangeContainer, dynamicStyles.lineRangeContainer]}>
@@ -200,7 +202,10 @@ export default function LineDetails() {
                                     {data.length === 1 ? `Line ${currentStart}` : `Lines ${currentStart}–${currentEnd}`}
                                 </Text>
                             </View>
-
+                            <ScrollView 
+                                contentContainerStyle={styles.scrollContainer}
+                                showsVerticalScrollIndicator={false}
+                            >
                             {line.speaker && (
                                 <>
                                     <View style={[styles.divider, dynamicStyles.divider]} />
@@ -250,9 +255,9 @@ export default function LineDetails() {
                                     <WordDisplay word={selectedWord.word} />
                                 </View>
                             )}
+                            </ScrollView>
                         </View>
                     ))}
-
                         <View style={[styles.navigationContainer, dynamicStyles.navigationContainer]}>
                             <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
                                 <TouchableOpacity
