@@ -146,20 +146,30 @@ export default function LineDetails() {
 
     if (loading) return (
         <TabLayout>
+            <LinearGradient
+                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+                style={{ flex: 1 }}
+            >
             <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
                 <ActivityIndicator 
                     size="large" 
                     color={isDarkMode ? Colors.dark.loadingIndicator : Colors.light.loadingIndicator} 
                 />
             </View>
+            </LinearGradient>
         </TabLayout>
     );
     
     if (error) return (
+        <LinearGradient
+            colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+            style={{ flex: 1 }}
+        >
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
             <Text style={[dynamicStyles.text, { color: '#FF3B30', marginBottom: 10 }]}>Unable to load text</Text>
             <Text style={[dynamicStyles.text, { textAlign: 'center' }]}>Please check your connection and try again</Text>
         </View>
+        </LinearGradient>
     );
 
     if (!data) return <Text style={[dynamicStyles.text, { textAlign: 'center', margin: 20 }]}>No text found for these lines</Text>;

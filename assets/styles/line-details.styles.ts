@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 8,
         letterSpacing: 0.5,
-        textTransform: 'uppercase',
+        //textTransform: 'uppercase',
     },
     lineNumber: {
         fontSize: 18,
@@ -252,7 +252,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             color: accentColor,
         },
         loadingContainer: {
-            backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
+            //backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
         },
         floatingLineNumber: {
             backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
