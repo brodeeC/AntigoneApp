@@ -224,8 +224,6 @@ def parse_postag(postag):
 @app.route('/AntigoneApp/lines/<startLine>', defaults={'endLine':None})   
 @app.route('/AntigoneApp/lines/<startLine>/<endLine>', methods=['GET'])
 def get_lines(startLine, endLine=None):
-    startLine.strip()
-    if endLine: endLine.strip()
     try:
         if endLine == None:
           startLine = int(startLine)
@@ -350,7 +348,6 @@ def get_word(lemma_id):
 
     words = [row['lemma'] for row in data]
     return words
-
 
 def search_by_definition(query):
     conn = get_db_connection()
