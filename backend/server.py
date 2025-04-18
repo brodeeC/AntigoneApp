@@ -330,11 +330,11 @@ def search():
         for word in words:
             data = lookup_word_details(word)
             if data:
-                results.append(data)
+                results = data
     elif mode == 'word':
         data = lookup_word_details(safe_query)
         if data:
-            results.append(data)
+            results = data
     else:
         return jsonify({'error': 'Invalid mode'}), 400
 

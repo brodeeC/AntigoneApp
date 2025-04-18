@@ -1,51 +1,53 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
-  StyleSheet, useColorScheme, Keyboard, FlatList,
-  ActivityIndicator, Linking
+  StyleSheet, useColorScheme, Keyboard, ScrollView,
+  ActivityIndicator
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 
-type Definition = {
-  def_num: number;
-  short_def: string;
-  queries: string;
-};
-
-type CaseInfo = {
-  [key: string]: string;
-};
-
-type WordInfo = {
+interface WordEntry {
   form: string;
   lemma: string;
   lemma_id: number;
   line_number: number;
   postag: string;
   speaker: string;
-};
+}
 
-// Each result item is an array with 3 elements:
-// 0: WordInfo
-// 1: { case: CaseInfo } 
-// 2: { definitions: Definition[] }
-type WordResultItem = [WordInfo, { case?: CaseInfo }, { definitions?: Definition[] }];
+interface CaseInfo {
+  [key: string]: string;
+}
+
+interface Definition {
+  def_num: number;
+  short_def: string;
+}
+
+interface WordDataEntry extends Array<unknown> {
+  0: WordEntry;
+  1?: { case?: CaseInfo };
+  2?: { definitions?: Definition[] };
+  length: 3;
+}
 
 export default function WordSearch() {
   const isDark = useColorScheme() === 'dark';
   const styles = getStyles(isDark);
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<'word' | 'definition'>('word');
-  const [results, setResults] = useState<WordResultItem[]>([]);
+  const [results, setResults] = useState<WordDataEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [collapsedEntries, setCollapsedEntries] = useState<Record<number, boolean>>({});
 
-  const sanitizeInput = (text: string) => text.replace(/[^a-zA-Zά-ωΑ-Ω\s']/g, '');
+  const sanitizeInput = useCallback((text: string) => 
+    text.replace(/[^a-zA-Zά-ωΑ-Ω\s']/g, ''), []);
 
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
     Keyboard.dismiss();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
@@ -55,125 +57,44 @@ export default function WordSearch() {
     setLoading(true);
     setHasSearched(true);
     try {
-      const res = await fetch(`http://brodeeclontz.com/AntigoneApp/search?mode=${mode}&q=${encodeURIComponent(safeQuery)}`);
-      const data = await res.json();
+      const res = await fetch(
+        `http://brodeeclontz.com/AntigoneApp/search?mode=${mode}&q=${encodeURIComponent(safeQuery)}`
+      );
+      const data: WordDataEntry[] = await res.json();
       setResults(data || []);
+      
+      // Initialize collapsed state
+      const initialCollapsed: Record<number, boolean> = {};
+      data?.forEach((_: WordDataEntry, index: number) => {
+        initialCollapsed[index] = true;
+      });
+      setCollapsedEntries(initialCollapsed);
     } catch (err) {
       console.error(err);
-      alert('Failed to fetch results.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [query, mode, sanitizeInput]);
 
-  const handleWordDetails = (form: string) => {
+  const handleWordDetails = useCallback((form: string) => {
     router.push(`/word-details/${form}`);
-  };
+  }, []);
 
-  const handleLineDetails = (lineNumber: number) => {
+  const handleLineDetails = useCallback((lineNumber: number) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     router.push({
       pathname: '/line-details/[start]/[[end]]',
       params: { start: lineNumber.toString() }
     });
-  };
+  }, []);
 
-  const handleDictionaryLink = (queries: string) => {
-    try {
-      const parsedQueries = JSON.parse(queries.replace(/'/g, '"'));
-      if (parsedQueries.length > 0) {
-        Linking.openURL(parsedQueries[0].url);
-      }
-    } catch (err) {
-      console.error('Failed to parse dictionary links', err);
-    }
-  };
-
-  const renderResultItem = ({ item }: { item: WordResultItem }) => {
-    // Destructure the array elements
-    const [wordInfo, caseObj, definitionsObj] = item;
-    const caseInfo = caseObj?.case;
-    const definitions = definitionsObj?.definitions || [];
-    
-    console.log("WordInfo:", wordInfo); 
-    console.log("Form:", wordInfo.form); 
-    
-    return (
-      <View style={styles.resultItem}>
-        {/* Header with word form and lemma */}
-        <View style={styles.resultHeader}>
-          <Text style={styles.resultWord}>{wordInfo.form}</Text>
-          <Text style={styles.resultLemma}>{wordInfo.lemma}</Text>
-        </View>
-        
-        {/* Metadata row */}
-        <View style={styles.resultMeta}>
-          <Text style={styles.resultMetaText}>Line {wordInfo.line_number}</Text>
-          <Text style={styles.resultMetaText}>•</Text>
-          <Text style={styles.resultMetaText}>{wordInfo.speaker}</Text>
-        </View>
-        
-        {/* Case information */}
-        {caseInfo && (
-          <View style={styles.caseContainer}>
-            {Object.entries(caseInfo).map(([key, value]) => (
-              value !== '-' && (
-                <View key={key} style={styles.casePill}>
-                  <Text style={styles.caseText}>{value}</Text>
-                </View>
-              )
-            ))}
-          </View>
-        )}
-        
-        {/* Definitions */}
-        {definitions.length > 0 && (
-          <View style={styles.definitionsContainer}>
-            <Text style={styles.sectionTitle}>Definitions:</Text>
-            {definitions.slice(0, 3).map((def) => (
-              <View key={def.def_num} style={styles.definitionItem}>
-                <Text style={styles.definitionText}>
-                  {def.def_num}. {def.short_def}
-                </Text>
-                <TouchableOpacity 
-                  onPress={() => handleDictionaryLink(def.queries)}
-                  style={styles.dictionaryLink}
-                >
-                  <Feather name="external-link" size={14} color={isDark ? '#64B5F6' : '#1E88E5'} />
-                  <Text style={[styles.dictionaryLinkText, { color: isDark ? '#64B5F6' : '#1E88E5' }]}>
-                    View in dictionary
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            ))}
-            {definitions.length > 3 && (
-              <Text style={[styles.resultMetaText, { marginTop: 8 }]}>
-                +{definitions.length - 3} more definitions...
-              </Text>
-            )}
-          </View>
-        )}
-        
-        {/* Action buttons */}
-        <View style={styles.actionButtonContainer}>
-          <TouchableOpacity
-            onPress={() => handleWordDetails(wordInfo.form)}
-            style={[styles.actionButton, styles.detailsButton]}
-          >
-            <Feather name="book-open" size={16} color="#FFF" />
-            <Text style={styles.actionButtonText}>Word Details</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            onPress={() => handleLineDetails(wordInfo.line_number)}
-            style={[styles.actionButton, styles.goButton]}
-          >
-            <Feather name="book" size={16} color="#FFF" />
-            <Text style={styles.actionButtonText}>View Line</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
+  const toggleDefinitionCollapse = useCallback((index: number) => {
+    Haptics.selectionAsync();
+    setCollapsedEntries(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  }, []);
 
   return (
     <LinearGradient
@@ -184,7 +105,6 @@ export default function WordSearch() {
         <Text style={styles.title}>Antigone Lexicon Search</Text>
         <Text style={styles.subtitle}>Search by {mode === 'word' ? 'Greek word forms' : 'English definitions'}</Text>
 
-        {/* Search mode toggle */}
         <View style={styles.toggleContainer}>
           {['word', 'definition'].map((option) => (
             <TouchableOpacity
@@ -205,13 +125,11 @@ export default function WordSearch() {
           ))}
         </View>
 
-        {/* Search input */}
         <View style={styles.inputContainer}>
           <Feather name="search" size={20} color={isDark ? '#94A3B8' : '#64748B'} style={styles.inputIcon} />
           <TextInput
             placeholder={mode === 'word' ? "Search Greek words..." : "Search definitions..."}
             placeholderTextColor={isDark ? '#94A3B8' : '#64748B'}
-            keyboardType="default"
             value={query}
             onChangeText={setQuery}
             onSubmitEditing={handleSearch}
@@ -222,7 +140,6 @@ export default function WordSearch() {
           />
         </View>
 
-        {/* Search button */}
         <TouchableOpacity
           onPress={handleSearch}
           activeOpacity={0.8}
@@ -239,31 +156,107 @@ export default function WordSearch() {
           )}
         </TouchableOpacity>
 
-        {/* Results section */}
         {hasSearched && !loading && (
-          <FlatList
-            data={results}
-            keyExtractor={(item, index) => `${item[0].lemma_id}-${index}`}
-            renderItem={renderResultItem}
+          <ScrollView
             style={styles.resultsList}
             contentContainerStyle={styles.resultsContent}
-            ListEmptyComponent={
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            {results.length === 0 ? (
               <View style={styles.emptyState}>
                 <Feather name="search" size={40} color={isDark ? '#94A3B8' : '#64748B'} />
                 <Text style={styles.emptyText}>No results found</Text>
                 <Text style={styles.emptySubtext}>Try a different search term</Text>
               </View>
-            }
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-          />
+            ) : (
+              results.map((entry, index) => {
+                if (!entry || !entry[0]) return null;
+
+                const isCollapsed = collapsedEntries[index] !== false;
+                const { form, lemma, line_number, postag, speaker } = entry[0];
+                const definitions = entry[2]?.definitions || [];
+                console.log(entry[0])
+
+                return (
+                  <View key={`${entry[0].lemma_id}-${index}`} style={styles.entryContainer}>
+                    <View style={styles.entryHeader}>
+                      <Text style={styles.entryTitle}>{index + 1}</Text>
+                      <Text style={styles.entryForm}>{form}</Text>
+                    </View>
+
+                    <View style={styles.entryRow}>
+                      <Text style={styles.entryLabel}>Lemma:</Text>
+                      <Text style={styles.entryValue}>{lemma}</Text>
+                    </View>
+
+                    <View style={styles.entryRow}>
+                      <Text style={styles.entryLabel}>Line:</Text>
+                      <Text style={styles.entryValue}>{line_number}</Text>
+                      <TouchableOpacity 
+                        style={styles.goButton}
+                        onPress={() => handleLineDetails(line_number)}
+                      >
+                        <Text style={styles.goButtonText}>Go</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.entryRow}>
+                      <Text style={styles.entryLabel}>Speaker:</Text>
+                      <Text style={styles.entryValue}>{speaker}</Text>
+                    </View>
+
+                    {definitions.length > 0 && (
+                      <View style={styles.definitionContainer}>
+                        <Text style={styles.sectionTitle}>Definitions:</Text>
+                        {definitions.slice(0, 3).map((def) => (
+                          <Text key={def.def_num} style={styles.definitionText}>
+                            {def.def_num}. {def.short_def}
+                          </Text>
+                        ))}
+                        
+                        {!isCollapsed && definitions.length > 3 && 
+                          definitions.slice(3).map((def) => (
+                            <Text key={def.def_num} style={styles.definitionText}>
+                              {def.def_num}. {def.short_def}
+                            </Text>
+                          ))
+                        }
+                        
+                        {definitions.length > 3 && (
+                          <TouchableOpacity 
+                            onPress={() => toggleDefinitionCollapse(index)}
+                            style={styles.toggleButton}
+                            activeOpacity={0.7}
+                          >
+                            <Text style={styles.toggleButtonText}>
+                              {isCollapsed
+                                ? `Show ${definitions.length - 3} more definitions` 
+                                : 'Show less'}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    )}
+
+                    <View style={styles.actionButtonContainer}>
+                      <TouchableOpacity
+                        onPress={() => handleWordDetails(form)}
+                        style={[styles.actionButton, styles.detailsButton]}
+                      >
+                        <Text style={styles.actionButtonText}>Word Details</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                );
+              })
+            )}
+          </ScrollView>
         )}
       </View>
     </LinearGradient>
   );
 }
-
-// Keep your existing getStyles function
 
 const getStyles = (isDark: boolean) => StyleSheet.create({
   container: {
@@ -347,68 +340,64 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     flex: 1,
   },
   resultsContent: {
-    paddingBottom: 20,
+    paddingBottom: 40,
   },
-  resultItem: {
+  entryContainer: {
     padding: 16,
     backgroundColor: isDark ? '#1E293B' : '#FFFFFF',
     borderRadius: 12,
     marginBottom: 16,
     borderWidth: 1,
     borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
-    shadowColor: isDark ? '#000' : '#64748B',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
   },
-  resultHeader: {
+  entryHeader: {
     flexDirection: 'row',
-    alignItems: 'baseline',
-    marginBottom: 8,
-    gap: 8,
-    flexWrap: 'wrap',
+    alignItems: 'center',
+    marginBottom: 12,
   },
-  resultWord: {
-    fontSize: 20,
+  entryTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: isDark ? '#64B5F6' : '#1E88E5',
+    marginRight: 12,
+  },
+  entryForm: {
+    fontSize: 18,
     fontWeight: '700',
     color: isDark ? '#F8FAFC' : '#1E293B',
   },
-  resultLemma: {
-    fontSize: 16,
-    color: isDark ? '#94A3B8' : '#64748B',
-    fontStyle: 'italic',
-  },
-  resultMeta: {
+  entryRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginBottom: 12,
+    marginBottom: 8,
     flexWrap: 'wrap',
   },
-  resultMetaText: {
+  entryLabel: {
     fontSize: 14,
+    fontWeight: '600',
     color: isDark ? '#94A3B8' : '#64748B',
+    marginRight: 6,
   },
-  caseContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-    marginBottom: 12,
+  entryValue: {
+    fontSize: 14,
+    color: isDark ? '#E2E8F0' : '#334155',
+    marginRight: 12,
   },
-  casePill: {
-    backgroundColor: isDark ? 'rgba(100, 181, 246, 0.2)' : 'rgba(30, 136, 229, 0.1)',
-    paddingHorizontal: 10,
+  goButton: {
+    backgroundColor: isDark ? '#4CAF50' : '#4CAF50',
     paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: 12,
+    borderRadius: 4,
+    marginLeft: 'auto',
   },
-  caseText: {
+  goButtonText: {
+    color: '#FFF',
     fontSize: 12,
-    color: isDark ? '#64B5F6' : '#1E88E5',
-    fontWeight: '500',
+    fontWeight: '600',
   },
-  definitionsContainer: {
-    marginBottom: 16,
+  definitionContainer: {
+    marginTop: 12,
+    marginBottom: 12,
   },
   sectionTitle: {
     fontSize: 14,
@@ -416,44 +405,31 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     color: isDark ? '#CBD5E1' : '#475569',
     marginBottom: 8,
   },
-  definitionItem: {
-    marginBottom: 8,
-  },
   definitionText: {
     fontSize: 14,
     color: isDark ? '#E2E8F0' : '#334155',
     lineHeight: 20,
+    marginBottom: 4,
   },
-  dictionaryLink: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 4,
-    gap: 4,
-  },
-  dictionaryLinkText: {
+  toggleButtonText: {
     fontSize: 12,
-    fontWeight: '500',
+    color: isDark ? '#64B5F6' : '#1E88E5',
+    fontWeight: '600',
   },
   actionButtonContainer: {
     flexDirection: 'row',
-    gap: 10,
-    marginTop: 8,
+    marginTop: 12,
   },
   actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
-    gap: 8,
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   detailsButton: {
     backgroundColor: isDark ? '#1E88E5' : '#1E88E5',
-  },
-  goButton: {
-    backgroundColor: isDark ? '#4CAF50' : '#4CAF50',
   },
   actionButtonText: {
     color: '#FFF',

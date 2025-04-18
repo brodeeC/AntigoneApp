@@ -37,10 +37,6 @@ interface WordDataEntry {
     [2]?: { definitions?: Definition[] };
 }
 
-interface WordDetailsProps {
-    word: string;
-}
-
 export default function WordDetails() {
     const { word } = useLocalSearchParams();  
     const [wordData, setWordData] = useState<WordDataEntry[] | null>(null);
