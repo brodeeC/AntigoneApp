@@ -24,6 +24,8 @@ def create_database(db_name='backend/database/antigone.db'):
             form TEXT,
             norm_form TEXT,
             postag TEXT,
+            form_eng TEXT,
+            norm_form_eng TEXT,
             PRIMARY KEY (lemma_id, line_number)
         )
     ''')

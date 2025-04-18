@@ -26,10 +26,14 @@ def xml_parse(file):
                 
             full_eng = grk_to_eng(lemma)
 
+            form_eng = grk_to_eng(form)
+            form_norm_eng = grk_to_eng(strip_accents(form))
+
             lemma_id = hash_word(full_eng)
 
             row = {'lemma_id': lemma_id, 'lemma': lemma, 'full_eng': full_eng, 'urn': urn, 'line_number': line,
-                    'normalized': normalized, 'eng_lemma': eng_lemma, 'form':form, 'norm_form':norm_form, 'postag':postag}
+                    'normalized': normalized, 'eng_lemma': eng_lemma, 'form':form, 'norm_form':norm_form, 'postag':postag,
+                    'form_eng': form_eng, 'norm_form_eng': form_norm_eng}
 
             if lemma_id != 0:
                 duplicate = False
