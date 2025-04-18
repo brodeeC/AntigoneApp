@@ -320,47 +320,80 @@ def add_defs(data, result_def):
 
 @app.route('/AntigoneApp/search', methods=['GET'])
 def search():
-    logger.debug(f"Received search request: {request.args}")
+    print("\n=== NEW REQUEST ===")
+    print(f"Request args: {request.args}")
     
     mode = request.args.get('mode')
     query = request.args.get('q')
+    print(f"Mode: {mode}, Query: {query}")
 
     if not query or not mode:
-        logger.error("Missing query or mode parameter")
-        return jsonify({'error': 'Missing query or mode parameter'}), 400
+        return jsonify({'error': 'Missing parameters', 'received': request.args}), 400
 
     safe_query = query.strip()
     results = []
 
     try:
-        logger.debug(f"Searching with mode: {mode}, query: {safe_query}")
-        
         if mode == 'definition':
-            logger.debug("Starting definition search")
-            matching_words = search_by_definition(safe_query)
-            logger.debug(f"Found matching words: {matching_words}")
+            print("Starting definition search...")
+            lemma_ids = search_by_definition(safe_query)
+            print(f"Found lemma IDs: {lemma_ids}")
             
-            unique_words = list(set(matching_words))
-            logger.debug(f"Unique words: {unique_words}")
-            
-            for word in unique_words:
-                logger.debug(f"Looking up word: {word}")
-                word_data = lookup_word_details(word)
+            for lemma_id in lemma_ids:
+                print(f"\nProcessing lemma ID: {lemma_id}")
+                word_data = lookup_word_details_by_id(lemma_id)  # New function
+                print(f"Word data: {word_data}")
                 if word_data:
-                    results.extend(word_data)
+                    results.append(word_data)
                     
         elif mode == 'word':
-            logger.debug("Starting word search")
+            print("Starting word search...")
             word_data = lookup_word_details(safe_query)
+            print(f"Word data: {word_data}")
             if word_data:
                 results = word_data
                 
-        logger.debug(f"Final results: {results}")
+        print(f"\nFinal results: {results}")
         return jsonify(results)
 
     except Exception as e:
-        logger.exception("Error in search endpoint")
-        return jsonify({'error': str(e)}), 500
+        print(f"\nERROR: {str(e)}")
+        return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
+
+def lookup_word_details_by_id(lemma_id):
+    """New function to lookup by ID instead of word"""
+    conn = get_db_connection()
+    try:
+        print(f"Looking up details for lemma ID: {lemma_id}")
+        # Query that joins all necessary tables
+        data = conn.execute("""
+            SELECT ld.lemma_id, ld.lemma, ld.form, ld.postag, 
+                   GROUP_CONCAT(ldd.short_def, '|') as definitions
+            FROM lemma_data ld
+            LEFT JOIN lemma_definitions ldd ON ld.lemma_id = ldd.lemma_id
+            WHERE ld.lemma_id = ?
+            GROUP BY ld.lemma_id
+        """, (lemma_id,)).fetchone()
+        
+        if data:
+            print(f"Raw DB result: {dict(data)}")
+            # Process into your expected format
+            return [
+                {
+                    'form': data['form'],
+                    'lemma': data['lemma'],
+                    'lemma_id': data['lemma_id'],
+                    'postag': data['postag'],
+                    'definitions': data['definitions'].split('|') if data['definitions'] else []
+                }
+            ]
+        return None
+        
+    except Exception as e:
+        print(f"DB Error for lemma_id {lemma_id}: {str(e)}")
+        return None
+    finally:
+        conn.close()
     
 def search_by_definition(query):
     conn = get_db_connection()
