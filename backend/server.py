@@ -300,59 +300,8 @@ def get_speaker_lines(speaker, linesNear=None):
 # Would it be beneficial to send full_eng up with this data? I don't think it makes sense
 @app.route('/AntigoneApp/word-details/<word>', methods=['GET'])
 def get_word_details(word):
-    word.strip()
-    conn = get_db_connection()
-    #if (len(word) > 2): norm = word[:-1]
-    word = clean_word(word)
-    norm = strip_accents(word)
-    query =(f"""SELECT lemma_id, lemma, form, line_number, postag
-                FROM lemma_data
-                WHERE lemma = '{word}'
-                OR form = '{word}'
-                OR normalized LIKE '{norm}%'
-                OR norm_form LIKE '{norm}%'
-                ORDER BY 
-                CASE 
-                    WHEN lemma = '{word}' THEN 1  -- Exact match on lemma (highest priority)
-                    WHEN form = '{word}' THEN 2   -- Exact match on form
-                    WHEN normalized LIKE '{norm}%' THEN 3  -- Partial match on normalized
-                    WHEN norm_form LIKE '{norm}%' THEN 4  -- Partial match on norm_form
-                    ELSE 5
-                END,
-                LENGTH(lemma),   -- Prefer shorter lemmas if priorities match
-                LENGTH(form),    -- Prefer shorter forms
-                line_number;""")
-    data = conn.execute(query).fetchall()
-    conn.close()
-
-    if not data: return {}
-
-    row_dict = []
-    for row in data:
-        lemma_id = row['lemma_id']
-        lemma = row['lemma']
-        form = row['form']
-        line_number = row['line_number']
-        postag = row['postag']
-
-        speaker = get_speaker(line_number)
-
-        case_list = parse_postag(postag)
-        
-        result_def = get_word_defs(lemma_id)
-
-        this_row = []
-
-        this_row.append({'lemma_id':lemma_id, 'lemma':lemma, 'form':form, 'line_number':line_number, 'postag':postag, 'speaker':speaker})
-        
-        this_row.append({'case':case_list})
-
-        if result_def != []:
-            this_row = add_defs(this_row, result_def)
-
-        row_dict.append(this_row)
-
-    return jsonify(row_dict)
+    
+    return jsonify(lookup_word_details(word))
 
 def add_defs(data, result_def):
     def_list = []
@@ -376,51 +325,101 @@ def search():
         return jsonify({'error': 'Missing query or mode parameter'}), 400
 
     safe_query = query.strip()
-    print(safe_query)
 
+    results = []
     if mode == 'definition':
         words = search_by_definition(safe_query)
-        print(words)
-        results = []
         for word in words:
-            results.append(get_word_details(word))
-            print(results)
+            data = lookup_word_details(word)
+            if data:
+                results.append(data)
     elif mode == 'word':
-        results = get_word_details(safe_query)
-        print(results)
+        data = lookup_word_details(safe_query)
+        if data:
+            results.append(data)
     else:
         return jsonify({'error': 'Invalid mode'}), 400
 
     return jsonify(results)
 
+
 def get_word(lemma_id):
     conn = get_db_connection()
-    query = f"SELECT lemma FROM lemma_data WHERE lemma_id={lemma_id}"
-    data = conn.execute(query).fetchall()
+    data = conn.execute("SELECT lemma FROM lemma_data WHERE lemma_id = ?", (lemma_id,)).fetchall()
     conn.close()
 
-    words = []
-    if data: 
-        for row in data:
-            lemma = row['lemma']
-            words.append(lemma)
-
+    words = [row['lemma'] for row in data]
     return words
 
 
 def search_by_definition(query):
     conn = get_db_connection()
-    query = f"SELECT lemma_id FROM lemma_definitions WHERE short_def LIKE '%{query}%'"
-    data = conn.execute(query).fetchall()
+    data = conn.execute(
+        "SELECT lemma_id FROM lemma_definitions WHERE short_def LIKE ?",
+        (f"%{query}%",)
+    ).fetchall()
     conn.close()
 
     full = []
     if data: 
         for row in data:
             lemma_id = row['lemma_id']
-            full.append(get_word(lemma_id))
-
+            full.extend(get_word(lemma_id))  # flatten the list
     return full
+
+def lookup_word_details(word):
+    word = clean_word(word)
+    norm = strip_accents(word)
+
+    conn = get_db_connection()
+    data = conn.execute("""
+        SELECT lemma_id, lemma, form, line_number, postag
+        FROM lemma_data
+        WHERE lemma = ?
+        OR form = ?
+        OR normalized LIKE ?
+        OR norm_form LIKE ?
+        ORDER BY 
+            CASE 
+                WHEN lemma = ? THEN 1
+                WHEN form = ? THEN 2
+                WHEN normalized LIKE ? THEN 3
+                WHEN norm_form LIKE ? THEN 4
+                ELSE 5
+            END,
+            LENGTH(lemma),
+            LENGTH(form),
+            line_number
+    """, (
+        word, word, norm + '%', norm + '%',
+        word, word, norm + '%', norm + '%'
+    )).fetchall()
+    conn.close()
+
+    if not data:
+        return {}
+
+    row_dict = []
+    for row in data:
+        lemma_id = row['lemma_id']
+        lemma = row['lemma']
+        form = row['form']
+        line_number = row['line_number']
+        postag = row['postag']
+        speaker = get_speaker(line_number)
+        case_list = parse_postag(postag)
+        result_def = get_word_defs(lemma_id)
+
+        this_row = []
+        this_row.append({'lemma_id': lemma_id, 'lemma': lemma, 'form': form, 'line_number': line_number, 'postag': postag, 'speaker': speaker})
+        this_row.append({'case': case_list})
+        if result_def:
+            this_row = add_defs(this_row, result_def)
+
+        row_dict.append(this_row)
+
+    return row_dict
+
 
 # Search api needs to identify if input is grk or eng,
 # If grk -> grk_to_eng() -> hash_word() to get lemma_id
