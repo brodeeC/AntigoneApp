@@ -1,4 +1,5 @@
 import json
+import logging
 from flask import Flask, jsonify, request
 #from flask_cors import CORS
 import sqlite3
@@ -8,6 +9,9 @@ import re
 
 app = Flask(__name__)
 #CORS(app, supports_credentials=True)
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 FIRST_PAGE = 1
 LAST_PAGE = 123
@@ -316,48 +320,79 @@ def add_defs(data, result_def):
 
 @app.route('/AntigoneApp/search', methods=['GET'])
 def search():
+    logger.debug(f"Received search request: {request.args}")
+    
     mode = request.args.get('mode')
     query = request.args.get('q')
 
     if not query or not mode:
+        logger.error("Missing query or mode parameter")
         return jsonify({'error': 'Missing query or mode parameter'}), 400
 
     safe_query = query.strip()
     results = []
 
     try:
+        logger.debug(f"Searching with mode: {mode}, query: {safe_query}")
+        
         if mode == 'definition':
-            # Get all matching words first
+            logger.debug("Starting definition search")
             matching_words = search_by_definition(safe_query)
-            # Then get details for each unique word
-            unique_words = list(set(matching_words))  # Remove duplicates
+            logger.debug(f"Found matching words: {matching_words}")
+            
+            unique_words = list(set(matching_words))
+            logger.debug(f"Unique words: {unique_words}")
+            
             for word in unique_words:
+                logger.debug(f"Looking up word: {word}")
                 word_data = lookup_word_details(word)
                 if word_data:
-                    results.extend(word_data)  # Extend instead of assigning
+                    results.extend(word_data)
                     
         elif mode == 'word':
+            logger.debug("Starting word search")
             word_data = lookup_word_details(safe_query)
             if word_data:
                 results = word_data
-        else:
-            return jsonify({'error': 'Invalid mode'}), 400
-
+                
+        logger.debug(f"Final results: {results}")
         return jsonify(results)
 
     except Exception as e:
-        print(f"Error in search: {str(e)}")
-        return jsonify({'error': 'Internal server error'}), 500
-
+        logger.exception("Error in search endpoint")
+        return jsonify({'error': str(e)}), 500
+    
 def search_by_definition(query):
     conn = get_db_connection()
     try:
-        # More precise search with word boundaries
+        logger.debug(f"Searching definitions for: {query}")
+        
+        # Try a simpler query first
+        test_query = "SELECT COUNT(*) FROM lemma_definitions"
+        count = conn.execute(test_query).fetchone()
+        logger.debug(f"Table contains {count[0]} rows")
+        
+        # Try with exact match first
         data = conn.execute(
-            "SELECT DISTINCT lemma_id FROM lemma_definitions WHERE short_def LIKE ?",
-            (f"% {query} %",)  # Search for whole words
+            "SELECT lemma_id FROM lemma_definitions WHERE short_def = ? LIMIT 5",
+            (query,)
         ).fetchall()
+        
+        logger.debug(f"Found {len(data)} exact matches")
+        
+        if not data:
+            # Try with LIKE if no exact matches
+            data = conn.execute(
+                "SELECT lemma_id FROM lemma_definitions WHERE short_def LIKE ? LIMIT 5",
+                (f"%{query}%",)
+            ).fetchall()
+            logger.debug(f"Found {len(data)} LIKE matches")
+            
         return [row['lemma_id'] for row in data]
+        
+    except Exception as e:
+        logger.exception("Error in search_by_definition")
+        return []
     finally:
         conn.close()
 
