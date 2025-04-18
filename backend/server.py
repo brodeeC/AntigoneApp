@@ -436,6 +436,7 @@ def get_word(lemma_id):
             "SELECT lemma FROM lemma_data WHERE lemma_id = ? LIMIT 1", 
             (lemma_id,)
         ).fetchone()  # Just get one result
+        logger.debug(data['lemma'])
         return [data['lemma']] if data else []
     finally:
         conn.close()
