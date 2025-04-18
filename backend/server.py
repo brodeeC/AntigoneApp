@@ -1,5 +1,6 @@
 import json
 import logging
+import traceback
 from flask import Flask, jsonify, request
 #from flask_cors import CORS
 import sqlite3
@@ -435,7 +436,7 @@ def get_word(lemma_id):
         data = conn.execute(
             "SELECT lemma FROM lemma_data WHERE lemma_id = ? LIMIT 1", 
             (lemma_id,)
-        ).fetchone()  # Just get one result
+        ).fetchone()  
         logger.debug(data['lemma'])
         return [data['lemma']] if data else []
     finally:
