@@ -376,14 +376,18 @@ def search():
         return jsonify({'error': 'Missing query or mode parameter'}), 400
 
     safe_query = query.strip()
+    print(safe_query)
 
     if mode == 'definition':
         words = search_by_definition(safe_query)
+        print(words)
         results = []
         for word in words:
             results.append(get_word_details(word))
+            print(results)
     elif mode == 'word':
         results = get_word_details(safe_query)
+        print(results)
     else:
         return jsonify({'error': 'Invalid mode'}), 400
 
