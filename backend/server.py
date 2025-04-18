@@ -407,7 +407,7 @@ def search_by_definition(query):
         
         # Try with exact match first
         data = conn.execute(
-            "SELECT lemma_id FROM lemma_definitions WHERE short_def = ? LIMIT 5",
+            "SELECT lemma_id FROM lemma_definitions WHERE short_definition = ? LIMIT 5",
             (query,)
         ).fetchall()
         
@@ -416,7 +416,7 @@ def search_by_definition(query):
         if not data:
             # Try with LIKE if no exact matches
             data = conn.execute(
-                "SELECT lemma_id FROM lemma_definitions WHERE short_def LIKE ? LIMIT 5",
+                "SELECT lemma_id FROM lemma_definitions WHERE short_definition LIKE ? LIMIT 5",
                 (f"%{query}%",)
             ).fetchall()
             logger.debug(f"Found {len(data)} LIKE matches")
