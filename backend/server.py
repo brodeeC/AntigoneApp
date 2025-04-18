@@ -341,7 +341,7 @@ def search():
             
             for lemma_id in lemma_ids:
                 logger.debug(f"\nProcessing lemma ID: {lemma_id}")
-                word_data = lookup_word_details_by_id(lemma_id)  # New function
+                word_data = lookup_word_details(get_word(lemma_id))
                 logger.debug(f"Word data: {word_data}")
                 if word_data:
                     results.append(word_data)
@@ -433,7 +433,7 @@ def get_word(lemma_id):
     conn = get_db_connection()
     try:
         data = conn.execute(
-            "SELECT lemma FROM lemma_data WHERE lemma_id = ?", 
+            "SELECT lemma FROM lemma_data WHERE lemma_id = ? LIMIT 1", 
             (lemma_id,)
         ).fetchone()  # Just get one result
         return [data['lemma']] if data else []
