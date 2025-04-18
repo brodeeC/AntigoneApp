@@ -13,22 +13,26 @@ export default function LineSearch() {
   const isDark = useColorScheme() === 'dark';
 
   const handleSearch = () => {
-    Keyboard.dismiss(); 
+    Keyboard.dismiss();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    
+  
     const start = parseInt(startLine);
     const end = parseInt(endLine);
   
     if (!isNaN(start)) {
-      const startParam = start.toString();
-      const endParam = !isNaN(end) && end > start ? end.toString() : null;
-  
-      const path = `/line-details/${startParam}${endParam ? `/${endParam}` : ''}` as `/line-details/[start]/[[end]]`;
-      router.push(path);
+      // If no end line provided or invalid, use start line as both values
+      const endParam = !isNaN(end) && end > start ? end : start;
       
+      router.push({
+        pathname: "/line-details/[start]/[end]",
+        params: {
+          start: start.toString(),
+          end: endParam.toString()
+        }
+      });
     } else {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      alert('Please enter a valid start line number');
+      alert("Please enter a valid start line number");
     }
   };
 

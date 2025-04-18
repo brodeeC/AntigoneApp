@@ -62,11 +62,11 @@ export default function PageDisplay({ page }: PageDisplayProps) {
         }
     };
 
-    const handleLineNumberPress = () => {
+    const handleLineNumberPress = (lineNum: number) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); 
         router.push({
-            pathname: "/line-details/[start]/[[end]]",
-            params: { start: page.toString() },
+            pathname: "/line-details/[start]/[end]",
+            params: { start: lineNum.toString(), end: lineNum.toString() },
         });
     };
 
@@ -105,7 +105,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
                             <View style={styles.lineContainer}>
                                 <TouchableOpacity
                                     style={[styles.lineNumberButton, dynamicStyles.lineNumberButton]}
-                                    onPress={handleLineNumberPress}
+                                    onPress={() => handleLineNumberPress(line.lineNum)}
                                 >
                                     <Text style={[styles.lineNumberText, dynamicStyles.lineNumberText]}>
                                         {line.lineNum}

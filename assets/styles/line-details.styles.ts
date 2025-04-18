@@ -35,7 +35,6 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 8,
         letterSpacing: 0.5,
-        //textTransform: 'uppercase',
     },
     lineNumber: {
         fontSize: 18,

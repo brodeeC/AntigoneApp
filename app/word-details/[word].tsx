@@ -77,8 +77,8 @@ export default function WordDetails() {
     const handleLineNavigation = (lineNum: string) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); // Stronger feedback for line navigation
         router.push({ 
-            pathname: "/line-details/[start]/[[end]]", 
-            params: { start: lineNum } 
+            pathname: "/line-details/[start]/[end]", 
+            params: { start: lineNum, end: lineNum } 
         });
     };
 

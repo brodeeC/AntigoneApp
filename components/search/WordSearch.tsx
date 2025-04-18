@@ -93,8 +93,8 @@ export default function WordSearch() {
   const handleLineDetails = useCallback((lineNumber: number) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     router.push({
-      pathname: '/line-details/[start]/[[end]]',
-      params: { start: lineNumber.toString() }
+      pathname: '/line-details/[start]/[end]',
+      params: { start: lineNumber.toString(), end: lineNumber.toString() }
     });
   }, []);
 
