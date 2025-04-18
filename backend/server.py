@@ -1,5 +1,5 @@
 import json
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 #from flask_cors import CORS
 import sqlite3
 from unicodedata import normalize, category
@@ -141,8 +141,6 @@ def get_speaker(lineNum):
 # Takes greek word -> english -> hash -> SQL query for definition  
 # Could use lemma from lemma_data table to get defs, may need to depending
 def get_word_defs(lemma_id):
-    #lemma_id = hash_word(grk_to_eng(grk_word))
-
     conn = get_db_connection()
     query = f'SELECT def_num, short_definition, queries  FROM lemma_definitions WHERE lemma_id={lemma_id}'
     data = conn.execute(query).fetchall()
@@ -226,6 +224,8 @@ def parse_postag(postag):
 @app.route('/AntigoneApp/lines/<startLine>', defaults={'endLine':None})   
 @app.route('/AntigoneApp/lines/<startLine>/<endLine>', methods=['GET'])
 def get_lines(startLine, endLine=None):
+    startLine.strip()
+    if endLine: endLine.strip()
     try:
         if endLine == None:
           startLine = int(startLine)
@@ -300,6 +300,7 @@ def get_speaker_lines(speaker, linesNear=None):
 # Would it be beneficial to send full_eng up with this data? I don't think it makes sense
 @app.route('/AntigoneApp/word-details/<word>', methods=['GET'])
 def get_word_details(word):
+    word.strip()
     conn = get_db_connection()
     #if (len(word) > 2): norm = word[:-1]
     word = clean_word(word)
@@ -365,6 +366,57 @@ def add_defs(data, result_def):
     data.append({'definitions': def_list})
 
     return data
+
+@app.route('/AntigoneApp/search', methods=['GET'])
+def search():
+    mode = request.args.get('mode')
+    query = request.args.get('q')
+
+    if not query or not mode:
+        return jsonify({'error': 'Missing query or mode parameter'}), 400
+
+    safe_query = query.strip()
+
+    if mode == 'definition':
+        words = search_by_definition(safe_query)
+        results = []
+        for word in words:
+            results.append(get_word_details(word))
+    elif mode == 'word':
+        results = get_word_details(safe_query)
+    else:
+        return jsonify({'error': 'Invalid mode'}), 400
+
+    return jsonify(results)
+
+def get_word(lemma_id):
+    conn = get_db_connection()
+    query = f"SELECT lemma FROM lemma_data WHERE lemma_id={lemma_id}"
+    data = conn.execute(query).fetchall()
+    conn.close()
+
+    words = []
+    if data: 
+        for row in data:
+            lemma = row['lemma']
+            words.append(lemma)
+
+    return words
+
+
+def search_by_definition(query):
+    conn = get_db_connection()
+    query = f"SELECT lemma_id FROM lemma_definitions WHERE short_def LIKE '%{query}%'"
+    data = conn.execute(query).fetchall()
+    conn.close()
+
+    full = []
+    if data: 
+        for row in data:
+            lemma_id = row['lemma_id']
+            full.append(get_word(lemma_id))
+
+    return full
 
 # Search api needs to identify if input is grk or eng,
 # If grk -> grk_to_eng() -> hash_word() to get lemma_id

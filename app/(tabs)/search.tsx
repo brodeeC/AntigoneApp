@@ -7,8 +7,10 @@ import {
   FlatList, 
   useColorScheme, 
   ScrollView, 
-  Dimensions 
+  Dimensions,
+  StyleSheet 
 } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import { searchStyles } from '@/assets/styles/search.styles';
 import LineSearch from '@/components/search/LineSearch';
 import SpeakerSearch from '@/components/search/SpeakerSearch';
@@ -29,10 +31,15 @@ type TabButtonProps = {
 const TabButton = ({ name, activeTab, onPress, isDark }: TabButtonProps) => {
   const styles = searchStyles(isDark);
 
+  const handlePress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onPress(name);
+  };
+
   return (
     <TouchableOpacity
       style={[styles.tabItem, activeTab === name && styles.activeTabItem]}
-      onPress={() => onPress(name)}
+      onPress={handlePress}
       activeOpacity={0.7}
     >
       <Text style={[styles.label, activeTab === name && styles.activeTabText]}>
@@ -52,22 +59,29 @@ const Tabs = ({ activeTab, setActiveTab, isDark }: {
   const styles = searchStyles(isDark);
 
   return (
-    <View style={[styles.tabBar, { paddingTop: Platform.OS === 'ios' ? 120 : 40 }]}>
-      <FlatList
-        data={tabs}
-        renderItem={({ item }) => (
-          <TabButton 
-            name={item} 
-            activeTab={activeTab} 
-            onPress={setActiveTab} 
-            isDark={isDark} 
-          />
-        )}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.tabList}
-        keyExtractor={(item) => item}
-      />
+    <View style={[styles.tabBarContainer]}> 
+      <LinearGradient
+        colors={isDark ? ['rgba(15,15,27,0.9)', 'rgba(26,26,46,0.9)'] : ['rgba(248,249,250,0.9)', 'rgba(255,255,255,0.9)']}
+        style={styles.tabBar}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 0 }}
+      >
+        <FlatList
+          data={tabs}
+          renderItem={({ item }) => (
+            <TabButton 
+              name={item} 
+              activeTab={activeTab} 
+              onPress={setActiveTab} 
+              isDark={isDark} 
+            />
+          )}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.tabList}
+          keyExtractor={(item) => item}
+        />
+      </LinearGradient>
     </View>
   );
 };
@@ -97,6 +111,7 @@ export default function SearchScreen() {
   }, [activeTab]);
 
   const handleTabPress = (tabName: ValidTab) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setActiveTab(tabName);
     const tabIndex = tabs.indexOf(tabName);
     scrollViewRef.current?.scrollTo({ x: width * tabIndex, animated: true });
@@ -109,6 +124,7 @@ export default function SearchScreen() {
   };
 
   const handleGoBack = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (router.canGoBack()) {
       router.back();
     } else {
@@ -116,11 +132,36 @@ export default function SearchScreen() {
     }
   };
 
+  const styles = searchStyles(isDark);
+
   return (
     <LinearGradient
-        colors={isDark ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
-        style={{ flex: 1 }}
+      colors={isDark ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+      style={{ flex: 1 }}
     >
+      <View style={[
+        styles.headerContainer,
+        isDark ? styles.darkHeader : styles.lightHeader
+      ]}>
+        <TouchableOpacity 
+          onPress={handleGoBack}
+          style={styles.backButton}
+          activeOpacity={0.7}
+        >
+          <Feather 
+            name="chevron-left" 
+            size={24} 
+            color={isDark ? '#E2E8F0' : '#2D3748'} 
+          />
+        </TouchableOpacity>
+        <Text style={[
+          styles.headerText,
+          isDark ? styles.darkHeaderText : styles.lightHeaderText
+        ]}>
+          Explore Antigone
+        </Text>
+        <View style={styles.headerRightSpacer} />
+      </View>
       <View style={{ flex: 1 }}>        
         <Tabs activeTab={activeTab} setActiveTab={handleTabPress} isDark={isDark} />
 

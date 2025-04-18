@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, TouchableOpacity, useColorScheme } from "react-native";
+import * as Haptics from 'expo-haptics';
 import { getDynamicStyles } from "./read-styles/styles";
 import { router } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface CaseInfo {
     case?: string;
@@ -46,8 +48,24 @@ export default function WordDetails({ word }: WordDetailsProps) {
         fetchWordDetails();
     }, [word]);
 
+    const handleMoreDetailsPress = () => {
+        // Provide haptic feedback
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        // Route to the WordDetails page
+        router.push(`/word-details/${wordData[0][0]?.lemma}`);
+    };
+
     // Handling loading, error, or no data
-    if (loading) return <ActivityIndicator size="small" color="#007AFF" />;
+    if (loading) return (
+        <LinearGradient
+            colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+            style={{ flex: 1 }}
+        >
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+                <ActivityIndicator size="small" color={isDarkMode ? "#64B5F6" : "#1E88E5"} />
+            </View>
+        </LinearGradient>
+    );
     if (error) return <Text style={dynamicStyles.errorText}>{error}</Text>;
     if (!wordData) return <Text style={dynamicStyles.errorText}>Data Unavailable</Text>;
 
@@ -55,8 +73,6 @@ export default function WordDetails({ word }: WordDetailsProps) {
     const form = wordData[0][0]?.form;
     const caseInfo = wordData[0][1]?.case;
     const definitions = wordData[0][2]?.definitions;
-
-    //if (definitions) caseInfo = wordData[0][2]?.case;
 
     return (
         <View style={dynamicStyles.wordDetailsContainer}>
@@ -106,10 +122,7 @@ export default function WordDetails({ word }: WordDetailsProps) {
             </View>
 
             <TouchableOpacity
-                onPress={() => {
-                    // Route to the WordDetails page
-                    router.push(`/word-details/${lemma}`);
-                }}
+                onPress={handleMoreDetailsPress}
                 style={dynamicStyles.moreDetailsButton}
             >
                 <Text style={dynamicStyles.moreDetailsButtonText}>More Details</Text>

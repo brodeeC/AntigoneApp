@@ -1,8 +1,10 @@
 import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Text, SafeAreaView, ScrollView, View, TouchableOpacity, useColorScheme } from "react-native";
+import { Text, SafeAreaView, ScrollView, View, TouchableOpacity, useColorScheme, ActivityIndicator } from "react-native";
+import * as Haptics from 'expo-haptics';
 import { styles, getDynamicStyles } from "./read-styles/styles";
 import WordDetails from "./wordDisplay"; 
+import { LinearGradient } from "expo-linear-gradient";
 
 type PageDisplayProps = {
     page: number;
@@ -46,7 +48,38 @@ export default function PageDisplay({ page }: PageDisplayProps) {
         loadData();
     }, [page]);
 
-    if (loading) return <Text style={dynamicStyles.text}>Loading...</Text>;
+    const handleWordPress = (word: string, lineNum: number, wordIndex: number) => {
+        const isSelected = selectedWord?.word === word &&
+            selectedWord?.lineNum === lineNum &&
+            selectedWord?.index === wordIndex;
+
+        if (isSelected) {
+            Haptics.selectionAsync(); 
+            setSelectedWord(null);
+        } else {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); 
+            setSelectedWord({ word, lineNum, index: wordIndex });
+        }
+    };
+
+    const handleLineNumberPress = () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); 
+        router.push({
+            pathname: "/line-details/[start]/[[end]]",
+            params: { start: page.toString() },
+        });
+    };
+
+    if (loading) return (
+        <LinearGradient
+            colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+            style={{ flex: 1 }}
+        >
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+                <ActivityIndicator size="small" color={isDarkMode ? "#64B5F6" : "#1E88E5"} />
+            </View>
+        </LinearGradient>
+    );
     if (error) return <Text style={dynamicStyles.text}>{error}</Text>;
 
     return (
@@ -72,10 +105,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
                             <View style={styles.lineContainer}>
                                 <TouchableOpacity
                                     style={[styles.lineNumberButton, dynamicStyles.lineNumberButton]}
-                                    onPress={() => router.push({
-                                        pathname: "/line-details/[start]/[[end]]",
-                                        params: { start: line.lineNum.toString() },
-                                    })}
+                                    onPress={handleLineNumberPress}
                                 >
                                     <Text style={[styles.lineNumberText, dynamicStyles.lineNumberText]}>
                                         {line.lineNum}
@@ -90,11 +120,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
                                         return (
                                             <TouchableOpacity
                                                 key={`${line.lineNum}-${wordIndex}`}
-                                                onPress={() => 
-                                                    setSelectedWord(
-                                                        isSelected ? null : { word, lineNum: line.lineNum, index: wordIndex }
-                                                    )
-                                                }
+                                                onPress={() => handleWordPress(word, line.lineNum, wordIndex)}
                                             >
                                                 <Text style={[
                                                     styles.word,

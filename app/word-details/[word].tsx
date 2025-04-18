@@ -7,6 +7,7 @@ import {
     ScrollView, 
     useColorScheme 
 } from "react-native";
+import * as Haptics from 'expo-haptics';
 import { Colors, getDynamicStyles } from "../../assets/styles/word-details.styles";
 import { router, useLocalSearchParams } from "expo-router";
 import TabLayout from "../(tabs)/tabLayout";
@@ -50,7 +51,6 @@ export default function WordDetails() {
     const isDarkMode = useColorScheme() === "dark";
     const dynamicStyles = getDynamicStyles(isDarkMode);
 
-
     const [collapsedEntries, setCollapsedEntries] = useState<Record<number, boolean>>(() => {
         const initialCollapsed: Record<number, boolean> = {};
         if (wordData) {
@@ -60,9 +60,9 @@ export default function WordDetails() {
         }
         return initialCollapsed;
     });
-    
 
     const toggleDefinitionCollapse = useCallback((index: number) => {
+        Haptics.selectionAsync(); // Light feedback for toggle action
         setCollapsedEntries(prev => ({
             ...prev,
             [index]: !prev[index]
@@ -70,11 +70,20 @@ export default function WordDetails() {
     }, []);
 
     const handleGoBack = () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); // Feedback for navigation
         if (router.canGoBack()) {
           router.back();
         } else {
           router.push('/(tabs)');
         }
+    };
+
+    const handleLineNavigation = (lineNum: string) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); // Stronger feedback for line navigation
+        router.push({ 
+            pathname: "/line-details/[start]/[[end]]", 
+            params: { start: lineNum } 
+        });
     };
 
     useEffect(() => {
@@ -109,9 +118,14 @@ export default function WordDetails() {
     }, [word]);
 
     if (loading) return (
-        <View style={dynamicStyles.loadingContainer}>
-            <ActivityIndicator size="small" color={isDarkMode ? "#64B5F6" : "#1E88E5"} />
-        </View>
+        <LinearGradient
+            colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+            style={{ flex: 1 }}
+        >
+            <View style={dynamicStyles.loadingContainer}>
+                <ActivityIndicator size="small" color={isDarkMode ? "#64B5F6" : "#1E88E5"} />
+            </View>
+        </LinearGradient>
     );
     if (error) return <Text style={dynamicStyles.errorText}>{error}</Text>;
     if (!wordData) return <Text style={dynamicStyles.errorText}>Data Unavailable</Text>;
@@ -125,7 +139,10 @@ export default function WordDetails() {
                 <View style={dynamicStyles.wordDetailsContainer}>
                     <View style={dynamicStyles.headerContainer}>
                         <TouchableOpacity 
-                            onPressIn={() => setIsBackPressed(true)}
+                            onPressIn={() => {
+                                setIsBackPressed(true);
+                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                            }}
                             onPressOut={() => setIsBackPressed(false)}
                             onPress={handleGoBack}
                             style={[
@@ -173,10 +190,7 @@ export default function WordDetails() {
                                         <Text style={dynamicStyles.entryValue}>{lineNum}</Text>
                                         <TouchableOpacity 
                                             style={dynamicStyles.goButton}
-                                            onPress={() => router.push({ 
-                                                pathname: "/line-details/[start]/[[end]]", 
-                                                params: { start: lineNum } 
-                                            })}
+                                            onPress={() => handleLineNavigation(lineNum)}
                                         >
                                             <Text style={dynamicStyles.goButtonText}>Go</Text>
                                         </TouchableOpacity>

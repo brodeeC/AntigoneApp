@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View, Text, TouchableOpacity, useColorScheme, SafeAreaView, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons"; 
 import { LinearGradient } from 'expo-linear-gradient';
+import * as Haptics from 'expo-haptics';
 import PageDisplay from "@/components/read/pageDisplay";
 import { styles, getDynamicStyles } from "../../assets/styles/read.styles";
 
@@ -9,6 +10,16 @@ export default function Read() {
     const [page, setPage] = useState(1);
     const isDarkMode = useColorScheme() === "dark";
     const dynamicStyles = getDynamicStyles(isDarkMode);
+
+    const handlePageChange = (newPage : number) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        setPage(newPage);
+    };
+
+    const handleFastForward = (forward = true) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        setPage(forward ? Math.min(123, page + 10) : Math.max(1, page - 10));
+    };
 
     return (
         <LinearGradient
@@ -33,17 +44,17 @@ export default function Read() {
 
                 {/* Enhanced Pagination */}
                 <View style={[styles.paginationContainer, dynamicStyles.paginationContainer]}>
-                <TouchableOpacity
-                    style={[styles.navButton, page === 1 && styles.disabledArrowButton]}
-                    onPress={() => setPage(Math.max(1, page - 10))}
-                    disabled={page === 1}
-                >
-                    <MaterialIcons name="keyboard-double-arrow-left" size={24} color={dynamicStyles.navIcon.color} />
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.navButton, page === 1 && styles.disabledArrowButton]}
+                        onPress={() => handleFastForward(false)}
+                        disabled={page === 1}
+                    >
+                        <MaterialIcons name="keyboard-double-arrow-left" size={24} color={dynamicStyles.navIcon.color} />
+                    </TouchableOpacity>
 
                     <TouchableOpacity
                         style={[styles.navButton, page === 1 && styles.disabledArrowButton]}
-                        onPress={() => setPage(page - 1)}
+                        onPress={() => handlePageChange(page - 1)}
                         disabled={page === 1}
                     >
                         <MaterialIcons
@@ -60,7 +71,7 @@ export default function Read() {
 
                     <TouchableOpacity
                         style={[styles.navButton, page === 123 && styles.disabledArrowButton]}
-                        onPress={() => setPage(page + 1)}
+                        onPress={() => handlePageChange(page + 1)}
                         disabled={page === 123}
                     >
                         <MaterialIcons
@@ -72,7 +83,7 @@ export default function Read() {
 
                     <TouchableOpacity
                         style={[styles.navButton, page === 123 && styles.disabledArrowButton]}
-                        onPress={() => setPage(Math.min(123, page + 10))}
+                        onPress={() => handleFastForward(true)}
                         disabled={page === 123}
                     >
                         <MaterialIcons name="keyboard-double-arrow-right" size={24} color={dynamicStyles.navIcon.color} />
