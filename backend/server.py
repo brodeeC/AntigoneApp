@@ -335,14 +335,14 @@ def search():
 
     try:
         if mode == 'definition':
-            print("Starting definition search...")
+            logger.debug("Starting definition search...")
             lemma_ids = search_by_definition(safe_query)
-            print(f"Found lemma IDs: {lemma_ids}")
+            logger.debug(f"Found lemma IDs: {lemma_ids}")
             
             for lemma_id in lemma_ids:
-                print(f"\nProcessing lemma ID: {lemma_id}")
+                logger.debug(f"\nProcessing lemma ID: {lemma_id}")
                 word_data = lookup_word_details_by_id(lemma_id)  # New function
-                print(f"Word data: {word_data}")
+                logger.debug(f"Word data: {word_data}")
                 if word_data:
                     results.append(word_data)
                     
@@ -353,7 +353,7 @@ def search():
             if word_data:
                 results = word_data
                 
-        print(f"\nFinal results: {results}")
+        logger.debug(f"\nFinal results: {results}")
         return jsonify(results)
 
     except Exception as e:
@@ -416,7 +416,7 @@ def search_by_definition(query):
         if not data:
             # Try with LIKE if no exact matches
             data = conn.execute(
-                "SELECT lemma_id FROM lemma_definitions WHERE short_definition LIKE ? LIMIT 5",
+                "SELECT lemma_id FROM lemma_definitions WHERE short_definition LIKE ? ",
                 (f"%{query}%",)
             ).fetchall()
             logger.debug(f"Found {len(data)} LIKE matches")
