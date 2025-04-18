@@ -440,7 +440,7 @@ def get_word(lemma_id):
             (lemma_id,)
         ).fetchone()  
         if data: logger.debug(f"\nget_word output: {data['lemma']}")
-        return [data['lemma']] if data else []
+        return data['lemma'] if data else []
     finally:
         conn.close()
 
