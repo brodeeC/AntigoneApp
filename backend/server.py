@@ -419,7 +419,7 @@ def search_by_definition(query):
         if not data:
             # Try with LIKE if no exact matches
             data = conn.execute(
-                "SELECT lemma_id FROM lemma_definitions WHERE short_definition LIKE ? ",
+                "SELECT lemma_id FROM lemma_definitions WHERE short_definition LIKE ? 20",
                 (f"%{query}%",)
             ).fetchall()
             logger.debug(f"Found {len(data)} LIKE matches")
