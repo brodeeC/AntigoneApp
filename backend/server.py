@@ -379,21 +379,26 @@ def lookup_word_details(word):
         OR form = ?
         OR normalized LIKE ?
         OR norm_form LIKE ?
+        OR full_eng LIKE ?
+        OR eng_lemma LIKE ?
         ORDER BY 
             CASE 
                 WHEN lemma = ? THEN 1
                 WHEN form = ? THEN 2
                 WHEN normalized LIKE ? THEN 3
                 WHEN norm_form LIKE ? THEN 4
-                ELSE 5
+                WHEN full_eng LIKE ? THEN 5
+                WHEN eng_lemma LIKE ? THEN 6
+                ELSE 7
             END,
             LENGTH(lemma),
             LENGTH(form),
             line_number
     """, (
-        word, word, norm + '%', norm + '%',
-        word, word, norm + '%', norm + '%'
+        word, word, norm + '%', norm + '%', f'%{word}%', f'%{word}%',
+        word, word, norm + '%', norm + '%', f'%{word}%', f'%{word}%'
     )).fetchall()
+
     conn.close()
 
     if not data:

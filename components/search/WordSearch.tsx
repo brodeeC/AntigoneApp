@@ -6,21 +6,35 @@ import {
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
+import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
+
+type Definition = {
+  def_num: number;
+  short_def: string;
+  queries: string;
+};
+
+type WordInfo = {
+  form: string;
+  lemma: string;
+  lemma_id: number;
+  line_number: number;
+  postag: string;
+  speaker: string;
+};
+
+type WordResult = [WordInfo, any?, { definitions: Definition[] }?];
 
 export default function WordSearch() {
+  const navigation = useNavigation();
   const isDark = useColorScheme() === 'dark';
   const styles = getStyles(isDark);
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<'word' | 'definition'>('word');
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<WordResult[]>([]);
   const [loading, setLoading] = useState(false);
 
-
-  type WordResult = {
-    word: string;
-    definition: string;
-  };
-  
   const sanitizeInput = (text: string) => text.replace(/[^a-zA-Zά-ωΑ-Ω\s']/g, '');
 
   const handleSearch = async () => {
@@ -41,6 +55,17 @@ export default function WordSearch() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleWordDetails = (form: string) => {
+    router.push(`/word-details/${form}`)
+  };
+
+  const handleLineDetails = (lineNumber: number) => {
+    router.push({
+      pathname: '/line-details/[start]/[[end]]',
+      params: { start: lineNumber.toString() }
+    });
   };
 
   return (
@@ -106,12 +131,33 @@ export default function WordSearch() {
           <FlatList
             data={results}
             keyExtractor={(_, index) => index.toString()}
-            renderItem={({ item }: { item: { word: string; definition: string } }) => (
-              <View style={styles.resultItem}>
-                <Text style={styles.resultWord}>{item.word}</Text>
-                <Text style={styles.resultDefinition}>{item.definition}</Text>
-              </View>
-            )}
+            renderItem={({ item }) => {
+              const wordInfo = item[0];
+              const defs = item[2]?.definitions?.[0];
+              return (
+                <View style={styles.resultItem}>
+                  <Text style={styles.resultWord}>Lemma: {wordInfo.lemma}</Text>
+                  <Text style={styles.resultDefinition}>Line: {wordInfo.line_number} (Speaker: {wordInfo.speaker})</Text>
+                  <Text style={styles.resultDefinition}>Definition: {defs?.short_def || 'No definition found'}</Text>
+            
+                  <View style={{ flexDirection: 'row', marginTop: 10, gap: 10 }}>
+                    <TouchableOpacity
+                      onPress={() => handleWordDetails(wordInfo.form)}
+                      style={[styles.actionButton, { backgroundColor: '#1E88E5' }]}
+                    >
+                      <Text style={styles.actionButtonText}>More Details</Text>
+                    </TouchableOpacity>
+            
+                    <TouchableOpacity
+                      onPress={() => handleLineDetails(wordInfo.line_number)}
+                      style={[styles.actionButton, { backgroundColor: '#4CAF50' }]}
+                    >
+                      <Text style={styles.actionButtonText}>Go</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            }}
             style={{ marginTop: 20 }}
             ListEmptyComponent={<Text style={styles.subtitle}>No results found</Text>}
           />
@@ -214,5 +260,14 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     fontSize: 14,
     color: isDark ? '#CBD5E1' : '#475569',
     marginTop: 4,
+  },
+  actionButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 8,
+  },
+  actionButtonText: {
+    color: '#FFF',
+    fontWeight: '600',
   },
 });
