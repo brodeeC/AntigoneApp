@@ -344,6 +344,7 @@ def search():
                 logger.debug(f"\nProcessing lemma ID: {lemma_id}")
                 word = get_word(lemma_id)
                 if word != []: word_data = lookup_word_details(word)
+                else: word_data = None
                 logger.debug(f"Word data: {word_data}")
                 if word_data:
                     results.append(word_data)
