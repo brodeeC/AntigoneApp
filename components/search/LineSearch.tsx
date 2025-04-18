@@ -24,8 +24,8 @@ export default function LineSearch() {
       const endParam = !isNaN(end) && end > start ? end.toString() : null;
   
       const path = `/line-details/${startParam}${endParam ? `/${endParam}` : ''}` as `/line-details/[start]/[[end]]`;
-  
       router.push(path);
+      
     } else {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       alert('Please enter a valid start line number');

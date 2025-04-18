@@ -18,10 +18,6 @@ interface WordEntry {
   speaker: string;
 }
 
-interface CaseInfo {
-  [key: string]: string;
-}
-
 interface Definition {
   def_num: number;
   short_def: string;
@@ -29,7 +25,7 @@ interface Definition {
 
 interface WordDataEntry extends Array<unknown> {
   0: WordEntry;
-  1?: { case?: CaseInfo };
+  1?: any;
   2?: { definitions?: Definition[] };
   length: 3;
 }
@@ -42,39 +38,53 @@ export default function WordSearch() {
   const [results, setResults] = useState<WordDataEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
-  const [collapsedEntries, setCollapsedEntries] = useState<Record<number, boolean>>({});
 
   const sanitizeInput = useCallback((text: string) => 
     text.replace(/[^a-zA-Zά-ωΑ-Ω\s']/g, ''), []);
 
-  const handleSearch = useCallback(async () => {
-    Keyboard.dismiss();
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
-    if (!query.trim()) return;
-
-    const safeQuery = sanitizeInput(query.trim());
-    setLoading(true);
-    setHasSearched(true);
-    try {
-      const res = await fetch(
-        `http://brodeeclontz.com/AntigoneApp/search?mode=${mode}&q=${encodeURIComponent(safeQuery)}`
-      );
-      const data: WordDataEntry[] = await res.json();
-      setResults(data || []);
+    const handleSearch = useCallback(async () => {
+      Keyboard.dismiss();
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    
+      if (!query.trim()) return;
+    
+      const safeQuery = sanitizeInput(query.trim());
+      setLoading(true);
+      setHasSearched(true);
       
-      // Initialize collapsed state
-      const initialCollapsed: Record<number, boolean> = {};
-      data?.forEach((_: WordDataEntry, index: number) => {
-        initialCollapsed[index] = true;
-      });
-      setCollapsedEntries(initialCollapsed);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [query, mode, sanitizeInput]);
+      try {
+        const response = await fetch(
+          `http://brodeeclontz.com/AntigoneApp/search?mode=${mode}&q=${encodeURIComponent(safeQuery)}`
+        );
+    
+        // First get the text to see what we're dealing with
+        const responseText = await response.text();
+        
+        try {
+          // Try to parse it as JSON
+          const data = JSON.parse(responseText);
+          
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          
+          if (!Array.isArray(data)) {
+            throw new Error('Unexpected response format');
+          }
+          
+          setResults(data);
+        } catch (parseError) {
+          console.error('Parse error:', parseError, 'Response:', responseText);
+          throw new Error('Failed to parse server response');
+        }
+      } catch (err) {
+        console.error('Search error:', err);
+        setResults([]);
+        alert(`Search failed: ${err instanceof Error ? err.message : 'Please try again'}`);
+      } finally {
+        setLoading(false);
+      }
+    }, [query, mode, sanitizeInput]);
 
   const handleWordDetails = useCallback((form: string) => {
     router.push(`/word-details/${form}`);
@@ -88,180 +98,146 @@ export default function WordSearch() {
     });
   }, []);
 
-  const toggleDefinitionCollapse = useCallback((index: number) => {
-    Haptics.selectionAsync();
-    setCollapsedEntries(prev => ({
-      ...prev,
-      [index]: !prev[index]
-    }));
-  }, []);
-
   return (
     <LinearGradient
       colors={isDark ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
-      style={styles.container}
+      style={{ flex: 1 }}
     >
-      <View style={styles.content}>
-        <Text style={styles.title}>Antigone Lexicon Search</Text>
-        <Text style={styles.subtitle}>Search by {mode === 'word' ? 'Greek word forms' : 'English definitions'}</Text>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.content}>
+          <Text style={styles.title}>Antigone Lexicon Search</Text>
+          <Text style={styles.subtitle}>Search by {mode === 'word' ? 'Greek word forms' : 'English definitions'}</Text>
 
-        <View style={styles.toggleContainer}>
-          {['word', 'definition'].map((option) => (
-            <TouchableOpacity
-              key={option}
-              style={[
-                styles.toggleButton,
-                mode === option && styles.toggleButtonActive,
-              ]}
-              onPress={() => setMode(option as 'word' | 'definition')}
-            >
-              <Text style={[
-                styles.toggleText,
-                mode === option && styles.toggleTextActive
-              ]}>
-                {option === 'word' ? 'Greek Word' : 'Definition'}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+          <View style={styles.toggleContainer}>
+            {['word', 'definition'].map((option) => (
+              <TouchableOpacity
+                key={option}
+                style={[
+                  styles.toggleButton,
+                  mode === option && styles.toggleButtonActive,
+                ]}
+                onPress={() => setMode(option as 'word' | 'definition')}
+              >
+                <Text style={[
+                  styles.toggleText,
+                  mode === option && styles.toggleTextActive
+                ]}>
+                  {option === 'word' ? 'Greek Word' : 'Definition'}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
 
-        <View style={styles.inputContainer}>
-          <Feather name="search" size={20} color={isDark ? '#94A3B8' : '#64748B'} style={styles.inputIcon} />
-          <TextInput
-            placeholder={mode === 'word' ? "Search Greek words..." : "Search definitions..."}
-            placeholderTextColor={isDark ? '#94A3B8' : '#64748B'}
-            value={query}
-            onChangeText={setQuery}
-            onSubmitEditing={handleSearch}
-            style={styles.input}
-            returnKeyType="search"
-            clearButtonMode="while-editing"
-            autoCapitalize="none"
-          />
-        </View>
+          <View style={styles.inputContainer}>
+            <Feather name="search" size={20} color={isDark ? '#94A3B8' : '#64748B'} style={styles.inputIcon} />
+            <TextInput
+              placeholder={mode === 'word' ? "Search Greek words..." : "Search definitions..."}
+              placeholderTextColor={isDark ? '#94A3B8' : '#64748B'}
+              value={query}
+              onChangeText={setQuery}
+              onSubmitEditing={handleSearch}
+              style={styles.input}
+              returnKeyType="search"
+              clearButtonMode="while-editing"
+              autoCapitalize="none"
+            />
+          </View>
 
-        <TouchableOpacity
-          onPress={handleSearch}
-          activeOpacity={0.8}
-          style={styles.searchButton}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#FFF" />
-          ) : (
-            <>
-              <Text style={styles.searchButtonText}>Search</Text>
-              <Feather name="arrow-right" size={20} color="#FFF" />
-            </>
-          )}
-        </TouchableOpacity>
-
-        {hasSearched && !loading && (
-          <ScrollView
-            style={styles.resultsList}
-            contentContainerStyle={styles.resultsContent}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
+          <TouchableOpacity
+            onPress={handleSearch}
+            activeOpacity={0.8}
+            style={styles.searchButton}
+            disabled={loading}
           >
-            {results.length === 0 ? (
-              <View style={styles.emptyState}>
-                <Feather name="search" size={40} color={isDark ? '#94A3B8' : '#64748B'} />
-                <Text style={styles.emptyText}>No results found</Text>
-                <Text style={styles.emptySubtext}>Try a different search term</Text>
-              </View>
+            {loading ? (
+              <ActivityIndicator color="#FFF" />
             ) : (
-              results.map((entry, index) => {
-                if (!entry || !entry[0]) return null;
+              <>
+                <Text style={styles.searchButtonText}>Search</Text>
+                <Feather name="arrow-right" size={20} color="#FFF" />
+              </>
+            )}
+          </TouchableOpacity>
 
-                const isCollapsed = collapsedEntries[index] !== false;
-                const { form, lemma, line_number, postag, speaker } = entry[0];
-                const definitions = entry[2]?.definitions || [];
-                console.log(entry[0])
+          {hasSearched && !loading && (
+            <View style={styles.resultsContainer}>
+              {results.length === 0 ? (
+                <View style={styles.emptyState}>
+                  <Feather name="search" size={40} color={isDark ? '#94A3B8' : '#64748B'} />
+                  <Text style={styles.emptyText}>No results found</Text>
+                  <Text style={styles.emptySubtext}>Try a different search term</Text>
+                </View>
+              ) : (
+                results.map((entry, index) => {
+                  if (!entry || !entry[0]) return null;
 
-                return (
-                  <View key={`${entry[0].lemma_id}-${index}`} style={styles.entryContainer}>
-                    <View style={styles.entryHeader}>
-                      <Text style={styles.entryTitle}>{index + 1}</Text>
-                      <Text style={styles.entryForm}>{form}</Text>
-                    </View>
+                  const { form, lemma, line_number, speaker } = entry[0];
+                  const definitions = entry[2]?.definitions?.slice(0, 3) || [];
 
-                    <View style={styles.entryRow}>
-                      <Text style={styles.entryLabel}>Lemma:</Text>
-                      <Text style={styles.entryValue}>{lemma}</Text>
-                    </View>
+                  return (
+                    <View key={`${entry[0].lemma_id}-${index}`} style={styles.entryContainer}>
+                      <View style={styles.entryHeader}>
+                        <Text style={styles.entryTitle}>{index + 1}</Text>
+                        <Text style={styles.entryForm}>{form}</Text>
+                      </View>
 
-                    <View style={styles.entryRow}>
-                      <Text style={styles.entryLabel}>Line:</Text>
-                      <Text style={styles.entryValue}>{line_number}</Text>
-                      <TouchableOpacity 
-                        style={styles.goButton}
-                        onPress={() => handleLineDetails(line_number)}
-                      >
-                        <Text style={styles.goButtonText}>Go</Text>
-                      </TouchableOpacity>
-                    </View>
+                      <View style={styles.entryRow}>
+                        <Text style={styles.entryLabel}>Lemma:</Text>
+                        <Text style={styles.entryValue}>{lemma}</Text>
+                      </View>
 
-                    <View style={styles.entryRow}>
-                      <Text style={styles.entryLabel}>Speaker:</Text>
-                      <Text style={styles.entryValue}>{speaker}</Text>
-                    </View>
+                      <View style={styles.entryRow}>
+                        <Text style={styles.entryLabel}>Line:</Text>
+                        <Text style={styles.entryValue}>{line_number}</Text>
+                        <TouchableOpacity 
+                          style={styles.lineButton}
+                          onPress={() => handleLineDetails(line_number)}
+                        >
+                          <Text style={styles.lineButtonText}>Go</Text>
+                        </TouchableOpacity>
+                      </View>
 
-                    {definitions.length > 0 && (
-                      <View style={styles.definitionContainer}>
-                        <Text style={styles.sectionTitle}>Definitions:</Text>
-                        {definitions.slice(0, 3).map((def) => (
-                          <Text key={def.def_num} style={styles.definitionText}>
-                            {def.def_num}. {def.short_def}
-                          </Text>
-                        ))}
-                        
-                        {!isCollapsed && definitions.length > 3 && 
-                          definitions.slice(3).map((def) => (
+                      <View style={styles.entryRow}>
+                        <Text style={styles.entryLabel}>Speaker:</Text>
+                        <Text style={styles.entryValue}>{speaker}</Text>
+                      </View>
+
+                      {definitions.length > 0 && (
+                        <View style={styles.definitionContainer}>
+                          <Text style={styles.sectionTitle}>Definitions:</Text>
+                          {definitions.map((def) => (
                             <Text key={def.def_num} style={styles.definitionText}>
                               {def.def_num}. {def.short_def}
                             </Text>
-                          ))
-                        }
-                        
-                        {definitions.length > 3 && (
-                          <TouchableOpacity 
-                            onPress={() => toggleDefinitionCollapse(index)}
-                            style={styles.toggleButton}
-                            activeOpacity={0.7}
-                          >
-                            <Text style={styles.toggleButtonText}>
-                              {isCollapsed
-                                ? `Show ${definitions.length - 3} more definitions` 
-                                : 'Show less'}
-                            </Text>
-                          </TouchableOpacity>
-                        )}
-                      </View>
-                    )}
+                          ))}
+                        </View>
+                      )}
 
-                    <View style={styles.actionButtonContainer}>
                       <TouchableOpacity
                         onPress={() => handleWordDetails(form)}
-                        style={[styles.actionButton, styles.detailsButton]}
+                        style={styles.detailsButton}
                       >
-                        <Text style={styles.actionButtonText}>Word Details</Text>
+                        <Text style={styles.detailsButtonText}>Word Details</Text>
                       </TouchableOpacity>
                     </View>
-                  </View>
-                );
-              })
-            )}
-          </ScrollView>
-        )}
-      </View>
+                  );
+                })
+              )}
+            </View>
+          )}
+        </View>
+      </ScrollView>
     </LinearGradient>
   );
 }
 
 const getStyles = (isDark: boolean) => StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollContainer: {
     padding: 20,
+    paddingBottom: 40,
   },
   content: {
     flex: 1,
@@ -336,11 +312,8 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  resultsList: {
-    flex: 1,
-  },
-  resultsContent: {
-    paddingBottom: 40,
+  resultsContainer: {
+    marginTop: 12,
   },
   entryContainer: {
     padding: 16,
@@ -383,15 +356,17 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     color: isDark ? '#E2E8F0' : '#334155',
     marginRight: 12,
   },
-  goButton: {
-    backgroundColor: isDark ? '#4CAF50' : '#4CAF50',
+  lineButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: isDark ? '#64748B' : '#94A3B8',
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 4,
     marginLeft: 'auto',
   },
-  goButtonText: {
-    color: '#FFF',
+  lineButtonText: {
+    color: isDark ? '#E2E8F0' : '#334155',
     fontSize: 12,
     fontWeight: '600',
   },
@@ -411,27 +386,14 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     lineHeight: 20,
     marginBottom: 4,
   },
-  toggleButtonText: {
-    fontSize: 12,
-    color: isDark ? '#64B5F6' : '#1E88E5',
-    fontWeight: '600',
-  },
-  actionButtonContainer: {
-    flexDirection: 'row',
-    marginTop: 12,
-  },
-  actionButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   detailsButton: {
     backgroundColor: isDark ? '#1E88E5' : '#1E88E5',
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 12,
   },
-  actionButtonText: {
+  detailsButtonText: {
     color: '#FFF',
     fontWeight: '600',
     fontSize: 14,

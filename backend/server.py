@@ -323,46 +323,54 @@ def search():
         return jsonify({'error': 'Missing query or mode parameter'}), 400
 
     safe_query = query.strip()
-
     results = []
-    if mode == 'definition':
-        words = search_by_definition(safe_query)
-        for word in words:
-            data = lookup_word_details(word)
-            if data:
-                results = data
-    elif mode == 'word':
-        data = lookup_word_details(safe_query)
-        if data:
-            results = data
-    else:
-        return jsonify({'error': 'Invalid mode'}), 400
 
-    return jsonify(results)
+    try:
+        if mode == 'definition':
+            # Get all matching words first
+            matching_words = search_by_definition(safe_query)
+            # Then get details for each unique word
+            unique_words = list(set(matching_words))  # Remove duplicates
+            for word in unique_words:
+                word_data = lookup_word_details(word)
+                if word_data:
+                    results.extend(word_data)  # Extend instead of assigning
+                    
+        elif mode == 'word':
+            word_data = lookup_word_details(safe_query)
+            if word_data:
+                results = word_data
+        else:
+            return jsonify({'error': 'Invalid mode'}), 400
 
+        return jsonify(results)
 
-def get_word(lemma_id):
-    conn = get_db_connection()
-    data = conn.execute("SELECT lemma FROM lemma_data WHERE lemma_id = ?", (lemma_id,)).fetchall()
-    conn.close()
-
-    words = [row['lemma'] for row in data]
-    return words
+    except Exception as e:
+        print(f"Error in search: {str(e)}")
+        return jsonify({'error': 'Internal server error'}), 500
 
 def search_by_definition(query):
     conn = get_db_connection()
-    data = conn.execute(
-        "SELECT lemma_id FROM lemma_definitions WHERE short_def LIKE ?",
-        (f"%{query}%",)
-    ).fetchall()
-    conn.close()
+    try:
+        # More precise search with word boundaries
+        data = conn.execute(
+            "SELECT DISTINCT lemma_id FROM lemma_definitions WHERE short_def LIKE ?",
+            (f"% {query} %",)  # Search for whole words
+        ).fetchall()
+        return [row['lemma_id'] for row in data]
+    finally:
+        conn.close()
 
-    full = []
-    if data: 
-        for row in data:
-            lemma_id = row['lemma_id']
-            full.extend(get_word(lemma_id))  # flatten the list
-    return full
+def get_word(lemma_id):
+    conn = get_db_connection()
+    try:
+        data = conn.execute(
+            "SELECT lemma FROM lemma_data WHERE lemma_id = ?", 
+            (lemma_id,)
+        ).fetchone()  # Just get one result
+        return [data['lemma']] if data else []
+    finally:
+        conn.close()
 
 def lookup_word_details(word):
     word = clean_word(word)
