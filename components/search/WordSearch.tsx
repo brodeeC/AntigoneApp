@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
   StyleSheet, useColorScheme, Keyboard, ScrollView,
@@ -36,57 +36,86 @@ export default function WordSearch() {
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<'word' | 'definition'>('word');
   const [results, setResults] = useState<WordDataEntry[]>([]);
+  const [filteredResults, setFilteredResults] = useState<WordDataEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [showAllResults, setShowAllResults] = useState(false);
-  const displayedResults = showAllResults ? results : results.slice(0, 5);
+  const [allSpeakers, setAllSpeakers] = useState<string[]>([]);
+  const [selectedSpeaker, setSelectedSpeaker] = useState<string | null>(null);
+  const [speakersLoading, setSpeakersLoading] = useState(false);
+
+  const displayedResults = showAllResults ? filteredResults : filteredResults.slice(0, 5);
 
   const sanitizeInput = useCallback((text: string) => 
     text.replace(/[^a-zA-Zά-ωΑ-Ω\s']/g, ''), []);
 
-    const handleSearch = useCallback(async () => {
-      Keyboard.dismiss();
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    
-      if (!query.trim()) return;
-    
-      const safeQuery = sanitizeInput(query.trim());
-      setLoading(true);
-      setHasSearched(true);
-      
+  // Fetch all speakers on component mount
+  useEffect(() => {
+    const fetchSpeakers = async () => {
+      setSpeakersLoading(true);
       try {
-        const response = await fetch(
-          `http://brodeeclontz.com/AntigoneApp/search?mode=${mode}&q=${encodeURIComponent(safeQuery)}`
-        );
-    
-        // First get the text to see what we're dealing with
-        const responseText = await response.text();
-        
-        try {
-          // Try to parse it as JSON
-          const data = JSON.parse(responseText);
-          
-          if (data.error) {
-            throw new Error(data.error);
-          }
-          
-          if (!Array.isArray(data)) {
-            throw new Error('Unexpected response format');
-          }
-          
-          setResults(data);
-        } catch (parseError) {
-          console.error('Parse error:', parseError, 'Response:', responseText);
-          throw new Error('Failed to parse server response');
+        const response = await fetch('http://brodeeclontz.com/AntigoneApp/get_all_speakers');
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setAllSpeakers(data);
         }
       } catch (err) {
-        console.error('Search error:', err);
-        setResults([]);
-        alert(`Search failed: ${err instanceof Error ? err.message : 'Please try again'}`);
+        console.error('Failed to fetch speakers:', err);
       } finally {
-        setLoading(false);
+        setSpeakersLoading(false);
       }
-    }, [query, mode, sanitizeInput]);
+    };
+
+    fetchSpeakers();
+  }, []);
+
+  // Filter results when selectedSpeaker changes
+  useEffect(() => {
+    if (selectedSpeaker) {
+      const filtered = results.filter(entry => 
+        entry[0]?.speaker?.toLowerCase() === selectedSpeaker.toLowerCase()
+      );
+      setFilteredResults(filtered);
+    } else {
+      setFilteredResults(results);
+    }
+  }, [selectedSpeaker, results]);
+
+  const handleSearch = useCallback(async () => {
+    Keyboard.dismiss();
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  
+    if (!query.trim()) return;
+  
+    const safeQuery = sanitizeInput(query.trim());
+    setLoading(true);
+    setHasSearched(true);
+    
+    try {
+      const response = await fetch(
+        `http://brodeeclontz.com/AntigoneApp/search?mode=${mode}&q=${encodeURIComponent(safeQuery)}`
+      );
+  
+      const responseText = await response.text();
+      
+      try {
+        const data = JSON.parse(responseText);
+        if (data.error) throw new Error(data.error);
+        if (!Array.isArray(data)) throw new Error('Unexpected response format');
+        
+        setResults(data);
+      } catch (parseError) {
+        console.error('Parse error:', parseError, 'Response:', responseText);
+        throw new Error('Failed to parse server response');
+      }
+    } catch (err) {
+      console.error('Search error:', err);
+      setResults([]);
+      alert(`Search failed: ${err instanceof Error ? err.message : 'Please try again'}`);
+    } finally {
+      setLoading(false);
+    }
+  }, [query, mode, sanitizeInput]);
 
   const handleWordDetails = useCallback((form: string) => {
     router.push(`/word-details/${form}`);
@@ -100,6 +129,20 @@ export default function WordSearch() {
     });
   }, []);
 
+  const handleSpeakerSelect = useCallback((speaker: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setSelectedSpeaker(speaker === selectedSpeaker ? null : speaker);
+  }, [selectedSpeaker]);
+
+  const clearFilters = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setSelectedSpeaker(null);
+    setQuery('');
+    setResults([]);
+    setFilteredResults([]);
+    setHasSearched(false);
+  }, []);
+
   return (
     <LinearGradient
       colors={isDark ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
@@ -111,8 +154,13 @@ export default function WordSearch() {
       >
         <View style={styles.content}>
           <Text style={styles.title}>Antigone Lexicon Search</Text>
-          <Text style={styles.subtitle}>Search by {mode === 'word' ? 'Greek word forms' : 'English definitions'}</Text>
+          <Text style={styles.subtitle}>
+            {selectedSpeaker 
+              ? `Showing results for speaker: ${selectedSpeaker}` 
+              : 'Search by ' + (mode === 'word' ? 'Greek word forms' : 'English definitions')}
+          </Text>
 
+          {/* Search Mode Toggle */}
           <View style={styles.toggleContainer}>
             {['word', 'definition'].map((option) => (
               <TouchableOpacity
@@ -121,7 +169,10 @@ export default function WordSearch() {
                   styles.toggleButton,
                   mode === option && styles.toggleButtonActive,
                 ]}
-                onPress={() => setMode(option as 'word' | 'definition')}
+                onPress={() => {
+                  setMode(option as 'word' | 'definition');
+                  setSelectedSpeaker(null); // Reset speaker when changing mode
+                }}
               >
                 <Text style={[
                   styles.toggleText,
@@ -133,6 +184,39 @@ export default function WordSearch() {
             ))}
           </View>
 
+          {/* Speaker Filter */}
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>Filter by Speaker</Text>
+            {speakersLoading ? (
+              <ActivityIndicator size="small" color={isDark ? '#64B5F6' : '#1E88E5'} />
+            ) : (
+              <ScrollView 
+                horizontal 
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.speakersContainer}
+              >
+                {allSpeakers.map((speaker) => (
+                  <TouchableOpacity
+                    key={speaker}
+                    style={[
+                      styles.speakerButton,
+                      selectedSpeaker === speaker && styles.speakerButtonActive
+                    ]}
+                    onPress={() => handleSpeakerSelect(speaker)}
+                  >
+                    <Text style={[
+                      styles.speakerButtonText,
+                      selectedSpeaker === speaker && styles.speakerButtonTextActive
+                    ]}>
+                      {speaker}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            )}
+          </View>
+
+          {/* Search Input */}
           <View style={styles.inputContainer}>
             <Feather name="search" size={20} color={isDark ? '#94A3B8' : '#64748B'} style={styles.inputIcon} />
             <TextInput
@@ -148,102 +232,121 @@ export default function WordSearch() {
             />
           </View>
 
-          <TouchableOpacity
-            onPress={handleSearch}
-            activeOpacity={0.8}
-            style={styles.searchButton}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#FFF" />
-            ) : (
-              <>
-                <Text style={styles.searchButtonText}>Search</Text>
-                <Feather name="arrow-right" size={20} color="#FFF" />
-              </>
-            )}
-          </TouchableOpacity>
+          {/* Action Buttons */}
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              onPress={clearFilters}
+              style={[
+                styles.actionButton,
+                styles.clearButton,
+                !selectedSpeaker && !query && { opacity: 0.5 }
+              ]}
+              disabled={!selectedSpeaker && !query}
+            >
+              <Text style={styles.clearButtonText}>Clear</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              onPress={handleSearch}
+              style={[
+                styles.searchButton,
+                (!query && !selectedSpeaker) && { opacity: 0.5 }
+              ]}
+              disabled={!query && !selectedSpeaker}
+            >
+              {loading ? (
+                <ActivityIndicator color="#FFF" />
+              ) : (
+                <>
+                  <Text style={styles.searchButtonText}>Search</Text>
+                  <Feather name="arrow-right" size={20} color="#FFF" />
+                </>
+              )}
+            </TouchableOpacity>
+          </View>
 
+          {/* Results */}
           {hasSearched && !loading && (
             <View style={styles.resultsContainer}>
-              {results.length === 0 ? (
+              {filteredResults.length === 0 ? (
                 <View style={styles.emptyState}>
                   <Feather name="search" size={40} color={isDark ? '#94A3B8' : '#64748B'} />
                   <Text style={styles.emptyText}>No results found</Text>
-                  <Text style={styles.emptySubtext}>Try a different search term</Text>
+                  <Text style={styles.emptySubtext}>
+                    {selectedSpeaker 
+                      ? `No ${mode === 'word' ? 'words' : 'definitions'} found for speaker ${selectedSpeaker}`
+                      : 'Try a different search term'}
+                  </Text>
                 </View>
               ) : (
-                displayedResults.map((entry, index) => {
-                  if (!entry || !entry[0]) return null;
+                <>
+                  {displayedResults.map((entry, index) => {
+                    if (!entry || !entry[0]) return null;
 
-                  const { form, lemma, line_number, speaker } = entry[0];
-                  const definitions = entry[2]?.definitions?.slice(0, 3) || [];
+                    const { form, lemma, line_number, speaker } = entry[0];
+                    const definitions = entry[2]?.definitions?.slice(0, 3) || [];
 
-                  return (
-                    <View key={`${entry[0].lemma_id}-${index}`} style={styles.entryContainer}>
-                      <View style={styles.entryHeader}>
-                        <Text style={styles.entryTitle}>{index + 1}</Text>
-                        <Text style={styles.entryForm}>{form}</Text>
-                      </View>
+                    return (
+                      <View key={`${entry[0].lemma_id}-${index}`} style={styles.entryContainer}>
+                        <View style={styles.entryHeader}>
+                          <Text style={styles.entryTitle}>{index + 1}</Text>
+                          <Text style={styles.entryForm}>{form}</Text>
+                        </View>
 
-                      <View style={styles.entryRow}>
-                        <Text style={styles.entryLabel}>Lemma:</Text>
-                        <Text style={styles.entryValue}>{lemma}</Text>
-                      </View>
+                        <View style={styles.entryRow}>
+                          <Text style={styles.entryLabel}>Lemma:</Text>
+                          <Text style={styles.entryValue}>{lemma}</Text>
+                        </View>
 
-                      <View style={styles.entryRow}>
-                        <Text style={styles.entryLabel}>Line:</Text>
-                        <Text style={styles.entryValue}>{line_number}</Text>
-                        <TouchableOpacity 
-                          style={styles.lineButton}
-                          onPress={() => handleLineDetails(line_number)}
+                        <View style={styles.entryRow}>
+                          <Text style={styles.entryLabel}>Line:</Text>
+                          <Text style={styles.entryValue}>{line_number}</Text>
+                          <TouchableOpacity 
+                            style={styles.lineButton}
+                            onPress={() => handleLineDetails(line_number)}
+                          >
+                            <Text style={styles.lineButtonText}>Go</Text>
+                          </TouchableOpacity>
+                        </View>
+
+                        {!selectedSpeaker && (
+                          <View style={styles.entryRow}>
+                            <Text style={styles.entryLabel}>Speaker:</Text>
+                            <Text style={styles.entryValue}>{speaker}</Text>
+                          </View>
+                        )}
+
+                        {definitions.length > 0 && (
+                          <View style={styles.definitionContainer}>
+                            <Text style={styles.sectionTitle}>Definitions:</Text>
+                            {definitions.map((def) => (
+                              <Text key={def.def_num} style={styles.definitionText}>
+                                {def.def_num}. {def.short_def}
+                              </Text>
+                            ))}
+                          </View>
+                        )}
+
+                        <TouchableOpacity
+                          onPress={() => handleWordDetails(form)}
+                          style={styles.detailsButton}
                         >
-                          <Text style={styles.lineButtonText}>Go</Text>
+                          <Text style={styles.detailsButtonText}>Word Details</Text>
                         </TouchableOpacity>
                       </View>
-
-                      <View style={styles.entryRow}>
-                        <Text style={styles.entryLabel}>Speaker:</Text>
-                        <Text style={styles.entryValue}>{speaker}</Text>
-                      </View>
-
-                      {definitions.length > 0 && (
-                        <View style={styles.definitionContainer}>
-                          <Text style={styles.sectionTitle}>Definitions:</Text>
-                          {definitions.map((def) => (
-                            <Text key={def.def_num} style={styles.definitionText}>
-                              {def.def_num}. {def.short_def}
-                            </Text>
-                          ))}
-                        </View>
-                      )}
-
-                      <TouchableOpacity
-                        onPress={() => handleWordDetails(form)}
-                        style={styles.detailsButton}
-                      >
-                        <Text style={styles.detailsButtonText}>Word Details</Text>
-                      </TouchableOpacity>
-                    </View>
-                  );
-                })
-              )}
-              {results.length > 5 && (
-                <TouchableOpacity
-                  onPress={() => setShowAllResults(!showAllResults)}
-                  style={{
-                    marginTop: 16,
-                    alignSelf: 'center',
-                    backgroundColor: isDark ? '#64B5F6' : '#1E88E5',
-                    paddingHorizontal: 16,
-                    paddingVertical: 12,
-                    borderRadius: 8,
-                  }}
-                >
-                  <Text style={{ color: 'white', fontWeight: '600' }}>
-                    {showAllResults ? 'Show Less' : 'Show All Results'}
-                  </Text>
-                </TouchableOpacity>
+                    );
+                  })}
+                  {filteredResults.length > 5 && (
+                    <TouchableOpacity
+                      onPress={() => setShowAllResults(!showAllResults)}
+                      style={styles.showAllButton}
+                    >
+                      <Text style={styles.showAllButtonText}>
+                        {showAllResults ? 'Show Less' : `Show All (${filteredResults.length})`}
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </>
               )}
             </View>
           )}
@@ -274,10 +377,43 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     color: isDark ? '#94A3B8' : '#64748B',
     textAlign: 'center',
   },
+  sectionContainer: {
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: isDark ? '#CBD5E1' : '#475569',
+    marginBottom: 12,
+  },
+  speakersContainer: {
+    paddingBottom: 8,
+  },
+  speakerButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    backgroundColor: isDark ? '#1E293B' : '#E2E8F0',
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+  },
+  speakerButtonActive: {
+    backgroundColor: isDark ? '#64B5F6' : '#1E88E5',
+    borderColor: isDark ? '#64B5F6' : '#1E88E5',
+  },
+  speakerButtonText: {
+    fontSize: 14,
+    color: isDark ? '#CBD5E1' : '#475569',
+  },
+  speakerButtonTextActive: {
+    color: '#FFF',
+    fontWeight: '600',
+  },
   toggleContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
     gap: 10,
   },
   toggleButton: {
@@ -316,6 +452,29 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     color: isDark ? '#F8FAFC' : '#1E293B',
     fontSize: 16,
   },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+    marginBottom: 20,
+  },
+  actionButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderRadius: 12,
+  },
+  clearButton: {
+    backgroundColor: isDark ? '#1E293B' : '#E2E8F0',
+    borderWidth: 1,
+    borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+  },
+  clearButtonText: {
+    color: isDark ? '#E2E8F0' : '#1E293B',
+    fontSize: 16,
+    fontWeight: '600',
+  },
   searchButton: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -323,8 +482,8 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     backgroundColor: isDark ? '#64B5F6' : '#1E88E5',
     paddingVertical: 16,
     borderRadius: 12,
-    marginBottom: 20,
     gap: 8,
+    flex: 1,
   },
   searchButtonText: {
     color: '#FFF',
@@ -393,12 +552,6 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     marginTop: 12,
     marginBottom: 12,
   },
-  sectionTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: isDark ? '#CBD5E1' : '#475569',
-    marginBottom: 8,
-  },
   definitionText: {
     fontSize: 14,
     color: isDark ? '#E2E8F0' : '#334155',
@@ -435,5 +588,18 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     color: isDark ? '#94A3B8' : '#64748B',
     marginTop: 4,
     textAlign: 'center',
+  },
+  showAllButton: {
+    backgroundColor: isDark ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
+    borderWidth: 1,
+    borderColor: isDark ? '#64B5F6' : '#1E88E5',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  showAllButtonText: {
+    color: isDark ? '#64B5F6' : '#1E88E5',
+    fontWeight: '600',
   },
 });

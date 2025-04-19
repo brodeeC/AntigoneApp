@@ -140,6 +140,20 @@ def get_all_speakers():
 
     return jsonify(speaker_arr)
 
+def get_speaker(lineNum):
+    conn = get_db_connection()
+    query = f'SELECT speaker FROM full_text WHERE line_number={lineNum}'
+    data = conn.execute(query).fetchall()
+    conn.close()
+
+    if data:    
+        row = data[0]  
+        speaker = row["speaker"] 
+        return speaker
+    
+    else:
+        return None
+
 # Takes greek word -> english -> hash -> SQL query for definition  
 # Could use lemma from lemma_data table to get defs, may need to depending
 def get_word_defs(lemma_id):
