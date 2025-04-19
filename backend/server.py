@@ -125,23 +125,24 @@ def is_ancient_greek(word):
         if unicode_block != "GREEK":
             return False
     return True
-    
-def get_speaker(lineNum):
+
+@app.route('/AntigoneApp/get_all_speakers', methods=['GET'])  
+def get_speakers():
     conn = get_db_connection()
-    query = f'SELECT speaker FROM full_text WHERE line_number={lineNum}'
+    query = f'SELECT DISTINCT speaker FROM full_text'
     data = conn.execute(query).fetchall()
     conn.close()
 
-    # Check if any rows are returned
+    speaker_arr = []
     if data:    
-        row = data[0]  
+        for row in data:
 
-        speaker = row["speaker"]        
+            speaker = row["speaker"]        
 
-        return speaker
+        return speaker_arr.extend(speaker)
     
     else:
-        return None
+        return speaker_arr
 
 # Takes greek word -> english -> hash -> SQL query for definition  
 # Could use lemma from lemma_data table to get defs, may need to depending
@@ -273,34 +274,6 @@ def get_page(page):
 
     return get_lines(minLine, maxLine)
 
-### Route to get all of a speaker's lines, param lineNum to return the closest line/lines to that lineNum.
-@app.route('/AntigoneApp/speaker/<speaker>/', defaults={'linesNear':None})
-@app.route('/AntigoneApp/speaker/<speaker>/<int:linesNear>', methods=['GET'])
-def get_speaker_lines(speaker, linesNear=None):
-    if is_ancient_greek(speaker):
-        speaker = grk_to_eng(strip_accents(speaker))
-
-    result = get_speaker(speaker)
-
-    if not result: return []
-    
-    speaker_dict = []
-    lineNum, line_text = result
-
-    ### NEW: Look for specific word from speaker
-
-    ## So far I'm thinking, first iterate over lineNear - 50 through linesNear + 50
-    # and see if speaker is present, return speaker_dict
-
-    ## Then if linesNear == None iterate over full result list and nest array's for 'blocks' of speaker lines
-    
-
-    
-    return []
-
-### Make raw csv's downloadable?
-
-# Would it be beneficial to send full_eng up with this data? I don't think it makes sense
 @app.route('/AntigoneApp/word-details/<word>', methods=['GET'])
 def get_word_details(word):
     
@@ -472,16 +445,6 @@ def lookup_word_details(word):
         row_dict.append(this_row)
 
     return row_dict
-
-
-# Search api needs to identify if input is grk or eng,
-# If grk -> grk_to_eng() -> hash_word() to get lemma_id
-# Use full_eng, normalized, and lemma_id as search conditions
-# Or determine what the word is supposed to be and search with it
-# Will need to build this as frontend implementation grows, start with simple search that
-# Redirects to word-details then as it grows make it it's own page.
-
-# This may be frontend, but need to have something like I did with CarInfo typing into search bar.
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

@@ -20,7 +20,6 @@ export default function LineSearch() {
     const end = parseInt(endLine);
   
     if (!isNaN(start)) {
-      // If no end line provided or invalid, use start line as both values
       const endParam = !isNaN(end) && end > start ? end : start;
       
       router.push({
@@ -108,7 +107,7 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: 'center',
-    marginTop: -300, 
+    marginTop: -410, 
   },
   title: {
     fontSize: 24,

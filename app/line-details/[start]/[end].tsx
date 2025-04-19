@@ -1,4 +1,4 @@
-// Updated line-details.tsx with fixed navigation and word selection
+// Updated line-details.tsx with improved styling
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated, ActivityIndicator, ScrollView } from "react-native";
@@ -192,7 +192,7 @@ export default function LineDetails() {
                     colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
                     style={{ flex: 1 }}
                 >
-                    <View style={styles.backButtonContainer}>
+                    <View style={[styles.headerContainer, dynamicStyles.headerContainer]}>
                         <TouchableOpacity 
                             onPressIn={() => setIsBackPressed(true)}
                             onPressOut={() => setIsBackPressed(false)}
@@ -213,16 +213,17 @@ export default function LineDetails() {
                                 Back
                             </Text>
                         </TouchableOpacity>
+
+                        <View style={[styles.lineRangeContainer, dynamicStyles.lineRangeContainer]}>
+                            <Text style={[styles.lineRangeText, dynamicStyles.lineRangeText]}>
+                                {data && data.length === 1 ? `Line ${currentStart}` : `Lines ${currentStart}–${currentEnd}`}
+                            </Text>
+                        </View>
+
+                        <View style={styles.headerSpacer} />
                     </View>
 
-                    {/* Line range header - only shown once at the top */}
-                    <View style={[styles.lineRangeContainer, dynamicStyles.lineRangeContainer]}>
-                        <Text style={[styles.lineRangeText, dynamicStyles.lineRangeText]}>
-                            {data && data.length === 1 ? `Line ${currentStart}` : `Lines ${currentStart}–${currentEnd}`}
-                        </Text>
-                    </View>
-
-                    <ContentWrapper {...contentWrapperProps}>
+                    <ContentWrapper {...contentWrapperProps} style={styles.contentWrapper}>
                         {data?.map((line, i) => {
                             const prevSpeaker = i > 0 ? data[i - 1].speaker : null;
                             const showSpeaker = line.speaker && line.speaker !== prevSpeaker;
@@ -243,7 +244,7 @@ export default function LineDetails() {
                                         onPress={() => goToLine(line.lineNum)}
                                     >
                                         <Text style={[styles.lineNumberButtonText, dynamicStyles.lineNumberButtonText]}>
-                                            Line {line.lineNum}
+                                            {line.lineNum}
                                         </Text>
                                     </TouchableOpacity>
                                     
@@ -280,6 +281,7 @@ export default function LineDetails() {
                         })}
                     </ContentWrapper>
                     
+                    {/* Floating navigation footer */}
                     <View style={[styles.navigationContainer, dynamicStyles.navigationContainer]}>
                         <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
                             <TouchableOpacity
@@ -309,6 +311,9 @@ export default function LineDetails() {
                                         (isDarkMode ? "#555555" : "#AAAAAA") : 
                                         (isDarkMode ? "#64B5F6" : "#1E88E5")}
                                 />
+                                <Text style={[styles.navButtonText, dynamicStyles.navButtonText]}>
+                                    Prev
+                                </Text>
                             </TouchableOpacity>
                         </Animated.View>
 
@@ -333,6 +338,9 @@ export default function LineDetails() {
                                 onPressOut={handlePressOut}
                                 disabled={currentEnd >= 1353}
                             >
+                                <Text style={[styles.navButtonText, dynamicStyles.navButtonText]}>
+                                    Next
+                                </Text>
                                 <MaterialIcons
                                     name="chevron-right"
                                     size={24}

@@ -38,6 +38,8 @@ export default function WordSearch() {
   const [results, setResults] = useState<WordDataEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [showAllResults, setShowAllResults] = useState(false);
+  const displayedResults = showAllResults ? results : results.slice(0, 5);
 
   const sanitizeInput = useCallback((text: string) => 
     text.replace(/[^a-zA-Zά-ωΑ-Ω\s']/g, ''), []);
@@ -171,7 +173,7 @@ export default function WordSearch() {
                   <Text style={styles.emptySubtext}>Try a different search term</Text>
                 </View>
               ) : (
-                results.map((entry, index) => {
+                displayedResults.map((entry, index) => {
                   if (!entry || !entry[0]) return null;
 
                   const { form, lemma, line_number, speaker } = entry[0];
@@ -225,6 +227,23 @@ export default function WordSearch() {
                     </View>
                   );
                 })
+              )}
+              {results.length > 5 && (
+                <TouchableOpacity
+                  onPress={() => setShowAllResults(!showAllResults)}
+                  style={{
+                    marginTop: 16,
+                    alignSelf: 'center',
+                    backgroundColor: isDark ? '#64B5F6' : '#1E88E5',
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    borderRadius: 8,
+                  }}
+                >
+                  <Text style={{ color: 'white', fontWeight: '600' }}>
+                    {showAllResults ? 'Show Less' : 'Show All Results'}
+                  </Text>
+                </TouchableOpacity>
               )}
             </View>
           )}

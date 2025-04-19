@@ -25,9 +25,30 @@ export const styles = StyleSheet.create({
         paddingBottom: 100,
     },
     headerContainer: {
-        marginBottom: 20,
-        paddingBottom: 10,
+        flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between', 
+        paddingHorizontal: 16,
+        paddingTop: Platform.select({
+            ios: 70,
+            android: 30
+        }),
+        paddingBottom: 16,
+        borderBottomWidth: 1,
+    },
+    headerSpacer: {
+        width: 80, 
+    },
+    lineRangeContainer: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 8,
+        top: 70,
+        paddingHorizontal: 16,
+        borderRadius: 12,
     },
     speaker: {
         fontSize: 22,
@@ -55,31 +76,30 @@ export const styles = StyleSheet.create({
     lineTextContainer: {
         flexDirection: "row",
         flexWrap: "wrap",
-        paddingHorizontal: 8,
+        paddingHorizontal: 16,
         marginBottom: 30,
     },
     navButton: {
-        padding: 16,
-        borderRadius: 28,
-        width: 64, 
-        height: 64, 
-        justifyContent: "center",
-        alignItems: "center",
-        marginHorizontal: 32, 
-        backgroundColor: 'rgba(30, 136, 229, 0.1)',
-        borderWidth: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 24,
+        justifyContent: 'center',
+        marginHorizontal: 8,
+        minWidth: 120,
     },
     navigationContainer: {
         position: "absolute",
-        bottom: 40, 
+        bottom: 0,
         left: 0,
         right: 0,
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        paddingHorizontal: 24,
-        paddingVertical: 16,
-        backgroundColor: 'transparent', 
+        paddingHorizontal: 16,
+        paddingVertical: 30,
+        backgroundColor: 'transparent',
     },
     disabledNavButton: {
         opacity: 0.5,
@@ -92,7 +112,7 @@ export const styles = StyleSheet.create({
         borderRadius: 16,
         padding: 20,
         marginTop: 24,
-        marginHorizontal: 8,
+        marginHorizontal: 16,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.2,
@@ -102,29 +122,17 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
     },
     backButton: {
-        padding: 12,
+        padding: 8,
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
         backgroundColor: 'transparent',
-        borderWidth: 0,
     },
     backButtonText: {
         fontSize: 16,
         fontFamily: 'Inter-Medium',
         marginLeft: 8,
-    },
-    backButtonContainer: {
-        position: 'absolute',
-        top: Platform.select({
-            ios: 60,
-            android: 30
-        }),
-        left: 24,
-        zIndex: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
     },
     loadingContainer: {
         flex: 1,
@@ -136,36 +144,11 @@ export const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '500',
     },
-    floatingLineNumber: {
-        position: 'absolute',
-        top: Platform.select({
-            ios: 110,
-            android: 90
-        }),
-        textAlign: 'center',
-        backgroundColor: 'rgba(30, 136, 229, 0.1)',
-        borderRadius: 20,
-        paddingVertical: 11,
-        paddingHorizontal: 16,
-        zIndex: 24,
-        borderWidth: 1,
-    },
     divider: {
         height: 1,
         marginVertical: 16,
         width: '40%',
         alignSelf: 'center',
-    },
-    lineRangeContainer: {
-        paddingVertical: 8,
-        paddingHorizontal: 24,
-        borderRadius: 20,
-        alignSelf: 'center',
-        marginBottom: 2,
-        marginTop: Platform.select({
-            ios: 50,
-            android: 0
-        }),
     },
     lineRangeText: {
         fontSize: 18,
@@ -174,15 +157,15 @@ export const styles = StyleSheet.create({
         includeFontPadding: false,
     },
     lineNumberButton: {
-        paddingVertical: 6,
+        paddingVertical: 4,
         paddingHorizontal: 12,
         borderRadius: 6,
         alignSelf: 'flex-start',
         marginVertical: 8,
-        marginLeft: 8,
+        marginLeft: 16,
         backgroundColor: 'transparent',
         borderWidth: 1,
-        minWidth: 48,
+        minWidth: 40,
         alignItems: 'center',
     },
     lineNumberButtonText: {
@@ -190,25 +173,16 @@ export const styles = StyleSheet.create({
         fontFamily: 'Inter-Medium',
     },
     scrollContainer: {
-        paddingBottom: 120, 
+        paddingBottom: 120,
+        paddingTop: 16,
     },
-    wordDetailsTitle: {
-        fontSize: 18,
-        fontWeight: "bold",
-        marginBottom: 4,
+    contentWrapper: {
+        paddingTop: 16,
     },
-    wordDetailsText: {
+    navButtonText: {
         fontSize: 16,
-    },
-    errorText: {
-        fontSize: 14,
-        marginTop: 8,
-    },
-    definitionContainer: {
-        marginTop: 6,
-    },
-    definitionText: {
-        fontSize: 14,
+        fontFamily: 'Inter-Medium',
+        marginHorizontal: 8,
     },
 });
 
@@ -230,14 +204,20 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             color: isDarkMode ? WHITE : DARK_TEXT,
         },
         navigationContainer: {
-            backgroundColor: 'transparent',
+            backgroundColor: isDarkMode ? 'rgba(15, 15, 27, 0.9)' : 'rgba(248, 249, 250, 0.9)',
+            borderTopWidth: 1,
+            borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
         },
         navButton: {
             backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
             borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.3)' : 'rgba(67, 97, 238, 0.3)',
+            borderWidth: 1,
+        },
+        navButtonText: {
+            color: isDarkMode ? accentColor : accentColor,
         },
         wordDetailsContainer: {
-            backgroundColor: isDarkMode ? "#1E1E1E" : "#F5F5F5",
+            backgroundColor: isDarkMode ? DARK_BACKGROUND : LIGHT_GRAY,
             borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.2)' : 'rgba(67, 97, 238, 0.1)',
         },
         selectedWord: {
@@ -251,11 +231,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             color: accentColor,
         },
         loadingContainer: {
-            //backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
-        },
-        floatingLineNumber: {
-            backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
-            borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.3)' : 'rgba(67, 97, 238, 0.2)',
+            backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
         },
         divider: {
             backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
@@ -269,26 +245,19 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             color: accentColor,
         },
         lineRangeContainer: {
-            backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
-            borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.3)' : 'rgba(67, 97, 238, 0.3)',
+            //backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
+            //borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.3)' : 'rgba(67, 97, 238, 0.3)',
+            borderWidth: 0,
+        },
+        headerContainer: {
+            borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+            backgroundColor: isDarkMode ? 'rgba(15, 15, 27, 0.9)' : 'rgba(248, 249, 250, 0.9)',
         },
         lineNumberButton: {
             borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.3)' : 'rgba(67, 97, 238, 0.3)',
         },
         lineNumberButtonText: {
             color: isDarkMode ? 'rgba(76, 201, 240, 0.8)' : 'rgba(67, 97, 238, 0.8)',
-        },
-        wordDetailsTitle: {
-            color: isDarkMode ? "#FFD54F" : "#F57C00",
-        },
-        wordDetailsText: {
-            color: isDarkMode ? WHITE : DARK_TEXT,
-        },
-        errorText: {
-            color: "#D32F2F",
-        },
-        definitionText: {
-            color: isDarkMode ? "#bbb" : "#555",
         },
     });
 };
