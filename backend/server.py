@@ -383,8 +383,7 @@ def search_by_definition(query):
         
         if not data:
             # Try with LIKE if no exact matches
-            lim = 20
-            if len(query) <= 3: lim = 3
+            lim = len(query)
             data = conn.execute(
                 "SELECT lemma_id FROM lemma_definitions WHERE short_definition LIKE ? LIMIT ?",
                 (f"%{query}%", lim)
