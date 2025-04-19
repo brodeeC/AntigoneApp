@@ -18,28 +18,36 @@ export const searchStyles = (isDark: boolean) => {
     tabBarContainer: {
       width: '100%',
       zIndex: 10,
+      alignItems: 'center', 
     },
     tabBar: {
-      paddingHorizontal: 16,
-      paddingBottom: 8,
+      width: '100%', 
+      paddingBottom: 12,
       borderBottomWidth: 1,
       borderBottomColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: isDark ? 0.1 : 0.05,
-      shadowRadius: 4,
-      elevation: 2,
     },
     tabItem: {
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-      marginHorizontal: 4,
+      paddingHorizontal: 60, 
+      paddingVertical: 14,
+    },
+    tabList: {
+      flexDirection: 'row',
+      justifyContent: 'space-between', 
+      width: '100%',
+    },
+    indicator: {
+      position: 'absolute',
+      bottom: -1, 
+      left: '60%', 
+      right: '60%',
+      height: 3,
+      backgroundColor: isDark ? '#64B5F6' : '#1E88E5',
     },
     activeTabItem: {
       position: 'relative',
     },
     label: {
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: '500',
       color: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)',
     },
@@ -47,28 +55,13 @@ export const searchStyles = (isDark: boolean) => {
       color: isDark ? '#fff' : '#000',
       fontWeight: '600',
     },
-    indicator: {
-      position: 'absolute',
-      bottom: -1,
-      left: 16,
-      right: 16,
-      height: 2,
-      backgroundColor: isDark ? '#64B5F6' : '#1E88E5',
-      borderRadius: 2,
-    },
-    tabList: {
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
     contentContainer: {
       flex: 1,
       paddingHorizontal: 16,
     },
-    
     scrollableTabContainer: {
       paddingHorizontal: 8,
     },
-    
     tabButtonPressed: {
       opacity: 0.8,
     },

@@ -19,7 +19,7 @@ import WordSearch from '@/components/search/WordSearch';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 
-type ValidTab = 'Word Search' | 'Line Search' | 'Speaker Search';
+type ValidTab = 'Word Search' | 'Line Search';
 
 type TabButtonProps = {
   name: ValidTab;
@@ -55,7 +55,7 @@ const Tabs = ({ activeTab, setActiveTab, isDark }: {
   setActiveTab: (tab: ValidTab) => void; 
   isDark: boolean 
 }) => {
-  const tabs: ValidTab[] = ['Word Search', 'Line Search', 'Speaker Search'];
+  const tabs: ValidTab[] = ['Word Search', 'Line Search'];
   const styles = searchStyles(isDark);
 
   return (
@@ -93,11 +93,10 @@ export default function SearchScreen() {
   const scrollViewRef = useRef<ScrollView>(null);
   const { width } = Dimensions.get('window');
 
-  const tabs: ValidTab[] = ['Word Search', 'Line Search', 'Speaker Search'];
+  const tabs: ValidTab[] = ['Word Search', 'Line Search'];
   const tabComponents: { [key in ValidTab]: React.JSX.Element } = {
     'Word Search': <WordSearch />,
     'Line Search': <LineSearch />,
-    'Speaker Search': <SpeakerSearch />,
   };
 
   const [activeTab, setActiveTab] = useState<ValidTab>(
