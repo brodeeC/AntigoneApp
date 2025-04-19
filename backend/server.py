@@ -127,22 +127,18 @@ def is_ancient_greek(word):
     return True
 
 @app.route('/AntigoneApp/get_all_speakers', methods=['GET'])  
-def get_speakers():
+def get_all_speakers():
     conn = get_db_connection()
-    query = f'SELECT DISTINCT speaker FROM full_text'
+    query = 'SELECT DISTINCT speaker FROM full_text'
     data = conn.execute(query).fetchall()
     conn.close()
 
     speaker_arr = []
     if data:    
         for row in data:
+            speaker_arr.append(row["speaker"])
 
-            speaker = row["speaker"]        
-
-        return speaker_arr.extend(speaker)
-    
-    else:
-        return speaker_arr
+    return jsonify(speaker_arr)
 
 # Takes greek word -> english -> hash -> SQL query for definition  
 # Could use lemma from lemma_data table to get defs, may need to depending
