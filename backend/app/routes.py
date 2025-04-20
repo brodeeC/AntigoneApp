@@ -24,7 +24,7 @@ from app.database_helpers import (
 from http import HTTPStatus
 import logging
 
-bp = Blueprint('api', __name__, url_prefix='/AntigoneApp')
+bp = Blueprint('api', __name__, url_prefix='/AntigoneApp/api')
 logger = logging.getLogger(__name__)
 
 @bp.route('/')
