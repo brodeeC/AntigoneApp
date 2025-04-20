@@ -154,12 +154,18 @@ def search():
 
     try:
         if mode == 'definition':
-            lemma_ids = search_by_definition(safe_query)
+            # Get list of (lemma_id, line_number) tuples
+            lemma_keys = search_by_definition(safe_query)
             results = []
-            for lemma_id in lemma_ids:
-                word = get_word(lemma_id)
+            for lemma_id, line_number in lemma_keys:
+                # Fetch the complete word record using both keys
+                word = LemmaData.query.filter_by(
+                    lemma_id=lemma_id,
+                    line_number=line_number
+                ).first()
+                
                 if word:
-                    word_data = lookup_word_details(word)
+                    word_data = lookup_word_details(word.lemma)  # Or pass both keys if needed
                     if word_data:
                         results.extend(word_data)
                         

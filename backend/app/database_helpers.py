@@ -99,19 +99,25 @@ def lookup_word_details(word):
     return word_details
 
 def search_by_definition(query):
-    """SQLAlchemy definition search"""
-    exact_matches = LemmaDefinition.query.filter(
+    """Returns list of (lemma_id, line_number) tuples for matching definitions"""
+    exact_matches = db.session.query(
+        LemmaDefinition.lemma_id,
+        LemmaData.line_number
+    ).join(LemmaData).filter(
         LemmaDefinition.short_definition == query
     ).limit(5).all()
     
     if exact_matches:
-        return [d.lemma_id for d in exact_matches]
+        return exact_matches
     
-    partial_matches = LemmaDefinition.query.filter(
+    partial_matches = db.session.query(
+        LemmaDefinition.lemma_id,
+        LemmaData.line_number
+    ).join(LemmaData).filter(
         LemmaDefinition.short_definition.contains(query)
     ).limit(10).all()
     
-    return [d.lemma_id for d in partial_matches]
+    return partial_matches
 
 def get_word(lemma_id):
     """Get lemma by ID"""
