@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from app import create_app
-application = create_app()
+app = create_app()  # Changed from 'application' to 'app'
 
 if __name__ == "__main__":
-    application.run()
+    app.run()
