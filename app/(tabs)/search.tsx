@@ -13,7 +13,6 @@ import {
 import * as Haptics from 'expo-haptics';
 import { searchStyles } from '@/assets/styles/search.styles';
 import LineSearch from '@/components/search/LineSearch';
-import SpeakerSearch from '@/components/search/SpeakerSearch';
 import { router, useLocalSearchParams } from 'expo-router';
 import WordSearch from '@/components/search/WordSearch';
 import { LinearGradient } from 'expo-linear-gradient';
