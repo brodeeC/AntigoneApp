@@ -48,7 +48,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         opacity: 0.7,
     },
     entryContainer: {
-        backgroundColor: isDarkMode ? "#2C2C2E" : "#F8F8F8",
+        backgroundColor: isDarkMode ? "#1E293B" : "#F8F8F8",
         borderRadius: 12,
         padding: 16,
         margin: 16,

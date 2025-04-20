@@ -43,6 +43,25 @@ export default function WordSearch() {
   const [allSpeakers, setAllSpeakers] = useState<string[]>([]);
   const [selectedSpeaker, setSelectedSpeaker] = useState<string | null>(null);
   const [speakersLoading, setSpeakersLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const resultsPerPage = 5;
+
+  const paginatedResults = filteredResults.slice(
+    currentPage * resultsPerPage,
+    (currentPage + 1) * resultsPerPage
+  );
+
+  const totalPages = Math.ceil(filteredResults.length / resultsPerPage);
+
+  const goToNextPage = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setCurrentPage(prev => Math.min(prev + 1, totalPages - 1));
+  };
+  
+  const goToPrevPage = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setCurrentPage(prev => Math.max(prev - 1, 0));
+  };
 
   const displayedResults = showAllResults ? filteredResults : filteredResults.slice(0, 5);
 
@@ -116,6 +135,10 @@ export default function WordSearch() {
       setLoading(false);
     }
   }, [query, mode, sanitizeInput]);
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [filteredResults]);
 
   const handleWordDetails = useCallback((form: string) => {
     router.push(`/word-details/${form}`)
@@ -280,7 +303,7 @@ export default function WordSearch() {
                 </View>
               ) : (
                 <>
-                  {displayedResults.map((entry, index) => {
+                  {paginatedResults.map((entry, index) => {
                     if (!entry || !entry[0]) return null;
 
                     const { form, lemma, line_number, speaker } = entry[0];
@@ -289,7 +312,7 @@ export default function WordSearch() {
                     return (
                       <View key={`${entry[0].lemma_id}-${index}`} style={styles.entryContainer}>
                         <View style={styles.entryHeader}>
-                          <Text style={styles.entryTitle}>{index + 1}</Text>
+                          <Text style={styles.entryTitle}>{currentPage * resultsPerPage + index + 1}</Text>
                           <Text style={styles.entryForm}>{form}</Text>
                         </View>
 
@@ -336,15 +359,46 @@ export default function WordSearch() {
                       </View>
                     );
                   })}
-                  {filteredResults.length > 5 && (
-                    <TouchableOpacity
-                      onPress={() => setShowAllResults(!showAllResults)}
-                      style={styles.showAllButton}
-                    >
-                      <Text style={styles.showAllButtonText}>
-                        {showAllResults ? 'Show Less' : `Show All (${filteredResults.length})`}
+                  {filteredResults.length > resultsPerPage && (
+                    <View style={styles.paginationContainer}>
+                      <TouchableOpacity
+                        onPress={goToPrevPage}
+                        disabled={currentPage === 0}
+                        style={[
+                          styles.paginationButton,
+                          currentPage === 0 && styles.paginationButtonDisabled
+                        ]}
+                      >
+                        <Feather 
+                          name="chevron-left" 
+                          size={20} 
+                          color={currentPage === 0 ? 
+                            (isDark ? '#64748B' : '#94A3B8') : 
+                            (isDark ? '#64B5F6' : '#1E88E5')} 
+                        />
+                      </TouchableOpacity>
+                      
+                      <Text style={styles.paginationText}>
+                        {currentPage + 1} / {totalPages}
                       </Text>
-                    </TouchableOpacity>
+                      
+                      <TouchableOpacity
+                        onPress={goToNextPage}
+                        disabled={currentPage === totalPages - 1}
+                        style={[
+                          styles.paginationButton,
+                          currentPage === totalPages - 1 && styles.paginationButtonDisabled
+                        ]}
+                      >
+                        <Feather 
+                          name="chevron-right" 
+                          size={20} 
+                          color={currentPage === totalPages - 1 ? 
+                            (isDark ? '#64748B' : '#94A3B8') : 
+                            (isDark ? '#64B5F6' : '#1E88E5')} 
+                        />
+                      </TouchableOpacity>
+                    </View>
                   )}
                 </>
               )}
@@ -589,17 +643,24 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     marginTop: 4,
     textAlign: 'center',
   },
-  showAllButton: {
-    backgroundColor: isDark ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
-    borderWidth: 1,
-    borderColor: isDark ? '#64B5F6' : '#1E88E5',
-    paddingVertical: 12,
-    borderRadius: 8,
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
     marginTop: 16,
+    gap: 20,
   },
-  showAllButtonText: {
-    color: isDark ? '#64B5F6' : '#1E88E5',
+  paginationButton: {
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: isDark ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
+  },
+  paginationButtonDisabled: {
+    opacity: 0.5,
+  },
+  paginationText: {
+    fontSize: 14,
     fontWeight: '600',
+    color: isDark ? '#E2E8F0' : '#1E293B',
   },
 });
