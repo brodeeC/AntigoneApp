@@ -73,7 +73,7 @@ export default function WordSearch() {
     const fetchSpeakers = async () => {
       setSpeakersLoading(true);
       try {
-        const response = await fetch('http://brodeeclontz.com/AntigoneApp/get_all_speakers');
+        const response = await fetch('http://brodeeclontz.com/AntigoneApp/api/get_all_speakers');
         const data = await response.json();
         if (Array.isArray(data)) {
           setAllSpeakers(data);
@@ -112,7 +112,7 @@ export default function WordSearch() {
     
     try {
       const response = await fetch(
-        `http://brodeeclontz.com/AntigoneApp/search?mode=${mode}&q=${encodeURIComponent(safeQuery)}`
+        `http://brodeeclontz.com/AntigoneApp/api/search?mode=${mode}&q=${encodeURIComponent(safeQuery)}`
       );
   
       const responseText = await response.text();

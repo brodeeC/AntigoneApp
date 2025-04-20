@@ -117,9 +117,9 @@ export default function LineDetails() {
             try {
                 let url = '';
                 if (startLine !== null && endLine !== startLine) {
-                    url = `http://brodeeclontz.com/AntigoneApp/lines/${startLine}/${endLine}`;
+                    url = `http://brodeeclontz.com/AntigoneApp/api/lines/${startLine}/${endLine}`;
                 } else if (startLine !== null) {
-                    url = `http://brodeeclontz.com/AntigoneApp/lines/${startLine}`;
+                    url = `http://brodeeclontz.com/AntigoneApp/api/lines/${startLine}`;
                 } else {
                     throw new Error("No valid line number provided.");
                 }

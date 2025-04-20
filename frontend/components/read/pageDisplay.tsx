@@ -35,7 +35,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const response = await fetch(`http://brodeeclontz.com/AntigoneApp/read/${page}`);
+                const response = await fetch(`http://brodeeclontz.com/AntigoneApp/api/read/${page}`);
                 if (!response.ok) throw new Error("Failed to load data");
                 const json = await response.json();
                 setData(json);
