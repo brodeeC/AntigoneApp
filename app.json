@@ -21,7 +21,7 @@
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png",
-      "publicPath": "/AntigoneApp/AntigoneApp/"
+      "publicPath": "/AntigoneApp"
     },
     "plugins": [
       "expo-router",

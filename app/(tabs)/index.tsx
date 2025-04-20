@@ -19,6 +19,11 @@ export default function HomeScreen() {
             title: 'Text Search',
             onPress: () => router.push('/search?tab=Word%20Search')
         },
+        {
+            icon: 'info-outline',
+            title: 'About',
+            onPress: () => router.push('/about')
+        },
     ];
 
     return (

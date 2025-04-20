@@ -44,7 +44,7 @@ export default function LineSearch() {
     >
       <View style={styles.content}>
         <Text style={styles.title}>Search by Line Number</Text>
-        <Text style={styles.subtitle}>Enter a line or range from Antigone</Text>
+        <Text style={styles.subtitle}>Enter a line or range of lines</Text>
         
         <View style={styles.inputContainer}>
           <Feather name="hash" size={20} color={isDark ? '#94A3B8' : '#64748B'} style={styles.inputIcon} />
@@ -72,28 +72,30 @@ export default function LineSearch() {
           />
         </View>
 
-        <TouchableOpacity
-          onPress={handleSearch}
-          onPressIn={() => setIsPressed(true)}
-          onPressOut={() => setIsPressed(false)}
-          activeOpacity={0.8}
-          style={[
-            styles.searchButton,
-            isPressed && styles.searchButtonPressed,
-            (!startLine) && styles.disabledButton
-          ]}
-          disabled={!startLine}
-        >
-          <Text style={styles.searchButtonText}>
-            {startLine && endLine ? `View Lines ${startLine}-${endLine}` : 
-             startLine ? `View Line ${startLine}` : 'Enter Line Number'}
-          </Text>
-          <Feather 
-            name="arrow-right" 
-            size={20} 
-            color={isDark ? '#E2E8F0' : '#F8FAFC'} 
-          />
-        </TouchableOpacity>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            onPress={handleSearch}
+            onPressIn={() => setIsPressed(true)}
+            onPressOut={() => setIsPressed(false)}
+            activeOpacity={0.8}
+            style={[
+              styles.searchButton,
+              isPressed && styles.searchButtonPressed,
+              (!startLine) && styles.disabledButton
+            ]}
+            disabled={!startLine}
+          >
+            <Text style={styles.searchButtonText}>
+              {startLine && endLine ? `View Lines ${startLine}-${endLine}` : 
+              startLine ? `View Line ${startLine}` : 'Enter Line Number'}
+            </Text>
+            <Feather 
+              name="arrow-right" 
+              size={20} 
+              color={isDark ? '#E2E8F0' : '#F8FAFC'} 
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     </LinearGradient>
   );
@@ -106,19 +108,17 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
-    marginTop: -410, 
   },
   title: {
     fontSize: 24,
     fontWeight: '700',
-    marginBottom: 8,
+    marginBottom: 4,
     color: isDark ? '#E2E8F0' : '#1E293B',
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
-    marginBottom: 30,
+    fontSize: 14,
+    marginBottom: 24,
     color: isDark ? '#94A3B8' : '#64748B',
     textAlign: 'center',
   },
@@ -128,9 +128,10 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
     borderRadius: 12,
     paddingHorizontal: 16,
-    marginBottom: 16,
     borderWidth: 1,
     borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+    marginBottom: 16,
+    top: 70,
   },
   inputIcon: {
     marginRight: 12,
@@ -141,14 +142,22 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     color: isDark ? '#F8FAFC' : '#1E293B',
     fontSize: 16,
   },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+    marginBottom: 20,
+    top: 70,
+  },
   searchButton: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: isDark ? '#64B5F6' : '#1E88E5',
     paddingVertical: 16,
     borderRadius: 12,
-    marginTop: 8,
+    gap: 8,
+    flex: 1,
   },
   searchButtonPressed: {
     opacity: 0.8,
@@ -161,6 +170,5 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     color: isDark ? '#E2E8F0' : '#F8FAFC',
     fontSize: 16,
     fontWeight: '600',
-    marginRight: 8,
   },
 });

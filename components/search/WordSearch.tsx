@@ -157,7 +157,7 @@ export default function WordSearch() {
           <Text style={styles.subtitle}>
             {selectedSpeaker 
               ? `Showing results for speaker: ${selectedSpeaker}` 
-              : 'Search by ' + (mode === 'word' ? 'Greek word forms' : 'English definitions')}
+              : 'Search by ' + (mode === 'word' ? 'word (Greek or Latin characters)' : 'English definitions')}
           </Text>
 
           {/* Search Mode Toggle */}
@@ -220,7 +220,7 @@ export default function WordSearch() {
           <View style={styles.inputContainer}>
             <Feather name="search" size={20} color={isDark ? '#94A3B8' : '#64748B'} style={styles.inputIcon} />
             <TextInput
-              placeholder={mode === 'word' ? "Search Greek words..." : "Search definitions..."}
+              placeholder={mode === 'word' ? "Search words..." : "Search definitions..."}
               placeholderTextColor={isDark ? '#94A3B8' : '#64748B'}
               value={query}
               onChangeText={setQuery}

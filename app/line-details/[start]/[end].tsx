@@ -183,6 +183,17 @@ export default function LineDetails() {
         showsVerticalScrollIndicator: false
     } : {};
 
+    let lastSpeaker: string | null = null;
+    const processedData = data
+        .filter(line => line.line_text !== null)
+        .map(line => {
+            const speaker = line.speaker ?? lastSpeaker;
+            if (line.speaker) {
+                lastSpeaker = line.speaker;
+            }
+            return { ...line, speaker };
+        });
+
     return (
         <>
             <Stack.Screen options={{ headerShown: false, animation: 'none' }} />
@@ -224,9 +235,9 @@ export default function LineDetails() {
                     </View>
 
                     <ContentWrapper {...contentWrapperProps} style={styles.contentWrapper}>
-                        {data?.map((line, i) => {
-                            const prevSpeaker = i > 0 ? data[i - 1].speaker : null;
-                            const showSpeaker = line.speaker && line.speaker !== prevSpeaker;
+                    {processedData.map((line, i) => {
+                        const prevSpeaker = i > 0 ? processedData[i - 1].speaker : null;
+                        const showSpeaker = line.speaker && line.speaker !== prevSpeaker;
 
                             return (
                                 <View key={`line-${line.lineNum}`} style={{ marginBottom: i === data.length - 1 ? 0 : 24 }}>

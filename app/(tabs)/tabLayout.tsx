@@ -62,6 +62,7 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
         | '/(tabs)'
         | '/(tabs)/read' 
         | '/(tabs)/search'
+        | '/(tabs)/about'
       ) => {
         Haptics.selectionAsync();
         
@@ -167,6 +168,16 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
                         >
                             <FoIcon name="magnifying-glass" size={24} color={dynamicStyles.activeTabColor} />
                             <Text style={[styles.menuItemText, dynamicStyles.menuItemTextStyle]}>Search</Text>
+                        </TouchableOpacity>
+
+                        <View style={[styles.menuDivider, dynamicStyles.menuDividerStyle]} />
+                        
+                        <TouchableOpacity 
+                            onPress={() => handleMenuItemPress('/(tabs)/about')} 
+                            style={[styles.menuItem, dynamicStyles.menuItemStyle]}
+                        >
+                            <EnIcon name="info-with-circle" size={24} color={dynamicStyles.activeTabColor} />
+                            <Text style={[styles.menuItemText, dynamicStyles.menuItemTextStyle]}>About</Text>
                         </TouchableOpacity>
                     </Animated.View>
                 </View>
