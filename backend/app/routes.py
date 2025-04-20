@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from app import db, limiter
 from app.models import FullText, LemmaData, LemmaDefinition
+from flask import send_from_directory
 from app.utils import (
     clean_word,
     grk_to_eng,
@@ -18,13 +19,18 @@ from app.database_helpers import (
     lookup_word_details,
     search_by_definition,
     get_word,
-    get_word_defs
+    get_word_defs,
 )
-from http_status import HTTPStatus
+from http import HTTPStatus
 import logging
 
 bp = Blueprint('api', __name__, url_prefix='/AntigoneApp')
 logger = logging.getLogger(__name__)
+
+@bp.route('/')
+@bp.route('/<path:path>')
+def serve_frontend(path='index.html'):
+    return send_from_directory('../static', path)
 
 @bp.route('/get_all_speakers', methods=['GET'])  
 @limiter.limit("50/minute")
@@ -104,68 +110,67 @@ def get_lines(startLine, endLine=None):
 @limiter.limit("100/minute")
 def get_page(page):
     try:
-        if page > LAST_PAGE or page < FIRST_PAGE:
-            return jsonify({"error": f"Page number out of range ({FIRST_PAGE}-{LAST_PAGE})"}), HTTPStatus.BAD_REQUEST
+        if page < FIRST_PAGE or page > LAST_PAGE:
+            return jsonify({"error": "Invalid page number"}), HTTPStatus.BAD_REQUEST
 
-        max_line = page * 11
-        min_line = ((page - 1) * 11) + 1
+        lines_per_page = 11
+        start_line = (page - 1) * lines_per_page + 1
+        end_line = page * lines_per_page
 
-        return get_lines(min_line, max_line)
+        # Use SQLAlchemy session correctly
+        lines = db.session.query(FullText).filter(
+            FullText.line_number.between(start_line, end_line)
+        ).order_by(FullText.line_number).all()
+
+        return jsonify([{
+            "lineNum": line.line_number,
+            "line_text": line.line_text,
+            "speaker": line.speaker
+        } for line in lines])
 
     except Exception as e:
         logger.error(f"Error in get_page: {str(e)}")
-        return jsonify({"error": "Internal server error"}), HTTPStatus.INTERNAL_SERVER_ERROR
-
-@bp.route('/word-details/<word>', methods=['GET'])
-@limiter.limit("50/minute")
-def get_word_details(word):
-    try:
-        details = lookup_word_details(word)
-        if not details:
-            return jsonify({"error": "Word not found"}), HTTPStatus.NOT_FOUND
-        return jsonify(details)
-    except Exception as e:
-        logger.error(f"Error in get_word_details: {str(e)}")
-        return jsonify({"error": "Internal server error"}), HTTPStatus.INTERNAL_SERVER_ERROR
+        return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
+    
+@bp.route("/health", methods=["GET"])
+def health_check():
+    return jsonify(status="ok"), HTTPStatus.OK
 
 @bp.route('/search', methods=['GET'])
-@limiter.limit("30/minute")
+@limiter.limit("10 per minute")
 def search():
+    logger.info("\n=== NEW SEARCH REQUEST ===")
+    logger.info(f"Request args: {request.args}")
+    
+    mode = request.args.get('mode')
+    query = request.args.get('q')
+    
+    if not query or not mode:
+        logger.warning("Missing search parameters")
+        return jsonify({'error': 'Missing parameters'}), HTTPStatus.BAD_REQUEST
+
+    safe_query = query.strip()
+    results = []
+
     try:
-        mode = request.args.get('mode')
-        query = request.args.get('q')
-        logger.debug(f"Search request - mode: {mode}, query: {query}")
-
-        if not query or not mode:
-            return jsonify({'error': 'Missing parameters'}), HTTPStatus.BAD_REQUEST
-
-        safe_query = query.strip()
-        results = []
-
         if mode == 'definition':
             lemma_ids = search_by_definition(safe_query)
-            logger.debug(f"Found lemma IDs: {lemma_ids}")
-            
+            results = []
             for lemma_id in lemma_ids:
                 word = get_word(lemma_id)
                 if word:
                     word_data = lookup_word_details(word)
                     if word_data:
                         results.extend(word_data)
-
+                        
         elif mode == 'word':
-            word_data = lookup_word_details(safe_query)
-            if word_data:
-                results.extend(word_data)
+            results = lookup_word_details(safe_query)
         else:
             return jsonify({'error': 'Invalid search mode'}), HTTPStatus.BAD_REQUEST
 
-        return jsonify(results) if results else jsonify({"error": "No results found"}), HTTPStatus.NOT_FOUND
+        logger.info(f"Returning {len(results)} results")
+        return jsonify(results)
 
     except Exception as e:
-        logger.error(f"Search error: {str(e)}")
+        logger.error(f"Search error: {str(e)}", exc_info=True)
         return jsonify({'error': 'Internal server error'}), HTTPStatus.INTERNAL_SERVER_ERROR
-
-@bp.route("/health", methods=["GET"])
-def health_check():
-    return jsonify(status="ok"), HTTPStatus.OK

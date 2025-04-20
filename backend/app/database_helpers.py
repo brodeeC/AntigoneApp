@@ -44,30 +44,30 @@ def lookup_word_details(word):
     # Base query
     query = LemmaData.query.filter(
         or_(
-            LemmaData.lemma == cleaned,
             LemmaData.form == cleaned,
-            LemmaData.normalized.startswith(normalized),
+            LemmaData.lemma == cleaned,
             LemmaData.norm_form.startswith(normalized),
-            LemmaData.full_eng.contains(word),
-            LemmaData.eng_lemma.contains(word),
+            LemmaData.normalized.startswith(normalized),
             LemmaData.form_eng.contains(word),
-            LemmaData.norm_form_eng.contains(word)
+            LemmaData.norm_form_eng.contains(word),
+            LemmaData.full_eng.contains(word),
+            LemmaData.eng_lemma.contains(word)
         )
     )
     
-    # Add ordering
+    # Modified case statement to prioritize form matches
     query = query.order_by(
         case(
-            [
-                (LemmaData.lemma == cleaned, 1),
-                (LemmaData.form == cleaned, 2),
-                (LemmaData.normalized.startswith(normalized), 3),
-                (LemmaData.norm_form.startswith(normalized), 4)
-            ],
-            else_=5
+            (LemmaData.form == cleaned, 1),           # Exact form match - highest priority
+            (LemmaData.norm_form.startswith(normalized), 2),  # Form starts with normalized
+            (LemmaData.normalized.startswith(normalized), 3),  # Lemma starts with normalized
+            (LemmaData.lemma == cleaned, 4),          # Exact lemma match - lower priority
+            (LemmaData.norm_form.contains(normalized), 5),   # Form contains normalized
+            (LemmaData.normalized.contains(normalized), 6),   # Lemma contains normalized
+            else_=7
         ),
-        func.length(LemmaData.lemma),
-        func.length(LemmaData.form),
+        func.length(LemmaData.form),  # Prefer shorter forms first
+        func.length(LemmaData.lemma),  # Then shorter lemmas
         LemmaData.line_number
     )
     
