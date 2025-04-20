@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Animated, useColorScheme, Easing, Text } from '
 import { useRouter } from 'expo-router';
 import EnIcon from 'react-native-vector-icons/Entypo';
 import FoIcon from 'react-native-vector-icons/Foundation';
-import { styles, getDynamicStyles } from '../../assets/styles/tab.styles';
+import { styles, getDynamicStyles } from '../../frontend/styles/tab.styles';
 import * as Haptics from 'expo-haptics';
 export default function TabLayout({ children }: { children: React.ReactNode }) {
     const isDarkMode = useColorScheme() === 'dark';
@@ -59,9 +59,10 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
     };
 
     const handleMenuItemPress = (route: 
-        | '/(tabs)'
+        | '/'
         | '/(tabs)/read' 
         | '/(tabs)/search'
+        | '/(tabs)/about'
       ) => {
         Haptics.selectionAsync();
         
@@ -142,7 +143,7 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
                         }
                     ]}>
                         <TouchableOpacity 
-                            onPress={() => handleMenuItemPress('/(tabs)')} 
+                            onPress={() => handleMenuItemPress('/')} 
                             style={[styles.menuItem, dynamicStyles.menuItemStyle]}
                         >
                             <EnIcon name="home" size={24} color={dynamicStyles.activeTabColor} />
@@ -167,6 +168,16 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
                         >
                             <FoIcon name="magnifying-glass" size={24} color={dynamicStyles.activeTabColor} />
                             <Text style={[styles.menuItemText, dynamicStyles.menuItemTextStyle]}>Search</Text>
+                        </TouchableOpacity>
+
+                        <View style={[styles.menuDivider, dynamicStyles.menuDividerStyle]} />
+                        
+                        <TouchableOpacity 
+                            onPress={() => handleMenuItemPress('/(tabs)/about')} 
+                            style={[styles.menuItem, dynamicStyles.menuItemStyle]}
+                        >
+                            <EnIcon name="info-with-circle" size={24} color={dynamicStyles.activeTabColor} />
+                            <Text style={[styles.menuItemText, dynamicStyles.menuItemTextStyle]}>About</Text>
                         </TouchableOpacity>
                     </Animated.View>
                 </View>

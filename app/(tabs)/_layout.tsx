@@ -10,7 +10,7 @@ export default function TabLayoutNav() {
           <Tabs.Screen name="index" />
           <Tabs.Screen name="read" />
           <Tabs.Screen name="search" />
-          <Tabs.Screen name="favorites" />
+          <Tabs.Screen name="about" />
         </Tabs>
       </View>
     </TabLayout>

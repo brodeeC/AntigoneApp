@@ -8,7 +8,7 @@ import {
     useColorScheme 
 } from "react-native";
 import * as Haptics from 'expo-haptics';
-import { Colors, getDynamicStyles } from "../../assets/styles/word-details.styles";
+import { Colors, getDynamicStyles } from "../../frontend/styles/word-details.styles";
 import { router, useLocalSearchParams } from "expo-router";
 import TabLayout from "../(tabs)/tabLayout";
 import { Feather } from "@expo/vector-icons";
@@ -70,7 +70,7 @@ export default function WordDetails() {
         if (router.canGoBack()) {
           router.back();
         } else {
-          router.push('/(tabs)');
+          router.push('/');
         }
     };
 

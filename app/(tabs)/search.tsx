@@ -11,10 +11,10 @@ import {
   StyleSheet 
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { searchStyles } from '@/assets/styles/search.styles';
-import LineSearch from '@/components/search/LineSearch';
+import { searchStyles } from '@/frontend/styles/search.styles';
+import LineSearch from '@/frontend/components/search/LineSearch';
 import { router, useLocalSearchParams } from 'expo-router';
-import WordSearch from '@/components/search/WordSearch';
+import WordSearch from '@/frontend/components/search/WordSearch';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 
@@ -126,7 +126,7 @@ export default function SearchScreen() {
     if (router.canGoBack()) {
       router.back();
     } else {
-      router.replace('/(tabs)');
+      router.replace('/');
     }
   };
 

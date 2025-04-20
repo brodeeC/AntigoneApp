@@ -21,7 +21,7 @@
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png",
-      "publicPath": "/AntigoneApp/AntigoneApp/"
+      "publicPath": "/AntigoneApp"
     },
     "plugins": [
       "expo-router",
@@ -38,6 +38,20 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "32e07cb3-adba-484c-8b40-6715cb0b86a7"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/32e07cb3-adba-484c-8b40-6715cb0b86a7"
     }
   }
 }

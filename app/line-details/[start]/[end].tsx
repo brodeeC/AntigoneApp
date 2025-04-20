@@ -2,9 +2,9 @@
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated, ActivityIndicator, ScrollView } from "react-native";
-import { styles, getDynamicStyles, Colors } from "../../../assets/styles/line-details.styles";
+import { styles, getDynamicStyles, Colors } from "../../../frontend/styles/line-details.styles";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import WordDisplay from "../../../components/read/wordDisplay"; 
+import WordDisplay from "../../../frontend/components/read/wordDisplay"; 
 import TabLayout from "../../(tabs)/tabLayout";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
@@ -107,7 +107,7 @@ export default function LineDetails() {
         if (router.canGoBack()) {
             router.back();
         } else {
-            router.replace('/(tabs)');
+            router.replace('/');
         }
     };
 
@@ -183,6 +183,17 @@ export default function LineDetails() {
         showsVerticalScrollIndicator: false
     } : {};
 
+    let lastSpeaker: string | null = null;
+    const processedData = data
+        .filter(line => line.line_text !== null)
+        .map(line => {
+            const speaker = line.speaker ?? lastSpeaker;
+            if (line.speaker) {
+                lastSpeaker = line.speaker;
+            }
+            return { ...line, speaker };
+        });
+
     return (
         <>
             <Stack.Screen options={{ headerShown: false, animation: 'none' }} />
@@ -224,9 +235,9 @@ export default function LineDetails() {
                     </View>
 
                     <ContentWrapper {...contentWrapperProps} style={styles.contentWrapper}>
-                        {data?.map((line, i) => {
-                            const prevSpeaker = i > 0 ? data[i - 1].speaker : null;
-                            const showSpeaker = line.speaker && line.speaker !== prevSpeaker;
+                    {processedData.map((line, i) => {
+                        const prevSpeaker = i > 0 ? processedData[i - 1].speaker : null;
+                        const showSpeaker = line.speaker && line.speaker !== prevSpeaker;
 
                             return (
                                 <View key={`line-${line.lineNum}`} style={{ marginBottom: i === data.length - 1 ? 0 : 24 }}>
