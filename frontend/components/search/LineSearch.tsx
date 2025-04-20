@@ -23,7 +23,7 @@ export default function LineSearch() {
       const endParam = !isNaN(end) && end > start ? end : start;
       
       router.push({
-        pathname: "../line-details/[start]/[end]",
+        pathname: "/line-details/[start]/[end]",
         params: {
           start: start.toString(),
           end: endParam.toString()

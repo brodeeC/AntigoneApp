@@ -174,3 +174,9 @@ def search():
     except Exception as e:
         logger.error(f"Search error: {str(e)}", exc_info=True)
         return jsonify({'error': 'Internal server error'}), HTTPStatus.INTERNAL_SERVER_ERROR
+    
+@bp.route('/word-details/<word>', methods=['GET'])
+@limiter.limit("200 per minute")
+def get_word_details(word):
+    
+    return jsonify(lookup_word_details(word))

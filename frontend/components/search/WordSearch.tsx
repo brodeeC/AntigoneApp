@@ -118,13 +118,13 @@ export default function WordSearch() {
   }, [query, mode, sanitizeInput]);
 
   const handleWordDetails = useCallback((form: string) => {
-    router.push(`../word-details/${form}`)
+    router.push(`/word-details/${form}`)
   }, []);
 
   const handleLineDetails = useCallback((lineNumber: number) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     router.push({
-      pathname: '../line-details/[start]/[end]',
+      pathname: '/line-details/[start]/[end]',
       params: { start: lineNumber.toString(), end: lineNumber.toString() }
     });
   }, []);

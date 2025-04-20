@@ -52,7 +52,7 @@ export default function WordDetails({ word }: WordDetailsProps) {
         // Provide haptic feedback
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         // Route to the WordDetails page
-        router.push(`./word-details/${wordData[0][0]?.lemma}`);
+        router.push(`/word-details/${wordData[0][0]?.lemma}`);
     };
 
     // Handling loading, error, or no data

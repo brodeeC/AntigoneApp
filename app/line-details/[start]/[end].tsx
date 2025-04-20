@@ -2,9 +2,9 @@
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated, ActivityIndicator, ScrollView } from "react-native";
-import { styles, getDynamicStyles, Colors } from "../../../styles/line-details.styles";
+import { styles, getDynamicStyles, Colors } from "../../../frontend/styles/line-details.styles";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import WordDisplay from "../../../components/read/wordDisplay"; 
+import WordDisplay from "../../../frontend/components/read/wordDisplay"; 
 import TabLayout from "../../(tabs)/tabLayout";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
@@ -65,14 +65,14 @@ export default function LineDetails() {
 
     const goToLine = (line: number) => {
         router.push({ 
-            pathname: "./line-details/[start]/[end]", 
+            pathname: "/line-details/[start]/[end]", 
             params: { start: line.toString(), end: line } 
         });
     };
 
     const goToLines = (start: number, end: number) => {
         router.push({ 
-            pathname: "./line-details/[start]/[end]", 
+            pathname: "/line-details/[start]/[end]", 
             params: { 
                 start: start.toString(),
                 end: end.toString()
@@ -107,7 +107,7 @@ export default function LineDetails() {
         if (router.canGoBack()) {
             router.back();
         } else {
-            router.replace('./(tabs)');
+            router.replace('/');
         }
     };
 

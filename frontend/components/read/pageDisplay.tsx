@@ -65,7 +65,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
     const handleLineNumberPress = (lineNum: number) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); 
         router.push({
-            pathname: "./line-details/[start]/[end]",
+            pathname: "/line-details/[start]/[end]",
             params: { start: lineNum.toString(), end: lineNum.toString() },
         });
     };
