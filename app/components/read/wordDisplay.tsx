@@ -71,8 +71,9 @@ export default function WordDetails({ word }: WordDetailsProps) {
 
     const lemma = wordData[0][0]?.lemma;
     const form = wordData[0][0]?.form;
-    const caseInfo = wordData[0][1]?.case;
-    const definitions = wordData[0][2]?.definitions;
+    const caseInfo = wordData[0][0]?.case;
+    const definitions = wordData[0][1]?.definitions;
+    console.log(caseInfo, definitions, form)
 
     return (
         <View style={dynamicStyles.wordDetailsContainer}>

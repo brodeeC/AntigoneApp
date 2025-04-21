@@ -88,8 +88,9 @@ def lookup_word_details(word):
             'line_number': lemma.line_number,
             'postag': lemma.postag,
             'speaker': speaker,
-            'case': parse_postag(lemma.postag)
+            #'case': parse_postag(lemma.postag)
         }]
+        word_details.append(parse_postag(lemma.postag))
         
         if definitions:
             word_data = add_defs(word_data, definitions)
@@ -122,4 +123,4 @@ def search_by_definition(query):
 def get_word(lemma_id):
     """Get lemma by ID"""
     lemma = LemmaData.query.get(lemma_id)
-    return lemma.lemma if lemma else None
+    return lemma.form if lemma else None ## Testing how getting lemma.form will affect results
