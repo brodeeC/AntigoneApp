@@ -52,7 +52,7 @@ def get_lines(startLine, endLine=None):
         except:
             start = MIN_LINE
 
-        if end and (start > end or end < start):
+        if end and (start > end or end < start or end == start):
             end = None
 
         if end and (end > MAX_LINE or end < MIN_LINE): end = None
