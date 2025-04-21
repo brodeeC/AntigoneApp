@@ -49,6 +49,7 @@ def get_lines(startLine, endLine=None):
                     end = int(endLine)
                 except:
                     end = start + 10
+            else: end = None
         except:
             start = MIN_LINE
 
