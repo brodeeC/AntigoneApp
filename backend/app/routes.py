@@ -42,27 +42,20 @@ def get_all_speakers():
 @limiter.limit("100/minute")
 def get_lines(startLine, endLine=None):
     try:
-        # Validate and convert line numbers
-        def validate_line_number(line_str, param_name):
-            """Helper function to validate and convert a line number"""
-            try:
-                line_num = int(line_str)
-                if not (MIN_LINE <= line_num <= MAX_LINE):
-                    raise ValueError(
-                        f"{param_name} must be between {MIN_LINE} and {MAX_LINE}"
-                    )
-                return line_num
-            except ValueError as e:
-                raise ValueError(
-                    f"Invalid {param_name}: must be an integer between {MIN_LINE} and {MAX_LINE}"
-                ) from e
+        try: 
+            start = int(startLine)
+            if endLine: 
+                try: 
+                    if endLine: end = int(endLine)
+                except:
+                    end = start + 10
+        except:
+            start = MIN_LINE
 
-        # Process start line
-        start = validate_line_number(startLine, "start line")
-        
-        # Process end line if provided
-        end = validate_line_number(endLine, "end line") if endLine else None
+        if end and start > end:
+            end = None
 
+        if end and end > MAX_LINE: end = MAX_LINE
         # Handle single line request
         if end is None:
             line_text, speaker = get_line(start)
@@ -73,13 +66,7 @@ def get_lines(startLine, endLine=None):
                 "lineNum": start,
                 "line_text": line_text,
                 "speaker": speaker
-            }])
-
-        # Handle range request (ensure start <= end)
-        if start > end:
-            return jsonify({
-                "error": "Start line must be less than or equal to end line"
-            }), HTTPStatus.BAD_REQUEST
+            }])        
 
         # Fetch lines in range
         lines = []
