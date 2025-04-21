@@ -89,7 +89,7 @@ def lookup_word_details(word):
             'postag': lemma.postag,
             'speaker': speaker,
             #'case': parse_postag(lemma.postag)
-        }, parse_postag(lemma.postag)]
+        }, {'case': parse_postag(lemma.postag)}]
         #word_details.append(parse_postag(lemma.postag))
         
         if definitions:
