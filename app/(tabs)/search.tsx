@@ -12,9 +12,9 @@ import {
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { searchStyles } from '@/frontend/styles/search.styles';
-import LineSearch from '@/frontend/components/search/LineSearch';
+import LineSearch from '@/app/components/search/LineSearch';
 import { router, useLocalSearchParams } from 'expo-router';
-import WordSearch from '@/frontend/components/search/WordSearch';
+import WordSearch from '@/app/components/search/WordSearch';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 

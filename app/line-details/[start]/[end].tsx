@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated, ActivityIndicator, ScrollView } from "react-native";
 import { styles, getDynamicStyles, Colors } from "../../../frontend/styles/line-details.styles";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import WordDisplay from "../../../frontend/components/read/wordDisplay"; 
+import WordDisplay from "../../components/read/wordDisplay"; 
 import TabLayout from "../../(tabs)/tabLayout";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
