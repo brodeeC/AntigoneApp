@@ -89,8 +89,8 @@ def lookup_word_details(word):
             'postag': lemma.postag,
             'speaker': speaker,
             #'case': parse_postag(lemma.postag)
-        }]
-        word_details.append(parse_postag(lemma.postag))
+        }, parse_postag(lemma.postag)]
+        #word_details.append(parse_postag(lemma.postag))
         
         if definitions:
             word_data = add_defs(word_data, definitions)
