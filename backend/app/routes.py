@@ -44,9 +44,9 @@ def get_lines(startLine, endLine=None):
     try:
         try: 
             start = int(startLine)
-            if endLine: 
+            if endLine != None: 
                 try: 
-                    if endLine: end = int(endLine)
+                    end = int(endLine)
                 except:
                     end = start + 10
         except:
