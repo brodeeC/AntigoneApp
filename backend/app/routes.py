@@ -27,11 +27,6 @@ import logging
 bp = Blueprint('api', __name__, url_prefix='/AntigoneApp/api')
 logger = logging.getLogger(__name__)
 
-@bp.route('/')
-@bp.route('/<path:path>')
-def serve_frontend(path='index.html'):
-    return send_from_directory('../static', path)
-
 @bp.route('/get_all_speakers', methods=['GET'])  
 @limiter.limit("50/minute")
 def get_all_speakers():
