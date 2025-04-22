@@ -38,7 +38,10 @@ export default function LineDetails() {
     const endLine = end ? Number(end) : startLine;
 
     const currentStart = startLine ?? 1;
-    const currentEnd = endLine ?? startLine;
+    let currentEnd = endLine ?? startLine;
+    if (currentEnd > 1353){
+        currentEnd = 1353;
+    }
     const span = currentEnd - currentStart + 1;
 
     const [fontsLoaded] = useFonts({
