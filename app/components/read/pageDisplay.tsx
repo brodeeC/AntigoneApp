@@ -2,9 +2,10 @@ import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, SafeAreaView, ScrollView, View, TouchableOpacity, useColorScheme, ActivityIndicator } from "react-native";
 import * as Haptics from 'expo-haptics';
-import { styles, getDynamicStyles } from "./read-styles/styles";
+import { styles, getDynamicStyles, Colors } from "./read-styles/styles";
 import WordDetails from "./wordDisplay"; 
 import { LinearGradient } from "expo-linear-gradient";
+import TabLayout from "@/app/(tabs)/tabLayout";
 
 type PageDisplayProps = {
     page: number;
@@ -71,16 +72,29 @@ export default function PageDisplay({ page }: PageDisplayProps) {
     };
 
     if (loading) return (
+        <TabLayout>
+            <LinearGradient
+                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+                style={{ flex: 1 }}
+            >
+                <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
+                    <ActivityIndicator 
+                        size="large" 
+                        color={isDarkMode ? Colors.dark.loadingIndicator : Colors.light.loadingIndicator} 
+                    />
+                </View>
+            </LinearGradient>
+        </TabLayout>
+    );
+    if (error) return (
+    <TabLayout>
         <LinearGradient
             colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
             style={{ flex: 1 }}
         >
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-                <ActivityIndicator size="small" color={isDarkMode ? "#64B5F6" : "#1E88E5"} />
-            </View>
+            <Text>{error}</Text>
         </LinearGradient>
-    );
-    if (error) return <Text style={dynamicStyles.text}>{error}</Text>;
+    </TabLayout>);
 
     return (
         <SafeAreaView style={[styles.container, dynamicStyles.container]}>

@@ -4,7 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import PageDisplay from "@/app/components/read/pageDisplay";
-import { styles, getDynamicStyles } from "../../frontend/styles/read.styles";
+import { styles, getDynamicStyles } from "../styles/read.styles";
 
 export default function Read() {
     const [page, setPage] = useState(1);
@@ -27,7 +27,7 @@ export default function Read() {
             style={{ flex: 1 }}
         >
             <SafeAreaView style={[styles.container, dynamicStyles.container]}>
-                {/* Header with subtle separation */}
+                {/* Header */}
                 <View style={styles.headerContainer}>
                     <Text style={[styles.header, dynamicStyles.header]}>Antigone</Text>
                     <Text style={[styles.author, dynamicStyles.author]}>Sophocles</Text>
@@ -42,7 +42,7 @@ export default function Read() {
                     <PageDisplay page={page} />
                 </ScrollView>
 
-                {/* Enhanced Pagination */}
+                {/* Pagination */}
                 <View style={[styles.paginationContainer, dynamicStyles.paginationContainer]}>
                     <TouchableOpacity
                         style={[styles.navButton, page === 1 && styles.disabledArrowButton]}

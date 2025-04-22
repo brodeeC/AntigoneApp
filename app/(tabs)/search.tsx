@@ -11,7 +11,7 @@ import {
   StyleSheet 
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { searchStyles } from '@/frontend/styles/search.styles';
+import { searchStyles } from '@/app/styles/search.styles';
 import LineSearch from '@/app/components/search/LineSearch';
 import { router, useLocalSearchParams } from 'expo-router';
 import WordSearch from '@/app/components/search/WordSearch';

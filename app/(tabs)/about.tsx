@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, useColorScheme, Linking, TouchableOpacity, Alert, ActivityIndicator  } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import EnIcon from 'react-native-vector-icons/Entypo';
-import styles from '../../frontend/styles/about.styles';
+import styles from '../styles/about.styles';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { useState } from 'react';
@@ -83,7 +83,7 @@ const downloadCSV = async (filename: string) => {
           </View>
           <Text style={[styles.sectionText, dynamicSubtextColor]}>
             Antigone Reader reimagines Sophocles' classic tragedy for the digital age. Designed for 
-            students, scholars, and theater enthusiasts, this app provides:
+            students, scholars, and enthusiasts, this app provides:
           </Text>
           <View style={styles.featureList}>
             {[
@@ -112,12 +112,11 @@ const downloadCSV = async (filename: string) => {
             <Text style={[styles.sectionTitle, dynamicTextColor]}>The Text</Text>
         </View>
         <Text style={[styles.sectionText, dynamicSubtextColor]}>
-            This app uses the 1924 Oxford Classical Text edition of Sophocles' Antigone, edited by 
-            A.C. Pearson. The Greek text has been enhanced with:
+            Placeholder text (cite data here). The Greek text has been enhanced with:
         </Text>
         <View style={styles.dataDetails}>
             <Text style={[styles.dataDetailText, dynamicSubtextColor]}>
-            • Full morphological analysis of every word
+            • Full morphological analysis of words
             </Text>
             <Text style={[styles.dataDetailText, dynamicSubtextColor]}>
             • Speaker attribution for every line
@@ -174,17 +173,17 @@ const downloadCSV = async (filename: string) => {
             <Text style={[styles.sectionTitle, dynamicTextColor]}>The Developer</Text>
           </View>
           <Text style={[styles.sectionText, dynamicSubtextColor]}>
-            Created by a classics loving developer, this app combines a passion for ancient Greek 
-            literature with modern technology. As a former student struggling with paper commentaries, 
-            I wanted to create:
+            As a developer passionate about classics, I built this app to bridge ancient 
+            Greek literature and modern tech. What started as a simple idea became:
           </Text>
           <Text style={[styles.highlightText, { color: isDarkMode ? "#4CC9F0" : "#4361EE" }]}>
-            "A tool that makes Antigone as accessible as checking social media."
+            "A tool that makes reading Antigone as accessible as checking social media."
           </Text>
           <Text style={[styles.sectionText, dynamicSubtextColor]}>
-            The project began as a way to learn React Native and grew into a full-fledged reading 
-            environment. Special thanks to my professors Dr. Chiara Palladino (Greek) and Dr. Fahad Sultan (CS) 
-            and the open-source community.
+            I never expected my semester project—a mobile adaptation of Antigone—to become such a rewarding 
+            challenge. Translating ancient drama into interactive experiences taught me as much about coding 
+            as it did about Greek tragedy. Heartfelt thanks to my mentors Dr. Palladino and Dr. Sultan, and 
+            to the global open-source community for their invisible mentorship.
           </Text>
           
           <View style={styles.contactContainer}>

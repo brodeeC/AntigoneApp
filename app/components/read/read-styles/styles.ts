@@ -1,8 +1,13 @@
 import { StyleSheet } from "react-native";
 
-const PRIMARY_COLOR = "#6A0DAD"; 
+
+
+const PRIMARY_COLOR = "#1E88E5"; 
 const LIGHT_BLUE = "#1E88E5"; 
 const DARK_BLUE = "#64B5F6"; 
+const ACCENT_COLOR_LIGHT = "#4361EE";
+const ACCENT_COLOR_DARK = "#4CC9F0";
+const DARK_BACKGROUND = "#0F0F1B";
 
 const LIGHT_GRAY = "#F9F9F9"; // Light mode background
 const DARK_GRAY = "#1C1C1E"; // Dark mode background
@@ -61,6 +66,11 @@ export const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     word: {
         fontSize: 18,
@@ -175,7 +185,9 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             fontSize: 16,
             color: isDarkMode ? WHITE : DARK_TEXT,
         },
-
+        loadingContainer: {
+            backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
+        },
         errorText: {
             fontSize: 14,
             color: "#D32F2F", 
@@ -216,4 +228,23 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             fontWeight: "bold",
         },
     });
+};
+
+export const Colors = {
+    light: {
+        buttonBackground: ACCENT_COLOR_LIGHT,
+        buttonText: WHITE,
+        background: LIGHT_GRAY,
+        loadingBackground: LIGHT_GRAY,
+        loadingIndicator: ACCENT_COLOR_LIGHT,
+        text: DARK_TEXT,
+    },
+    dark: {
+        buttonBackground: ACCENT_COLOR_DARK,
+        buttonText: WHITE,
+        background: DARK_BACKGROUND,
+        loadingBackground: '#121212',
+        loadingIndicator: ACCENT_COLOR_DARK,
+        text: WHITE,
+    }
 };

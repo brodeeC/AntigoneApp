@@ -8,7 +8,7 @@ import {
     useColorScheme 
 } from "react-native";
 import * as Haptics from 'expo-haptics';
-import { Colors, getDynamicStyles } from "../../frontend/styles/word-details.styles";
+import { Colors, getDynamicStyles } from "../styles/word-details.styles";
 import { router, useLocalSearchParams } from "expo-router";
 import TabLayout from "../(tabs)/tabLayout";
 import { Feather } from "@expo/vector-icons";
@@ -114,14 +114,16 @@ export default function WordDetails() {
     }, [word]);
 
     if (loading) return (
-        <LinearGradient
-            colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
-            style={{ flex: 1 }}
-        >
-            <View style={dynamicStyles.loadingContainer}>
-                <ActivityIndicator size="small" color={isDarkMode ? "#64B5F6" : "#1E88E5"} />
-            </View>
-        </LinearGradient>
+        <TabLayout>
+            <LinearGradient
+                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+                style={{ flex: 1 }}
+            >
+                <View style={dynamicStyles.loadingContainer}>
+                    <ActivityIndicator size="small" color={isDarkMode ? "#64B5F6" : "#1E88E5"} />
+                </View>
+            </LinearGradient>
+        </TabLayout>
     );
     if (error) return <Text style={dynamicStyles.errorText}>{error}</Text>;
     if (!wordData) return <Text style={dynamicStyles.errorText}>Data Unavailable</Text>;

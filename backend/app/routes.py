@@ -56,7 +56,9 @@ def get_lines(startLine, endLine=None):
         if end and (start > end or end < start or end == start):
             end = None
 
-        if end and (end > MAX_LINE or end < MIN_LINE): end = None
+        if end and end > MAX_LINE: end = MAX_LINE
+
+        if end and end < MIN_LINE: end = None
 
         if start < MIN_LINE or start > MAX_LINE: start = MIN_LINE
         # Handle single line request

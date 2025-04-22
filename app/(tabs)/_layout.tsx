@@ -7,7 +7,6 @@ export default function TabLayoutNav() {
     <TabLayout> 
       <View style={{ flex: 1 }}> 
         <Tabs screenOptions={{ headerShown: false }} tabBar={() => null}>
-          <Tabs.Screen name="index" />
           <Tabs.Screen name="read" />
           <Tabs.Screen name="search" />
           <Tabs.Screen name="about" />

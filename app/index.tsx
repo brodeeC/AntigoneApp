@@ -2,7 +2,7 @@ import { TouchableOpacity, View, Text, useColorScheme } from 'react-native';
 import { router } from 'expo-router';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { LinearGradient } from 'expo-linear-gradient';
-import styles from '../frontend/styles/app.styles';
+import styles from './styles/app.styles';
 import TabLayout from './(tabs)/tabLayout';
 
 export default function HomeScreen() {

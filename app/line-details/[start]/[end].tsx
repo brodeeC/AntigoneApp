@@ -2,7 +2,7 @@
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated, ActivityIndicator, ScrollView } from "react-native";
-import { styles, getDynamicStyles, Colors } from "../../../frontend/styles/line-details.styles";
+import { styles, getDynamicStyles, Colors } from "../../styles/line-details.styles";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import WordDisplay from "../../components/read/wordDisplay"; 
 import TabLayout from "../../(tabs)/tabLayout";
@@ -140,10 +140,18 @@ export default function LineDetails() {
     if (!fontsLoaded && !loading) {
         return (
             <TabLayout>
+            <LinearGradient
+                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+                style={{ flex: 1 }}
+            >
                 <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
-                    <ActivityIndicator size="large" color={isDarkMode ? Colors.dark.loadingIndicator : Colors.light.loadingIndicator} />
+                    <ActivityIndicator 
+                        size="large" 
+                        color={isDarkMode ? Colors.dark.loadingIndicator : Colors.light.loadingIndicator} 
+                    />
                 </View>
-            </TabLayout>
+            </LinearGradient>
+        </TabLayout>
         );
     }
 
