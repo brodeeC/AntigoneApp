@@ -59,15 +59,15 @@ def lookup_word_details(word):
     query = query.order_by(
         case(
             (LemmaData.form == cleaned, 1),           # Exact form match - highest priority
-            (LemmaData.norm_form.startswith(normalized), 2),  # Form starts with normalized
-            (LemmaData.normalized.startswith(normalized), 3),  # Lemma starts with normalized
-            (LemmaData.lemma == cleaned, 4),          # Exact lemma match - lower priority
+            (LemmaData.lemma == cleaned, 2),            # Exact lemma match
+            (LemmaData.norm_form.startswith(normalized), 3),  # Form starts with normalized
+            (LemmaData.normalized.startswith(normalized), 4),  # Lemma starts with normalized
             (LemmaData.norm_form.contains(normalized), 5),   # Form contains normalized
             (LemmaData.normalized.contains(normalized), 6),   # Lemma contains normalized
             else_=7
         ),
         
-        LemmaData.line_number
+        #LemmaData.line_number
     )
     
     results = query.all()
