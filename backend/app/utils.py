@@ -15,8 +15,10 @@ def strip_accents(s):
            if category(c) != 'Mn' and c != "'")
 
 def clean_word(word):
-    word = re.sub(r'[\u0313\u02BC]', '', word)
-    word = re.sub(r'[\u00B7\u002C\u002E\u037E\u0387;]+$', '', word)
+    word = re.sub(r'[\u0313\u02BC]', '', word)  # Remove breathing marks
+    word = re.sub(r'[\u00B7\u002C\u002E\u037E\u0387;]+$', '', word)  # Remove punctuation at the end
+    word = re.sub(r'^\[', '', word)  # Remove leading '['
+    word = re.sub(r'\]$', '', word)  # Remove trailing ']'
     return word
 
 def hash_word(eng_lemma):
