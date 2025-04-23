@@ -44,14 +44,14 @@ def lookup_word_details(word):
     # Base query
     query = LemmaData.query.filter(
         or_(
-            LemmaData.form == cleaned,
-            LemmaData.lemma == cleaned,
-            LemmaData.norm_form.startswith(normalized),
-            LemmaData.normalized.startswith(normalized),
-            LemmaData.form_eng.contains(word),
-            LemmaData.norm_form_eng.contains(word),
-            LemmaData.full_eng.contains(word),
-            LemmaData.eng_lemma.contains(word)
+            LemmaData.form == cleaned, # form
+            LemmaData.lemma == cleaned, # lemma
+            LemmaData.norm_form.startswith(normalized), # form
+            LemmaData.normalized.startswith(normalized), # lemma
+            LemmaData.form_eng.contains(cleaned), # form
+            LemmaData.norm_form_eng.contains(normalized), # form
+            LemmaData.full_eng.contains(cleaned), # lemma
+            LemmaData.eng_lemma.contains(normalized) # norm lemma
         )
     )
     

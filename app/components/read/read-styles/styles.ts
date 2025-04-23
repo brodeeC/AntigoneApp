@@ -80,8 +80,18 @@ export const styles = StyleSheet.create({
         marginVertical: 2,
     },
     wordDetailsContainer: {
-        marginTop: 12,
-        marginLeft: 52, // Align with text
+        borderRadius: 16,
+        padding: 20,
+        marginTop: 24,
+        marginHorizontal: 16,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 6,
+        marginBottom: 24,
+        width: 400,
+        borderWidth: 1,
     },
 
     header: {
