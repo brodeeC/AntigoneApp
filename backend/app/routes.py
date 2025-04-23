@@ -53,14 +53,18 @@ def get_lines(startLine, endLine=None):
         except:
             start = MIN_LINE
 
-        if end and (start > end or end < start or end == start):
-            end = None
-
         if end and end > MAX_LINE: end = MAX_LINE
 
         if end and end < MIN_LINE: end = None
 
-        if start < MIN_LINE or start > MAX_LINE: start = MIN_LINE
+        if start < MIN_LINE: start = MIN_LINE
+
+        if start > MAX_LINE: start = MAX_LINE
+
+        if end and (start > end or end < start or end == start):
+            end = None
+
+            
         # Handle single line request
         if end is None:
             line_text, speaker = get_line(start)
