@@ -66,8 +66,7 @@ def lookup_word_details(word):
             (LemmaData.normalized.contains(normalized), 6),   # Lemma contains normalized
             else_=7
         ),
-        func.length(LemmaData.form),  # Prefer shorter forms first
-        func.length(LemmaData.lemma),  # Then shorter lemmas
+        
         LemmaData.line_number
     )
     
