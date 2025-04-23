@@ -55,19 +55,24 @@ def lookup_word_details(word):
         )
     )
     
-    # Modified case statement to prioritize form matches
     query = query.order_by(
         case(
             (LemmaData.form == cleaned, 1),           # Exact form match - highest priority
             (LemmaData.lemma == cleaned, 2),            # Exact lemma match
             (LemmaData.norm_form.startswith(normalized), 3),  # Form starts with normalized
             (LemmaData.normalized.startswith(normalized), 4),  # Lemma starts with normalized
-            (LemmaData.norm_form.contains(normalized), 5),   # Form contains normalized
-            (LemmaData.normalized.contains(normalized), 6),   # Lemma contains normalized
+            (LemmaData.form_eng.startswith(cleaned), 5), 
+            (LemmaData.norm_form_eng.startswith(normalized), 6),
+            (LemmaData.full_eng.startswith(cleaned), 7),
+            (LemmaData.eng_lemma.startswith(normalized), 8),
+            (LemmaData.norm_form.contains(normalized), 9),   # Form contains normalized
+            (LemmaData.normalized.contains(normalized), 10),   # Lemma contains normalized
+            (LemmaData.form_eng.contains(cleaned), 11),
+            (LemmaData.norm_form_eng.contains(normalized), 12),
+            (LemmaData.full_eng.contains(cleaned), 13),
+            (LemmaData.eng_lemma.contains(normalized), 14),
             else_=7
         ),
-        
-        #LemmaData.line_number
     )
     
     results = query.all()
@@ -87,9 +92,7 @@ def lookup_word_details(word):
             'line_number': lemma.line_number,
             'postag': lemma.postag,
             'speaker': speaker,
-            #'case': parse_postag(lemma.postag)
         }, {'case': parse_postag(lemma.postag)}]
-        #word_details.append(parse_postag(lemma.postag))
         
         if definitions:
             word_data = add_defs(word_data, definitions)
@@ -122,4 +125,4 @@ def search_by_definition(query):
 def get_word(lemma_id):
     """Get lemma by ID"""
     lemma = LemmaData.query.get(lemma_id)
-    return lemma.form if lemma else None ## Testing how getting lemma.form will affect results
+    return lemma.form if lemma else None 
