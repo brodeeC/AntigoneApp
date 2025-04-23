@@ -18,7 +18,7 @@ const downloadCSV = async (filename: string) => {
     setDownloading(filename);
     
     const fileUri = `${FileSystem.documentDirectory}${filename}`;
-    const downloadUrl = `https://raw.githubusercontent.com/brodeeC/AntigoneApp/1aae980617e632797c15a47fbc5b2125848758de/backend/database/csv/${filename}`; 
+    const downloadUrl = `https://raw.githubusercontent.com/brodeeC/AntigoneApp/refs/heads/main/backend/database/csv/${filename}`; 
     
     const downloadResumable = FileSystem.createDownloadResumable(
         downloadUrl,
