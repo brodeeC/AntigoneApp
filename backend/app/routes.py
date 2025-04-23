@@ -64,7 +64,7 @@ def get_lines(startLine, endLine=None):
         if end and (start > end or end < start or end == start):
             end = None
 
-            
+
         # Handle single line request
         if end is None:
             line_text, speaker = get_line(start)
@@ -138,39 +138,36 @@ def search():
     
     if not query or not mode:
         logger.warning("Missing search parameters")
-        return jsonify({'error': 'Missing parameters'}), HTTPStatus.BAD_REQUEST
+        return jsonify([]), HTTPStatus.OK  # Gracefully return empty list
 
     safe_query = query.strip()
     results = []
 
     try:
         if mode == 'definition':
-            # Get list of (lemma_id, line_number) tuples
             lemma_keys = search_by_definition(safe_query)
-            results = []
             for lemma_id, line_number in lemma_keys:
-                # Fetch the complete word record using both keys
                 word = LemmaData.query.filter_by(
                     lemma_id=lemma_id,
                     line_number=line_number
                 ).first()
-                
                 if word:
-                    word_data = lookup_word_details(word.lemma)  # Or pass both keys if needed
+                    word_data = lookup_word_details(word.lemma)
                     if word_data:
                         results.extend(word_data)
-                        
+
         elif mode == 'word':
             results = lookup_word_details(safe_query)
         else:
-            return jsonify({'error': 'Invalid search mode'}), HTTPStatus.BAD_REQUEST
+            logger.warning("Invalid search mode")
+            return jsonify([]), HTTPStatus.OK  # Invalid mode = empty list
 
         logger.info(f"Returning {len(results)} results")
         return jsonify(results)
 
     except Exception as e:
         logger.error(f"Search error: {str(e)}", exc_info=True)
-        return jsonify({'error': 'Internal server error'}), HTTPStatus.INTERNAL_SERVER_ERROR
+        return jsonify([]), HTTPStatus.OK  # Always return an empty list on error
     
 @bp.route('/word-details/<word>', methods=['GET'])
 @limiter.limit("200 per minute")

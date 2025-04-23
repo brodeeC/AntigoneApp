@@ -104,37 +104,48 @@ export default function WordSearch() {
     Keyboard.dismiss();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   
-    if (!query.trim()) return;
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery) return;
   
-    const safeQuery = sanitizeInput(query.trim());
+    const safeQuery = sanitizeInput(trimmedQuery);
     setLoading(true);
     setHasSearched(true);
-    
+    setResults([]); // Clear previous results early
+  
     try {
       const response = await fetch(
         `http://brodeeclontz.com/AntigoneApp/api/search?mode=${mode}&q=${encodeURIComponent(safeQuery)}`
       );
   
-      const responseText = await response.text();
-      
-      try {
-        const data = JSON.parse(responseText);
-        if (data.error) throw new Error(data.error);
-        if (!Array.isArray(data)) throw new Error('Unexpected response format');
-        
-        setResults(data);
-      } catch (parseError) {
-        console.error('Parse error:', parseError, 'Response:', responseText);
-        throw new Error('Failed to parse server response');
+      if (!response.ok) {
+        throw new Error(`Server returned status ${response.status}`);
       }
+  
+      const responseText = await response.text();
+  
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Failed to parse response JSON:', parseError);
+        throw new Error('Unexpected server response. Please try again.');
+      }
+  
+      if (!Array.isArray(data)) {
+        console.error('Response is not an array:', data);
+        throw new Error('Unexpected response format');
+      }
+  
+      setResults(data);
     } catch (err) {
-      console.error('Search error:', err);
+      console.error('Search failed:', err);
       setResults([]);
-      alert(`Search failed: ${err instanceof Error ? err.message : 'Please try again'}`);
+      alert(`Search failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
   }, [query, mode, sanitizeInput]);
+  
 
   useEffect(() => {
     setCurrentPage(0);
