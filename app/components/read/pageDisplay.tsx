@@ -150,7 +150,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
                             </View>
                             {selectedWord?.lineNum === line.lineNum && (
                                 <View style={[styles.wordDetailsContainer, dynamicStyles.wordDetailsContainer]}>
-                                    <WordDetails word={selectedWord.word} />
+                                    <WordDetails word={selectedWord.word} lineNumber={selectedWord.lineNum} />
                                 </View>
                             )}
                         </View>

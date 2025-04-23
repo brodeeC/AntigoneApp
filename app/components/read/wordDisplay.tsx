@@ -19,9 +19,10 @@ interface CaseInfo {
 
 type WordDetailsProps = {
     word: string;
+    lineNumber: number;
 };
 
-export default function WordDetails({ word }: WordDetailsProps) {
+export default function WordDetails({ word, lineNumber }: WordDetailsProps) {
     const [wordData, setWordData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -37,22 +38,31 @@ export default function WordDetails({ word }: WordDetailsProps) {
                 const response = await fetch(`http://brodeeclontz.com/AntigoneApp/api/word-details/${word}`);
                 if (!response.ok) throw new Error("Failed to load word details");
                 const json = await response.json();
-                setWordData(json);
+    
+                // Find the first entry where line number matches
+                const matchingEntry = json.find((entry: any) => entry[0]?.line_number === lineNumber);
+    
+                if (matchingEntry) {
+                    setWordData(matchingEntry);
+                } else {
+                    setWordData(null);
+                    setError("No matching word found for this line.");
+                }
             } catch (err) {
                 setError("Error loading word details");
             } finally {
                 setLoading(false);
             }
         };
-
+    
         fetchWordDetails();
-    }, [word]);
+    }, [word, lineNumber]);
 
     const handleMoreDetailsPress = () => {
         // Provide haptic feedback
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         // Route to the WordDetails page
-        router.push(`/word-details/${wordData[0][0]?.lemma}`);
+        router.push(`/word-details/${wordData[0]?.lemma}`);
     };
 
     // Handling loading, error, or no data
@@ -69,10 +79,10 @@ export default function WordDetails({ word }: WordDetailsProps) {
     if (error) return <Text style={dynamicStyles.errorText}>{error}</Text>;
     if (!wordData) return <Text style={dynamicStyles.errorText}>Data Unavailable</Text>;
 
-    const lemma = wordData[0][0]?.lemma;
-    const form = wordData[0][0]?.form;
-    const caseInfo = wordData[0][1]?.case;
-    const definitions = wordData[0][2]?.definitions;
+    const lemma = wordData[0]?.lemma;
+    const form = wordData[0]?.form;
+    const caseInfo = wordData[1]?.case;
+    const definitions = wordData[2]?.definitions;
 
     return (
         <View style={dynamicStyles.wordDetailsContainer}>

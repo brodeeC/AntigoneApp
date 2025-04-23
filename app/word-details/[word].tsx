@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { 
     View, 
     Text, 
@@ -44,8 +44,20 @@ export default function WordDetails() {
     const [error, setError] = useState<string | null>(null);
     const [isBackPressed, setIsBackPressed] = useState(false);
 
+    const [currentPage, setCurrentPage] = useState(0);
+    const resultsPerPage = 4;
+
+    const totalPages = wordData ? Math.ceil(wordData.length / resultsPerPage) : 0;
+
+    const paginatedResults = wordData
+        ? wordData.slice(currentPage * resultsPerPage, (currentPage + 1) * resultsPerPage)
+        : [];
+
+
     const isDarkMode = useColorScheme() === "dark";
     const dynamicStyles = getDynamicStyles(isDarkMode);
+
+    const scrollViewRef = useRef<ScrollView>(null);
 
     const [collapsedEntries, setCollapsedEntries] = useState<Record<number, boolean>>(() => {
         const initialCollapsed: Record<number, boolean> = {};
@@ -56,6 +68,18 @@ export default function WordDetails() {
         }
         return initialCollapsed;
     });
+
+    const goToPrevPage = () => {
+        Haptics.selectionAsync();
+        setCurrentPage(prev => Math.max(prev - 1, 0));
+        scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+    };
+    
+    const goToNextPage = () => {
+        Haptics.selectionAsync();
+        setCurrentPage(prev => Math.min(prev + 1, totalPages - 1));
+        scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+    };
 
     const toggleDefinitionCollapse = useCallback((index: number) => {
         Haptics.selectionAsync(); // Light feedback for toggle action
@@ -158,13 +182,16 @@ export default function WordDetails() {
                         <Text style={dynamicStyles.header}>{word ?? 'Unknown'}</Text>
                     </View>
                     <ScrollView
+                        ref={scrollViewRef}
                         contentContainerStyle={{ paddingBottom: 40 }}
                         showsVerticalScrollIndicator={false}
                     >
-                        {wordData.map((entry, index) => {
+                        {paginatedResults.map((entry, index) => {
+                            const absoluteIndex = currentPage * resultsPerPage + index;
+
                             if (!entry || !entry[0]) return null; 
 
-                            const isCollapsed = collapsedEntries[index] !== false;
+                            const isCollapsed = collapsedEntries[absoluteIndex] !== false;
 
                             const { form, lemma, line_number, postag, speaker } = entry[0];
                             const lineNum = line_number;
@@ -173,8 +200,8 @@ export default function WordDetails() {
                             const definitions: Definition[] = entry[2]?.definitions ?? [];
 
                             return (
-                                <View key={index} style={dynamicStyles.entryContainer}>
-                                    <Text style={dynamicStyles.entryTitle}>{index + 1}</Text> 
+                                <View key={absoluteIndex} style={dynamicStyles.entryContainer}>
+                                    <Text style={dynamicStyles.entryTitle}>{absoluteIndex + 1}</Text> 
                                     <View style={dynamicStyles.entryContent}>
                                         <Text style={dynamicStyles.entryLabel}>Form: </Text>
                                         <Text style={dynamicStyles.entryValue}>{form}</Text>
@@ -229,7 +256,7 @@ export default function WordDetails() {
                                                 ))}
                                                 
                                                 {/* Show additional definitions if NOT collapsed */}
-                                                {collapsedEntries[index] === false && definitions.length > 3 && 
+                                                {collapsedEntries[absoluteIndex] === false && definitions.length > 3 && 
                                                     definitions.slice(3).map(({ def_num, short_def }) => (
                                                         <Text key={def_num} style={dynamicStyles.definitionText}>
                                                             {`${def_num}. ${short_def}`}
@@ -240,12 +267,12 @@ export default function WordDetails() {
                                                 {/* Only show toggle if more than 3 definitions exist */}
                                                 {definitions.length > 3 && (
                                                     <TouchableOpacity 
-                                                        onPress={() => toggleDefinitionCollapse(index)}
+                                                        onPress={() => toggleDefinitionCollapse(absoluteIndex)}
                                                         style={dynamicStyles.toggleButton}
                                                         activeOpacity={0.7}
                                                     >
                                                         <Text style={dynamicStyles.toggleButtonText}>
-                                                            {collapsedEntries[index] === true
+                                                            {collapsedEntries[absoluteIndex] === true
                                                                 ? `Show ${definitions.length - 3} more definitions` 
                                                                 : 'Show less'}
                                                         </Text>
@@ -260,6 +287,45 @@ export default function WordDetails() {
                             );
                         })}
                     </ScrollView>
+                    {totalPages > 1 && (
+                        <View style={dynamicStyles.paginationContainer}>
+                            <TouchableOpacity
+                                onPress={goToPrevPage}
+                                disabled={currentPage === 0}
+                                style={[
+                                    dynamicStyles.paginationButton,
+                                    currentPage === 0 && dynamicStyles.paginationButtonDisabled
+                                ]}
+                                activeOpacity={0.7}
+                            >
+                                <Feather 
+                                    name="chevron-left" 
+                                    size={24} 
+                                    color={isDarkMode ? "#64B5F6" : "#1E88E5"} 
+                                />
+                            </TouchableOpacity>
+
+                            <Text style={dynamicStyles.paginationText}>
+                                {currentPage + 1} <Text style={{ color: isDarkMode ? '#94A3B8' : '#64748B' }}>of</Text> {totalPages}
+                            </Text>
+
+                            <TouchableOpacity
+                                onPress={goToNextPage}
+                                disabled={currentPage === totalPages - 1}
+                                style={[
+                                    dynamicStyles.paginationButton,
+                                    currentPage === totalPages - 1 && dynamicStyles.paginationButtonDisabled
+                                ]}
+                                activeOpacity={0.7}
+                            >
+                                <Feather 
+                                    name="chevron-right" 
+                                    size={24} 
+                                    color={isDarkMode ? "#64B5F6" : "#1E88E5"} 
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </View>
             </LinearGradient>
         </TabLayout>

@@ -33,6 +33,35 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
             android: 20
         }),
     },
+    paginationContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 16,
+        paddingHorizontal: 16,
+    },
+    paginationButton: {
+        padding: 12,
+        borderRadius: 8,
+        backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
+        width: 44,
+        height: 44,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: 4,
+    },
+    paginationButtonDisabled: {
+        opacity: 0.5,
+        backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.05)' : 'rgba(30, 136, 229, 0.05)',
+    },
+    paginationText: {
+        marginHorizontal: 16,
+        fontSize: 16,
+        fontWeight: '600',
+        color: isDarkMode ? '#E2E8F0' : '#475569',
+        minWidth: 60,
+        textAlign: 'center',
+    },
     header: {
         fontSize: 28,
         fontWeight: '700',
