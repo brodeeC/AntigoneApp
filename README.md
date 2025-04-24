@@ -27,10 +27,7 @@ Processed CSV files available in `/backend/database/csv/`:
 
 - **Source Data**: [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) (Perseus/Scaife)
 - **Processed Data**: [CC-BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
-  - *Attribution Requirement*:
-    ```plaintext
-    Derived from Perseus/Scaife sources via AntigoneApp by Brodee Clontz (https://github.com/brodeeC/AntigoneApp).
-    ```
+  - *Attribution Requirement*: [Attribution](backend/database/csv/ATTRIBUTION.md)
 - **Application Code**: [MIT License](backend/database/csv/LICENSE.md)
 
 ### How to Cite
