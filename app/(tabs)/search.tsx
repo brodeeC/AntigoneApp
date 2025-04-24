@@ -11,10 +11,10 @@ import {
   StyleSheet 
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { searchStyles } from '@/app/styles/search.styles';
-import LineSearch from '@/app/components/search/LineSearch';
+import { searchStyles } from '@/styles/search.styles';
+import LineSearch from '@/components/search/LineSearch';
 import { router, useLocalSearchParams } from 'expo-router';
-import WordSearch from '@/app/components/search/WordSearch';
+import WordSearch from '@/components/search/WordSearch';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 

@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity, useColorScheme, SafeAreaView, ScrollView 
 import { MaterialIcons } from "@expo/vector-icons"; 
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
-import PageDisplay from "@/app/components/read/pageDisplay";
-import { styles, getDynamicStyles } from "../styles/read.styles";
+import PageDisplay from "@/components/read/pageDisplay";
+import { styles, getDynamicStyles } from "../../styles/read.styles";
 
 export default function Read() {
     const [page, setPage] = useState(1);

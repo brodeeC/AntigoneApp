@@ -2,9 +2,9 @@
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated, ActivityIndicator, ScrollView } from "react-native";
-import { styles, getDynamicStyles, Colors } from "../../styles/line-details.styles";
+import { styles, getDynamicStyles, Colors } from "../../../styles/line-details.styles";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import WordDisplay from "../../components/read/wordDisplay"; 
+import WordDisplay from "../../../components/read/wordDisplay"; 
 import TabLayout from "../../(tabs)/tabLayout";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
@@ -295,7 +295,7 @@ export default function LineDetails() {
                                     
                                     {selectedWord?.lineNum === line.lineNum && (
                                         <View style={[styles.wordDetailsContainer, dynamicStyles.wordDetailsContainer]}>
-                                            <WordDisplay word={selectedWord.word} />
+                                            <WordDisplay word={selectedWord.word} lineNumber={line.lineNum} />
                                         </View>
                                     )}
                                 </View>

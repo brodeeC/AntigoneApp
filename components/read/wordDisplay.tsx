@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, TouchableOpacity, useColorScheme } from "react-native";
 import * as Haptics from 'expo-haptics';
-import { getDynamicStyles } from "./read-styles/styles";
+import { getDynamicStyles } from "../../styles/styles";
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 

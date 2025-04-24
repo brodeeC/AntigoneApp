@@ -2,7 +2,7 @@ import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, SafeAreaView, ScrollView, View, TouchableOpacity, useColorScheme, ActivityIndicator } from "react-native";
 import * as Haptics from 'expo-haptics';
-import { styles, getDynamicStyles, Colors } from "./read-styles/styles";
+import { styles, getDynamicStyles, Colors } from "../../styles/styles";
 import WordDetails from "./wordDisplay"; 
 import { LinearGradient } from "expo-linear-gradient";
 import TabLayout from "@/app/(tabs)/tabLayout";

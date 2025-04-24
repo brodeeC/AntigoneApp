@@ -8,7 +8,7 @@ import {
     useColorScheme 
 } from "react-native";
 import * as Haptics from 'expo-haptics';
-import { Colors, getDynamicStyles } from "../styles/word-details.styles";
+import { Colors, getDynamicStyles } from "../../styles/word-details.styles";
 import { router, useLocalSearchParams } from "expo-router";
 import TabLayout from "../(tabs)/tabLayout";
 import { Feather } from "@expo/vector-icons";

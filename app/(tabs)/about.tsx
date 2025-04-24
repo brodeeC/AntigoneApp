@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, useColorScheme, Linking, TouchableOpacity, Alert, ActivityIndicator  } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import EnIcon from 'react-native-vector-icons/Entypo';
-import styles from '../styles/about.styles';
+import styles from '../../styles/about.styles';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { useState } from 'react';

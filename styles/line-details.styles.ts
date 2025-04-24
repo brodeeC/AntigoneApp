@@ -232,7 +232,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             color: accentColor,
         },
         loadingContainer: {
-            backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
+            //backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
         },
         divider: {
             backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',

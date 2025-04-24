@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Animated, useColorScheme, Text } from 'react-na
 import { useRouter } from 'expo-router';
 import EnIcon from 'react-native-vector-icons/Entypo';
 import FoIcon from 'react-native-vector-icons/Foundation';
-import { styles, getDynamicStyles } from '../styles/tab.styles';
+import { styles, getDynamicStyles } from '../../styles/tab.styles';
 import * as Haptics from 'expo-haptics';
 export default function TabLayout({ children }: { children: React.ReactNode }) {
     const isDarkMode = useColorScheme() === 'dark';

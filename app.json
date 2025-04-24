@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "AntigoneApp",
+    "name": "Antigone Reader",
     "slug": "AntigoneApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "app/assets/icon.png",
+    "icon": "assets/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,14 +13,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "app/assets/icon.png",
+        "foregroundImage": "assets/icon.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "app/assets/icon.png",
+      "favicon": "assets/icon.png",
       "publicPath": "/AntigoneApp",
       "build": {
         "baseUrl": "/AntigoneApp"
@@ -31,7 +31,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "app/assets/icon.png",
+          "image": "assets/icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"

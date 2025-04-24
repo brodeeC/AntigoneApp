@@ -196,7 +196,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             color: isDarkMode ? WHITE : DARK_TEXT,
         },
         loadingContainer: {
-            backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
+            //backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
         },
         errorText: {
             fontSize: 14,
