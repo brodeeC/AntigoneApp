@@ -12,7 +12,7 @@ This dataset is derived from:
 **Under these terms:**
 - **Attribution** — Must credit:
    - Original sources (linked above)
-   - This project: "AntigoneApp by Brodee Clontz, [GitHub](https://github.com/brodeeC/AntigoneApp)"
+   - This project: "AntigoneApp by Brodee C., [GitHub](https://github.com/brodeeC/AntigoneApp)"
 - **ShareAlike** — Derivative works must use CC-BY-SA.
 
 Full legal text: [https://creativecommons.org/licenses/by-sa/4.0/](https://creativecommons.org/licenses/by-sa/4.0/)
