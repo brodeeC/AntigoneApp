@@ -112,24 +112,48 @@ const downloadCSV = async (filename: string) => {
             <Text style={[styles.sectionTitle, dynamicTextColor]}>The Text</Text>
         </View>
         <Text style={[styles.sectionText, dynamicSubtextColor]}>
-            Placeholder text (cite data here). The Greek text has been enhanced with:
+          The text and data in this app comes from the following sources:
         </Text>
         <View style={styles.dataDetails}>
-            <Text style={[styles.dataDetailText, dynamicSubtextColor]}>
-            • Full morphological analysis of words
-            </Text>
-            <Text style={[styles.dataDetailText, dynamicSubtextColor]}>
-            • Speaker attribution for every line
-            </Text>
-            <Text style={[styles.dataDetailText, dynamicSubtextColor]}>
-            • Cross-referenced with Perseus Digital Library
-            </Text>
+          {/* Scaife Viewer - Now clickable */}
+          <Text style={[styles.dataDetailText, dynamicSubtextColor]}>
+            • Greek text from the{' '}
+            <Text 
+              style={{color: isDarkMode ? '#4CC9F0' : '#4361EE'}} 
+              onPress={() => Linking.openURL('https://scaife.perseus.org/')}
+            >
+              Scaife Viewer
+            </Text>, accessed January 2025
+          </Text>
+
+          {/* Treebank - Added link */}
+          <Text style={[styles.dataDetailText, dynamicSubtextColor]}>
+            • Morphological analysis from the{' '}
+            <Text 
+              style={{color: isDarkMode ? '#4CC9F0' : '#4361EE'}}
+              onPress={() => Linking.openURL('https://perseusdl.github.io/treebank_data/')}
+            >
+              Perseus Ancient Greek Dependency Treebank
+            </Text>{' '}
+            (v2.1, 2014), developed by Giuseppe G. A. Celano, Gregory Crane, Bridget Almas, and Francesco Mambrini
+          </Text>
+
+          {/* Perseus - Now clickable */}
+          <Text style={[styles.dataDetailText, dynamicSubtextColor]}>
+            • Definitions from the{' '}
+            <Text 
+              style={{color: isDarkMode ? '#4CC9F0' : '#4361EE'}}
+              onPress={() => Linking.openURL('http://www.perseus.tufts.edu')}
+            >
+              Perseus Digital Library
+            </Text>, accessed January 2025
+          </Text>
         </View>
 
         <View style={styles.downloadSection}>
-            <Text style={[styles.downloadTitle, dynamicTextColor]}>
-            Download Datasets:
-            </Text>
+        <Text style={[styles.downloadTitle, dynamicTextColor]}>
+          Download Processed Datasets:
+        </Text>
             
             {[
             { name: "lines.csv", label: "Full Text" },
@@ -163,7 +187,19 @@ const downloadCSV = async (filename: string) => {
                 )}
             </TouchableOpacity>
             ))}
-        </View>
+            <View style={styles.section}>
+              <Text style={[styles.sectionText, dynamicSubtextColor]}>
+                All processed datasets are licensed under{' '}
+                <Text 
+                  style={{color: isDarkMode ? '#4CC9F0' : '#4361EE'}}
+                  onPress={() => Linking.openURL('https://creativecommons.org/licenses/by-sa/4.0/')}
+                >
+                  CC-BY-SA 4.0
+                </Text>{' '}
+                with attribution requirements.
+              </Text>
+            </View>
+          </View>
         </View>
 
         {/* Developer Section */}

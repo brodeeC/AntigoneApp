@@ -23,7 +23,7 @@ export default StyleSheet.create({
     opacity: 0.8,
   },
   section: {
-    marginBottom: 32,
+    marginBottom: 16,
   },
   sectionHeader: {
     flexDirection: 'row',
