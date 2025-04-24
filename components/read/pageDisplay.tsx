@@ -1,7 +1,6 @@
 import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, SafeAreaView, ScrollView, View, TouchableOpacity, useColorScheme, ActivityIndicator } from "react-native";
-import * as Haptics from 'expo-haptics';
 import { styles, getDynamicStyles, Colors } from "../../styles/styles";
 import WordDetails from "./wordDisplay"; 
 import { LinearGradient } from "expo-linear-gradient";
@@ -55,16 +54,13 @@ export default function PageDisplay({ page }: PageDisplayProps) {
             selectedWord?.index === wordIndex;
 
         if (isSelected) {
-            Haptics.selectionAsync(); 
             setSelectedWord(null);
         } else {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); 
             setSelectedWord({ word, lineNum, index: wordIndex });
         }
     };
 
     const handleLineNumberPress = (lineNum: number) => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); 
         router.push({
             pathname: "/line-details/[start]/[end]",
             params: { start: lineNum.toString(), end: lineNum.toString() },

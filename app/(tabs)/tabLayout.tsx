@@ -4,7 +4,6 @@ import { useRouter } from 'expo-router';
 import EnIcon from 'react-native-vector-icons/Entypo';
 import FoIcon from 'react-native-vector-icons/Foundation';
 import { styles, getDynamicStyles } from '../../styles/tab.styles';
-import * as Haptics from 'expo-haptics';
 export default function TabLayout({ children }: { children: React.ReactNode }) {
     const isDarkMode = useColorScheme() === 'dark';
     const dynamicStyles = getDynamicStyles(isDarkMode);
@@ -35,10 +34,8 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
         
         // Immediate visual feedback
         setExpanded(!expanded);
-        overlayOpacity.setValue(toValue); // Jump to target opacity
-        
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        
+        overlayOpacity.setValue(toValue); 
+                
         Animated.parallel([
             // Fast overlay fade (already at target)
             Animated.spring(overlayOpacity, {
@@ -64,7 +61,6 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
         | '/(tabs)/search'
         | '/(tabs)/about'
       ) => {
-        Haptics.selectionAsync();
         
         // Immediate close
         setExpanded(false);

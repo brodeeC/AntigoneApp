@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 
 interface WordEntry {
@@ -54,12 +53,10 @@ export default function WordSearch() {
   const totalPages = Math.ceil(filteredResults.length / resultsPerPage);
 
   const goToNextPage = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setCurrentPage(prev => Math.min(prev + 1, totalPages - 1));
   };
   
   const goToPrevPage = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setCurrentPage(prev => Math.max(prev - 1, 0));
   };
 
@@ -102,7 +99,6 @@ export default function WordSearch() {
 
   const handleSearch = useCallback(async () => {
     Keyboard.dismiss();
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   
     const trimmedQuery = query.trim();
     if (!trimmedQuery) return;
@@ -156,7 +152,6 @@ export default function WordSearch() {
   }, []);
 
   const handleLineDetails = useCallback((lineNumber: number) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     router.push({
       pathname: '/line-details/[start]/[end]',
       params: { start: lineNumber.toString(), end: lineNumber.toString() }
@@ -164,12 +159,10 @@ export default function WordSearch() {
   }, []);
 
   const handleSpeakerSelect = useCallback((speaker: string) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedSpeaker(speaker === selectedSpeaker ? null : speaker);
   }, [selectedSpeaker]);
 
   const clearFilters = useCallback(() => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedSpeaker(null);
     setQuery('');
     setResults([]);

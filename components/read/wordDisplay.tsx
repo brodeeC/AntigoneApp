@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, TouchableOpacity, useColorScheme } from "react-native";
-import * as Haptics from 'expo-haptics';
 import { getDynamicStyles } from "../../styles/styles";
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
@@ -59,8 +58,6 @@ export default function WordDetails({ word, lineNumber }: WordDetailsProps) {
     }, [word, lineNumber]);
 
     const handleMoreDetailsPress = () => {
-        // Provide haptic feedback
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         // Route to the WordDetails page
         router.push(`/word-details/${wordData[0]?.lemma}`);
     };

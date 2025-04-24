@@ -2,7 +2,6 @@ import { useState } from "react";
 import { View, Text, TouchableOpacity, useColorScheme, SafeAreaView, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons"; 
 import { LinearGradient } from 'expo-linear-gradient';
-import * as Haptics from 'expo-haptics';
 import PageDisplay from "@/components/read/pageDisplay";
 import { styles, getDynamicStyles } from "../../styles/read.styles";
 
@@ -12,12 +11,10 @@ export default function Read() {
     const dynamicStyles = getDynamicStyles(isDarkMode);
 
     const handlePageChange = (newPage : number) => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         setPage(newPage);
     };
 
     const handleFastForward = (forward = true) => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         setPage(forward ? Math.min(123, page + 10) : Math.max(1, page - 10));
     };
 

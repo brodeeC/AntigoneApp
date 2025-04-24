@@ -3,14 +3,11 @@ import {
   View, 
   Text, 
   TouchableOpacity, 
-  Platform, 
   FlatList, 
   useColorScheme, 
   ScrollView, 
   Dimensions,
-  StyleSheet 
 } from 'react-native';
-import * as Haptics from 'expo-haptics';
 import { searchStyles } from '@/styles/search.styles';
 import LineSearch from '@/components/search/LineSearch';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -31,7 +28,6 @@ const TabButton = ({ name, activeTab, onPress, isDark }: TabButtonProps) => {
   const styles = searchStyles(isDark);
 
   const handlePress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onPress(name);
   };
 
@@ -109,7 +105,6 @@ export default function SearchScreen() {
   }, [activeTab]);
 
   const handleTabPress = (tabName: ValidTab) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setActiveTab(tabName);
     const tabIndex = tabs.indexOf(tabName);
     scrollViewRef.current?.scrollTo({ x: width * tabIndex, animated: true });
@@ -122,7 +117,6 @@ export default function SearchScreen() {
   };
 
   const handleGoBack = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (router.canGoBack()) {
       router.back();
     } else {

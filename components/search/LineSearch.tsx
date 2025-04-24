@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, useColorScheme, Keyboard } from 'react-native';
 import { useRouter } from 'expo-router';
-import * as Haptics from 'expo-haptics';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -14,7 +13,6 @@ export default function LineSearch() {
 
   const handleSearch = () => {
     Keyboard.dismiss();
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   
     const start = parseInt(startLine);
     const end = parseInt(endLine);
@@ -30,7 +28,6 @@ export default function LineSearch() {
         }
       });
     } else {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       alert("Please enter a valid start line number");
     }
   };

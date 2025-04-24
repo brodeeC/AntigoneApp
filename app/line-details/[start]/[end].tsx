@@ -8,7 +8,6 @@ import WordDisplay from "../../../components/read/wordDisplay";
 import TabLayout from "../../(tabs)/tabLayout";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
-import * as Haptics from 'expo-haptics';
 
 interface LineData {
     lineNum: number;
@@ -90,23 +89,19 @@ export default function LineDetails() {
 
         try {
             if (isSelected) {
-                await Haptics.selectionAsync();
                 setSelectedWord(null);
             } else {
-                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 setSelectedWord({ word, lineNum, index });
             }
         } catch (error) {
-            console.log("Haptic feedback not supported on this device");
+            console.log("Failed to set selected word.");
         }
     };
 
     const handleNavPress = () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     };
 
     const handleGoBack = () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         if (router.canGoBack()) {
             router.back();
         } else {

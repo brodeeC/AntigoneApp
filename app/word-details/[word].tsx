@@ -7,7 +7,6 @@ import {
     ScrollView, 
     useColorScheme 
 } from "react-native";
-import * as Haptics from 'expo-haptics';
 import { Colors, getDynamicStyles } from "../../styles/word-details.styles";
 import { router, useLocalSearchParams } from "expo-router";
 import TabLayout from "../(tabs)/tabLayout";
@@ -70,19 +69,16 @@ export default function WordDetails() {
     });
 
     const goToPrevPage = () => {
-        Haptics.selectionAsync();
         setCurrentPage(prev => Math.max(prev - 1, 0));
         scrollViewRef.current?.scrollTo({ y: 0, animated: true });
     };
     
     const goToNextPage = () => {
-        Haptics.selectionAsync();
         setCurrentPage(prev => Math.min(prev + 1, totalPages - 1));
         scrollViewRef.current?.scrollTo({ y: 0, animated: true });
     };
 
     const toggleDefinitionCollapse = useCallback((index: number) => {
-        Haptics.selectionAsync(); // Light feedback for toggle action
         setCollapsedEntries(prev => ({
             ...prev,
             [index]: !prev[index]
@@ -90,7 +86,6 @@ export default function WordDetails() {
     }, []);
 
     const handleGoBack = () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); // Feedback for navigation
         if (router.canGoBack()) {
           router.back();
         } else {
@@ -99,7 +94,6 @@ export default function WordDetails() {
     };
 
     const handleLineNavigation = (lineNum: string) => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); // Stronger feedback for line navigation
         router.push({ 
             pathname: "/line-details/[start]/[end]", 
             params: { start: lineNum, end: lineNum } 
@@ -163,7 +157,6 @@ export default function WordDetails() {
                         <TouchableOpacity 
                             onPressIn={() => {
                                 setIsBackPressed(true);
-                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                             }}
                             onPressOut={() => setIsBackPressed(false)}
                             onPress={handleGoBack}
