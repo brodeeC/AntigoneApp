@@ -39,7 +39,7 @@ export default function WordDetails({ word, lineNumber }: WordDetailsProps) {
                 const json = await response.json();
     
                 // Find the first entry where line number matches
-                const matchingEntry = json.find((entry: any) => entry[0]?.line_number === lineNumber);
+                const matchingEntry = json.find((entry: any) => entry[0]?.line_number === lineNumber)|| json[0];
     
                 if (matchingEntry) {
                     setWordData(matchingEntry);
