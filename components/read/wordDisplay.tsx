@@ -38,8 +38,8 @@ export default function WordDetails({ word, lineNumber }: WordDetailsProps) {
                 if (!response.ok) throw new Error("Failed to load word details");
                 const json = await response.json();
     
-                // Find the first entry where line number matches if no match, first entry
-                const matchingEntry = json.find((entry: any) => entry[0]?.line_number === lineNumber)|| json[0];
+                // Find the first entry where line number and lemma match if no match, first entry
+                const matchingEntry = json.find((entry: any) => (entry[0]?.line_number === lineNumber && entry[0]?.form == word)) || json[3] || json[0];
     
                 if (matchingEntry) {
                     setWordData(matchingEntry);
