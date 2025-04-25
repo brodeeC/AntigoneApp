@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity, useColorScheme, SafeAreaView, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, useColorScheme, SafeAreaView, ScrollView, ActivityIndicator } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons"; 
 import { LinearGradient } from 'expo-linear-gradient';
 import PageDisplay from "@/components/read/pageDisplay";
-import { styles, getDynamicStyles } from "../../styles/read.styles";
+import { styles, getDynamicStyles, Colors } from "../../styles/read.styles";
+import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 
 export default function Read() {
     const [page, setPage] = useState(1);
@@ -17,6 +18,28 @@ export default function Read() {
     const handleFastForward = (forward = true) => {
         setPage(forward ? Math.min(123, page + 10) : Math.max(1, page - 10));
     };
+
+    const [fontsLoaded] = useFonts({
+        'Inter-Medium': Inter_500Medium,
+        'Inter-SemiBold': Inter_600SemiBold,
+        'Inter-Bold': Inter_700Bold,
+    });
+
+    if (!fontsLoaded) {
+        return (
+            <LinearGradient
+                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+                style={{ flex: 1 }}
+            >
+                <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
+                    <ActivityIndicator 
+                        size="large" 
+                        color={isDarkMode ? Colors.dark.loadingIndicator : Colors.light.loadingIndicator} 
+                    />
+                </View>
+            </LinearGradient>
+        );
+    }
 
     return (
         <LinearGradient

@@ -1,13 +1,21 @@
-import { TouchableOpacity, View, Text, useColorScheme } from 'react-native';
+import { TouchableOpacity, View, Text, useColorScheme, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { LinearGradient } from 'expo-linear-gradient';
-import styles from '../styles/app.styles';
+import styles, { Colors } from '../styles/app.styles';
 import TabLayout from './(tabs)/tabLayout';
+import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
+
 
 export default function HomeScreen() {
     const theme = useColorScheme();
     const isDarkMode = theme === 'dark';
+
+    const [fontsLoaded] = useFonts({
+        'Inter-Medium': Inter_500Medium,
+        'Inter-SemiBold': Inter_600SemiBold,
+        'Inter-Bold': Inter_700Bold,
+    });
 
     const actions = [
         {
@@ -26,6 +34,22 @@ export default function HomeScreen() {
             onPress: () => router.push('./about')
         },
     ];
+
+    if (!fontsLoaded) {
+        return (
+            <LinearGradient
+                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+                style={{ flex: 1 }}
+            >
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator 
+                        size="large" 
+                        color={isDarkMode ? Colors.dark.loadingIndicator : Colors.light.loadingIndicator} 
+                    />
+                </View>
+            </LinearGradient>
+        );
+    }
 
     return (
         <TabLayout>

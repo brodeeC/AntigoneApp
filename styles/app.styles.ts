@@ -1,13 +1,24 @@
 import { Platform } from 'react-native';
 import { StyleSheet } from 'react-native';
 
-const PRIMARY_COLOR = "#4361EE"; // Vibrant blue
 const SECONDARY_COLOR = "#3A0CA3"; // Deep purple-blue
 const ACCENT_COLOR = "#4CC9F0"; // Bright cyan
 const LIGHT_BACKGROUND = "#F8F9FA"; // Soft white
-const DARK_BACKGROUND = "#0F0F1B"; // Deep space blue
 const LIGHT_TEXT = "#2B2D42"; // Dark blue-gray
-const DARK_TEXT = "#F8F9FA"; // Off-white
+
+const PRIMARY_COLOR = "#1E88E5"; 
+const LIGHT_BLUE = "#1E88E5"; 
+const DARK_BLUE = "#64B5F6"; 
+const ACCENT_COLOR_LIGHT = "#4361EE";
+const ACCENT_COLOR_DARK = "#4CC9F0";
+const DARK_BACKGROUND = "#0F0F1B";
+
+const LIGHT_GRAY = "#F9F9F9"; // Light mode background
+const DARK_GRAY = "#1C1C1E"; // Dark mode background
+const WHITE = "#FFFFFF"; // White for text in dark mode
+const DARK_TEXT = "#333333"; // Dark gray for text in light mode
+const MUTED_GRAY = "#888888"; // Muted gray for line numbers
+const DISABLED_COLOR = "#A0A0A0"; // Gray for disabled state
 
 export default StyleSheet.create({
     container: {
@@ -17,6 +28,11 @@ export default StyleSheet.create({
         flex: 1,
         paddingHorizontal: 24,
         paddingTop: 80,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     header: {
         marginTop: Platform.select({
@@ -97,3 +113,22 @@ export default StyleSheet.create({
         opacity: 0.8,
     },
 });
+
+export const Colors = {
+    light: {
+        buttonBackground: ACCENT_COLOR_LIGHT,
+        buttonText: WHITE,
+        background: LIGHT_GRAY,
+        loadingBackground: LIGHT_GRAY,
+        loadingIndicator: ACCENT_COLOR_LIGHT,
+        text: DARK_TEXT,
+    },
+    dark: {
+        buttonBackground: ACCENT_COLOR_DARK,
+        buttonText: WHITE,
+        background: DARK_BACKGROUND,
+        loadingBackground: '#121212',
+        loadingIndicator: ACCENT_COLOR_DARK,
+        text: WHITE,
+    }
+};

@@ -5,6 +5,8 @@ import { styles, getDynamicStyles, Colors } from "../../styles/styles";
 import WordDetails from "./wordDisplay"; 
 import { LinearGradient } from "expo-linear-gradient";
 import TabLayout from "@/app/(tabs)/tabLayout";
+import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
+
 
 type PageDisplayProps = {
     page: number;
@@ -31,6 +33,28 @@ export default function PageDisplay({ page }: PageDisplayProps) {
     const router = useRouter();
     const isDarkMode = useColorScheme() === "dark";
     const dynamicStyles = getDynamicStyles(isDarkMode);
+
+    const [fontsLoaded] = useFonts({
+        'Inter-Medium': Inter_500Medium,
+        'Inter-SemiBold': Inter_600SemiBold,
+        'Inter-Bold': Inter_700Bold,
+    });
+
+    if (!fontsLoaded && !loading) {
+        return (
+            <LinearGradient
+                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+                style={{ flex: 1 }}
+            >
+                <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
+                    <ActivityIndicator 
+                        size="large" 
+                        color={isDarkMode ? Colors.dark.loadingIndicator : Colors.light.loadingIndicator} 
+                    />
+                </View>
+            </LinearGradient>
+        );
+    }
 
     useEffect(() => {
         const loadData = async () => {
