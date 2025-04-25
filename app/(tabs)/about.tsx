@@ -36,7 +36,6 @@ const downloadCSV = async (filename: string) => {
         throw new Error('Download failed - no result returned');
       }
   
-      // Now TypeScript knows result is defined
       const { uri } = result;
       
       if (await Sharing.isAvailableAsync()) {
@@ -115,7 +114,7 @@ const downloadCSV = async (filename: string) => {
           The text and data in this app comes from the following sources:
         </Text>
         <View style={styles.dataDetails}>
-          {/* Scaife Viewer - Now clickable */}
+          {/* Scaife Viewer */}
           <Text style={[styles.dataDetailText, dynamicSubtextColor]}>
             • Greek text from the{' '}
             <Text 
@@ -126,7 +125,7 @@ const downloadCSV = async (filename: string) => {
             </Text>, accessed January 2025
           </Text>
 
-          {/* Treebank - Added link */}
+          {/* Treebank */}
           <Text style={[styles.dataDetailText, dynamicSubtextColor]}>
             • Morphological analysis from the{' '}
             <Text 
@@ -138,7 +137,7 @@ const downloadCSV = async (filename: string) => {
             (v2.1, 2014), developed by Giuseppe G. A. Celano, Gregory Crane, Bridget Almas, and Francesco Mambrini
           </Text>
 
-          {/* Perseus - Now clickable */}
+          {/* Perseus */}
           <Text style={[styles.dataDetailText, dynamicSubtextColor]}>
             • Definitions from the{' '}
             <Text 
@@ -218,8 +217,8 @@ const downloadCSV = async (filename: string) => {
           <Text style={[styles.sectionText, dynamicSubtextColor]}>
             I never expected my semester project—a mobile adaptation of Antigone—to become such a rewarding 
             challenge. Translating ancient drama into interactive experiences taught me as much about coding 
-            as it did about Greek tragedy. Heartfelt thanks to my mentors Dr. Palladino and Dr. Sultan, and 
-            to the global open-source community for their invisible mentorship.
+            as it did about Greek tragedy. Heartfelt thanks to my mentors Dr. Palladino and Dr. Sultan, 
+            to the global open-source community for their invisible mentorship, and to Calina Floyd for designing the icon!
           </Text>
           
           <View style={styles.contactContainer}>

@@ -90,7 +90,9 @@ export const styles = StyleSheet.create({
         shadowRadius: 8,
         elevation: 6,
         marginBottom: 24,
-        width: 400,
+        alignSelf: 'flex-start',
+        width: '90%',
+        maxWidth: 400,
         borderWidth: 1,
     },
 
