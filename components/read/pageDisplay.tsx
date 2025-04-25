@@ -35,7 +35,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const response = await fetch(`http://brodeeclontz.com/AntigoneApp/api/read/${page}`);
+                const response = await fetch(`https://brodeeclontz.com/AntigoneApp/api/read/${page}`);
                 if (!response.ok) throw new Error("Failed to load data");
                 const json = await response.json();
                 setData(json);
@@ -83,14 +83,13 @@ export default function PageDisplay({ page }: PageDisplayProps) {
         </TabLayout>
     );
     if (error) return (
-    <TabLayout>
         <LinearGradient
             colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
             style={{ flex: 1 }}
         >
             <Text>{error}</Text>
         </LinearGradient>
-    </TabLayout>);
+    );
 
     return (
         <SafeAreaView style={[styles.container, dynamicStyles.container]}>

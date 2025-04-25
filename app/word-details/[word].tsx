@@ -105,7 +105,7 @@ export default function WordDetails() {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`http://brodeeclontz.com/AntigoneApp/api/word-details/${word}`);
+                const response = await fetch(`https://brodeeclontz.com/AntigoneApp/api/word-details/${word}`);
                 if (!response.ok) throw new Error("Failed to load word details");
                 
                 const json: WordDataEntry[] = await response.json();
