@@ -122,6 +122,7 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         alignSelf: 'flex-start',
         width: '90%',
+        maxWidth: 400,
     },
     backButton: {
         padding: 8,
