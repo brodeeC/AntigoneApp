@@ -39,9 +39,10 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         alignItems: 'center',
         marginVertical: 16,
         paddingHorizontal: 16,
+        marginBottom: 40,
     },
     paginationButton: {
-        padding: 12,
+        padding: 10,
         borderRadius: 8,
         backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
         width: 44,
@@ -49,6 +50,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: 4,
+        marginVertical: 4,
     },
     paginationButtonDisabled: {
         opacity: 0.5,
@@ -61,6 +63,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
         color: isDarkMode ? '#E2E8F0' : '#475569',
         minWidth: 60,
         textAlign: 'center',
+        marginVertical: 16,
     },
     header: {
         fontSize: 28,

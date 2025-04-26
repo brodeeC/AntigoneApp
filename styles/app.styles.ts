@@ -99,17 +99,17 @@ export default StyleSheet.create({
         backgroundColor: DARK_BACKGROUND,
     },
     lightText: {
-        color: LIGHT_TEXT,
-    },
-    darkText: {
         color: DARK_TEXT,
     },
+    darkText: {
+        color: WHITE,
+    },
     lightSubtext: {
-        color: LIGHT_TEXT,
+        color: DARK_TEXT,
         opacity: 0.8,
     },
     darkSubtext: {
-        color: DARK_TEXT,
+        color: WHITE,
         opacity: 0.8,
     },
 });

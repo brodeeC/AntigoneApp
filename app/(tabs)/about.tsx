@@ -215,10 +215,10 @@ const downloadCSV = async (filename: string) => {
             "A tool that makes reading Antigone as accessible as checking social media."
           </Text>
           <Text style={[styles.sectionText, dynamicSubtextColor]}>
-            I never expected my semester project—a mobile adaptation of Antigone—to become such a rewarding 
-            challenge. Translating ancient drama into interactive experiences taught me as much about coding 
-            as it did about Greek tragedy. Heartfelt thanks to my mentors Dr. Palladino and Dr. Sultan, 
-            to the global open-source community for their invisible mentorship, and to Calina Floyd for designing the icon!
+            I never expected my semester project, a mobile adaptation of Antigone, to be such a rewarding 
+            challenge. Translating ancient tragedy into interactive experiences taught me as much about coding 
+            as it did Greek tragedy. Heartfelt thanks to my mentors Dr. Palladino and Dr. Sultan, 
+            and to Calina Floyd for designing the icon!
           </Text>
           
           <View style={styles.contactContainer}>

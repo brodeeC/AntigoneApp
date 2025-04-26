@@ -36,7 +36,11 @@ export default function LineDetails() {
     const startLine = start ? Number(start) : 1;
     const endLine = end ? Number(end) : startLine;
 
-    const currentStart = startLine ?? 1;
+    let currentStart = startLine ?? 1;
+    if (currentStart < 1){
+        currentStart = 1;
+    }
+
     let currentEnd = endLine ?? startLine;
     if (currentEnd > 1353){
         currentEnd = 1353;

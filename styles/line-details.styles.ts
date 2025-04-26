@@ -120,8 +120,8 @@ export const styles = StyleSheet.create({
         elevation: 6,
         marginBottom: 24,
         borderWidth: 1,
-        alignSelf: 'center',
-        width: '100%',
+        alignSelf: 'flex-start',
+        width: '90%',
     },
     backButton: {
         padding: 8,
