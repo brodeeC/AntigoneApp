@@ -69,7 +69,8 @@ def get_lines(startLine, endLine=None):
         if end is None:
             line_text, speaker = get_line(start)
             if not line_text:
-                return jsonify({"error": f"Line {start} not found"}), HTTPStatus.NOT_FOUND
+                start = MIN_LINE
+                line_text, speaker = get_line(start);
                 
             return jsonify([{
                 "lineNum": start,
