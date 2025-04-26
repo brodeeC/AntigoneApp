@@ -70,8 +70,9 @@ def get_lines(startLine, endLine=None):
             line_text, speaker = get_line(start)
             if not line_text:
                 start = MIN_LINE
-                line_text, speaker = get_line(start);
-                
+                line_text = 'Line not in database.'
+                speaker = 'None'
+
             return jsonify([{
                 "lineNum": start,
                 "line_text": line_text,
