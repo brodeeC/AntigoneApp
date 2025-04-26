@@ -92,19 +92,17 @@ export default function PageDisplay({ page }: PageDisplayProps) {
     };
 
     if (loading) return (
-        <TabLayout>
-            <LinearGradient
-                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
-                style={{ flex: 1 }}
-            >
-                <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
-                    <ActivityIndicator 
-                        size="large" 
-                        color={isDarkMode ? Colors.dark.loadingIndicator : Colors.light.loadingIndicator} 
-                    />
-                </View>
-            </LinearGradient>
-        </TabLayout>
+        <LinearGradient
+            colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+            style={{ flex: 1 }}
+        >
+            <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
+                <ActivityIndicator 
+                    size="large" 
+                    color={isDarkMode ? Colors.dark.loadingIndicator : Colors.light.loadingIndicator} 
+                />
+            </View>
+        </LinearGradient>
     );
     if (error) return (
         <LinearGradient
