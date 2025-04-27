@@ -35,11 +35,3 @@ Processed CSV files available in `/backend/database/csv/`:
 For academic use, please cite both:
 
 1. Original sources (see [detailed attribution](/backend/database/csv/ATTRIBUTION.md))
-2. This project:
-   ```bibtex
-   @software{Clontz_AntigoneApp_2025,
-     author = {Clontz, Brodee},
-     title = {Antigone Reader},
-     url = {https://github.com/brodeeC/AntigoneApp},
-     year = {2025}
-   }
