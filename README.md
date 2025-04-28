@@ -1,4 +1,8 @@
 # Antigone Reader
+#### Coming soon to Android and the Web
+
+## Released April 2025 on iPhone and iPadOS:
+[Get Antigone Reader](https://apps.apple.com/app/id6745100412)
 
 ## Data
 
