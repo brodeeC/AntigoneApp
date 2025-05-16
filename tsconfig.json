@@ -2,7 +2,10 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "NodeNext",
-    "lib": ["dom", "esnext"],
+    "lib": [
+      "dom",
+      "esnext"
+    ],
     "jsx": "react-native",
     "moduleResolution": "nodenext",
     "allowSyntheticDefaultImports": true,
@@ -13,14 +16,19 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
-    "types": ["expo-router"]
+    "types": [
+      "expo-router"
+    ]
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+  ],
+  "extends": "expo/tsconfig.base"
 }
