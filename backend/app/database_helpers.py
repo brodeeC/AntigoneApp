@@ -99,7 +99,7 @@ def lookup_word_details(word):
             
         word_details.append(word_data)
     
-    return word_details[:30]
+    return word_details[:20]
 
 def search_by_definition(query):
     """Returns list of (lemma_id, line_number) tuples for matching definitions"""
