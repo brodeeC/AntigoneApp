@@ -118,7 +118,7 @@ def search_by_definition(query):
         LemmaData.line_number
     ).join(LemmaData).filter(
         LemmaDefinition.short_definition.contains(query)
-    ).limit(50).all()
+    ).limit(300)
     
     return partial_matches
 
