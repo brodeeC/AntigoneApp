@@ -99,7 +99,7 @@ def lookup_word_details(word):
             
         word_details.append(word_data)
     
-    return word_details[:20]
+    return word_details
 
 def search_by_definition(query):
     """Returns list of (lemma_id, line_number) tuples for matching definitions"""
@@ -118,7 +118,7 @@ def search_by_definition(query):
         LemmaData.line_number
     ).join(LemmaData).filter(
         LemmaDefinition.short_definition.contains(query)
-    ).limit(30).all()
+    ).limit(12).all()
     
     return partial_matches[:300]
 
