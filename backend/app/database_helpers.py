@@ -57,23 +57,23 @@ def lookup_word_details(word):
     
     query = query.order_by(
         case(
-            (LemmaData.form == cleaned, 1),           # Exact form match - highest priority
-            (LemmaData.lemma == cleaned, 2),            # Exact lemma match
-            (LemmaData.norm_form.startswith(normalized), 3),  # Form starts with normalized
-            (LemmaData.normalized.startswith(normalized), 4),  # Lemma starts with normalized
-            (LemmaData.form_eng.startswith(cleaned), 5), 
+            (LemmaData.form == cleaned, 1),
+            (LemmaData.lemma == cleaned, 2),
+            (LemmaData.norm_form.startswith(normalized), 3),
+            (LemmaData.normalized.startswith(normalized), 4),
+            (LemmaData.form_eng.startswith(cleaned), 5),
             (LemmaData.norm_form_eng.startswith(normalized), 6),
             (LemmaData.full_eng.startswith(cleaned), 7),
             (LemmaData.eng_lemma.startswith(normalized), 8),
-            (LemmaData.norm_form.contains(normalized), 9),   # Form contains normalized
-            (LemmaData.normalized.contains(normalized), 10),   # Lemma contains normalized
+            (LemmaData.norm_form.contains(normalized), 9),
+            (LemmaData.normalized.contains(normalized), 10),
             (LemmaData.form_eng.contains(cleaned), 11),
             (LemmaData.norm_form_eng.contains(normalized), 12),
             (LemmaData.full_eng.contains(cleaned), 13),
             (LemmaData.eng_lemma.contains(normalized), 14),
-            else_=7
-        ),
-    )
+            else_=15
+        )
+    ).limit(500)
     
     results = query.all()
     
@@ -99,7 +99,7 @@ def lookup_word_details(word):
             
         word_details.append(word_data)
     
-    return word_details[:500]
+    return word_details
 
 def search_by_definition(query):
     """Returns list of (lemma_id, line_number) tuples for matching definitions"""
