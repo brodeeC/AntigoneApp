@@ -118,9 +118,9 @@ def search_by_definition(query):
         LemmaData.line_number
     ).join(LemmaData).filter(
         LemmaDefinition.short_definition.contains(query)
-    ).limit(300)
+    ).limit(300).all()
     
-    return partial_matches
+    return partial_matches[:300]
 
 def get_word(lemma_id):
     """Get lemma by ID"""
