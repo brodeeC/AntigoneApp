@@ -255,7 +255,7 @@ const downloadCSV = async (filename: string) => {
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={[styles.footerText, dynamicSubtextColor]}>
-            Version 1.0 · Made with ♥ for Greek tragedy
+            Version 1.1 · Made with ♥ for Greek tragedy
           </Text>
         </View>
       </ScrollView>
