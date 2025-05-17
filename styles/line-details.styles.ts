@@ -131,6 +131,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         backgroundColor: 'transparent',
+        zIndex: 10,
     },
     backButtonText: {
         fontSize: 16,

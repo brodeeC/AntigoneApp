@@ -277,9 +277,9 @@ export default function WordSearch() {
               onPress={handleSearch}
               style={[
                 styles.searchButton,
-                (!query && !selectedSpeaker) && { opacity: 0.5 }
+                (!query) && { opacity: 0.5 }
               ]}
-              disabled={!query && !selectedSpeaker}
+              disabled={!query}
             >
               {loading ? (
                 <ActivityIndicator color="#FFF" />

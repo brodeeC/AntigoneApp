@@ -70,14 +70,14 @@ export default function LineDetails() {
     };
 
     const goToLine = (line: number) => {
-        router.push({ 
+        router.replace({ 
             pathname: "/line-details/[start]/[end]", 
             params: { start: line.toString(), end: line } 
         });
     };
 
     const goToLines = (start: number, end: number) => {
-        router.push({ 
+        router.replace({ 
             pathname: "/line-details/[start]/[end]", 
             params: { 
                 start: start.toString(),
@@ -106,12 +106,14 @@ export default function LineDetails() {
     };
 
     const handleGoBack = () => {
-        if (router.canGoBack()) {
+        if (router.canGoBack?.()) {
             router.back();
         } else {
             router.replace('/');
         }
     };
+
+
 
     useEffect(() => {
         const loadData = async () => {

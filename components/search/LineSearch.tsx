@@ -61,7 +61,7 @@ export default function LineSearch() {
           <TextInput
             placeholder="End Line (optional)"
             placeholderTextColor={isDark ? '#94A3B8' : '#64748B'}
-            keyboardType="numeric"
+            keyboardType="number-pad"
             value={endLine}
             onChangeText={setEndLine}
             style={styles.input}

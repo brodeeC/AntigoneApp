@@ -27,7 +27,7 @@ export default StyleSheet.create({
     content: {
         flex: 1,
         paddingHorizontal: 24,
-        paddingTop: 80,
+        paddingTop: 35,
     },
     loadingContainer: {
         flex: 1,
