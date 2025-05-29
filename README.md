@@ -1,5 +1,5 @@
 # Antigone Reader
-#### Coming soon to Android and the Web
+#### Read Antigone from the palm of your hand!
 
 ## Released April 2025 on iPhone and iPadOS:
 [Get Antigone Reader](https://apps.apple.com/app/id6745100412)
