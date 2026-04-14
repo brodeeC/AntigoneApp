@@ -1,212 +1,265 @@
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet } from 'react-native';
+import { accent } from '@/lib/appTheme';
 
-const PRIMARY_COLOR = "#1E88E5";
-const LIGHT_BLUE = "#1E88E5";
-const DARK_BLUE = "#64B5F6";
-const LIGHT_GRAY = "#F9F9F9";
-const DARK_GRAY = "#1C1C1E";
-const WHITE = "#FFFFFF";
-const DARK_TEXT = "#333333";
-const MUTED_GRAY = "#888888";
-const DISABLED_COLOR = "#A0A0A0";
+const ACCENT_D = accent.dark;
+const ACCENT_L = accent.light;
+const MUTED_D = '#94A3B8';
+const MUTED_L = '#64748B';
+const BODY_D = '#E2E8F0';
+const BODY_L = '#1E293B';
 
-export const getDynamicStyles = (isDarkMode: boolean) => StyleSheet.create({
+export const getDynamicStyles = (isDarkMode: boolean) => {
+  const a = isDarkMode ? ACCENT_D : ACCENT_L;
+  const muted = isDarkMode ? MUTED_D : MUTED_L;
+  const body = isDarkMode ? BODY_D : BODY_L;
+  const hero = isDarkMode ? '#F8FAFC' : '#0F172A';
+
+  return StyleSheet.create({
     wordDetailsContainer: {
-        flex: 1,
-        paddingTop: Platform.select({
-            ios: 20,
-            android: 10
-        }),
+      flex: 1,
+      paddingTop: Platform.select({ ios: 8, default: 4 }),
     },
     loadingContainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: 24,
     },
-    headerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 16,
-        paddingHorizontal: 16,
-        paddingTop: Platform.select({
-            ios: 40,
-            android: 20
-        }),
+    headerGlass: {
+      marginHorizontal: 16,
+      marginBottom: 14,
     },
-    paginationContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginVertical: 16,
-        paddingHorizontal: 16,
-        marginBottom: 40,
+    headerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 4,
     },
-    paginationButton: {
-        padding: 10,
-        borderRadius: 8,
-        backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
-        width: 44,
-        height: 44,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginHorizontal: 4,
-        marginVertical: 4,
-    },
-    paginationButtonDisabled: {
-        opacity: 0.5,
-        backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.05)' : 'rgba(30, 136, 229, 0.05)',
-    },
-    paginationText: {
-        marginHorizontal: 16,
-        fontSize: 16,
-        fontWeight: '600',
-        color: isDarkMode ? '#E2E8F0' : '#475569',
-        minWidth: 60,
-        textAlign: 'center',
-        marginVertical: 16,
-    },
-    header: {
-        fontSize: 28,
-        fontWeight: '700',
-        color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
+    headerTitle: {
+      flex: 1,
+      fontSize: 22,
+      fontWeight: '800',
+      color: hero,
+      letterSpacing: 0.2,
     },
     backButton: {
-        marginRight: 12,
-        padding: 8,
-        borderRadius: 8,
-        backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
+      width: 44,
+      height: 44,
+      borderRadius: 22,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.35)' : 'rgba(67, 97, 238, 0.25)',
+      backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.12)' : 'rgba(67, 97, 238, 0.08)',
     },
     backButtonPressed: {
-        opacity: 0.7,
+      opacity: 0.72,
     },
-    entryContainer: {
-        backgroundColor: isDarkMode ? "#1E293B" : "#F8F8F8",
-        borderRadius: 12,
-        padding: 16,
-        margin: 16,
-        marginBottom: 12,
-        shadowColor: isDarkMode ? "#000" : "#CCC",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 6,
-        elevation: 3,
+    entryWrap: {
+      marginHorizontal: 16,
+      marginBottom: 16,
     },
-    entryTitle: {
-        fontSize: 20,
-        fontWeight: "600",
-        color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
-        marginBottom: 12,
-        borderBottomWidth: 1,
-        borderBottomColor: isDarkMode ? "#444" : "#EEE",
-        paddingBottom: 8,
+    entryHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 14,
+      paddingBottom: 12,
+      borderBottomWidth: StyleSheet.hairlineWidth * 2,
+      borderBottomColor: isDarkMode ? 'rgba(76, 201, 240, 0.25)' : 'rgba(67, 97, 238, 0.2)',
     },
-    entryContent: {
-        flexDirection: "row",
-        marginBottom: 8,
-        alignItems: "center",
-        flexWrap: 'wrap',
+    entryIndex: {
+      fontSize: 13,
+      fontWeight: '800',
+      letterSpacing: 1.5,
+      color: a,
     },
-    entryLabel: {
-        fontWeight: "600",
-        fontSize: 16,
-        color: isDarkMode ? WHITE : DARK_TEXT,
-        minWidth: 100,
+    entryBadge: {
+      fontSize: 11,
+      fontWeight: '700',
+      color: muted,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
     },
-    entryValue: {
-        fontSize: 16,
-        color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
-        lineHeight: 22,
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      marginBottom: 10,
+      gap: 6,
+    },
+    label: {
+      fontSize: 12,
+      fontWeight: '700',
+      letterSpacing: 0.8,
+      color: muted,
+      textTransform: 'uppercase',
+      minWidth: 88,
+    },
+    value: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: a,
+      flexShrink: 1,
+    },
+    valuePlain: {
+      fontSize: 16,
+      fontWeight: '500',
+      color: body,
+      flexShrink: 1,
     },
     goButton: {
-        backgroundColor: 'transparent',
-        borderRadius: 6,
-        borderWidth: 1,
-        paddingVertical: 6,
-        paddingHorizontal: 12,
-        marginLeft: 8,
-        borderColor: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
+      marginLeft: 'auto',
+      paddingVertical: 8,
+      paddingHorizontal: 16,
+      borderRadius: 12,
+      backgroundColor: a,
+      ...Platform.select({
+        ios: {
+          shadowColor: a,
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.35,
+          shadowRadius: 8,
+        },
+        default: { elevation: 4 },
+      }),
     },
     goButtonText: {
-        color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
-        fontSize: 14,
-        fontFamily: 'Inter-Medium',
+      color: '#FFFFFF',
+      fontSize: 13,
+      fontWeight: '800',
+      letterSpacing: 0.5,
     },
-    caseContainer: {
-        marginTop: 16,
-        padding: 12,
-        backgroundColor: isDarkMode ? "#2A2A2C" : "#F0F0F0",
-        borderRadius: 8,
-        borderLeftWidth: 4,
-        borderLeftColor: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
+    sectionLabel: {
+      fontSize: 11,
+      fontWeight: '800',
+      letterSpacing: 1.4,
+      color: muted,
+      marginBottom: 8,
+      marginTop: 4,
+      textTransform: 'uppercase',
     },
-    wordDetailsLabel: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: isDarkMode ? "#BBBBBB" : "#666666",
-        marginBottom: 6,
-        letterSpacing: 0.5,
-        textTransform: 'uppercase',
+    morphPanel: {
+      borderRadius: 14,
+      padding: 14,
+      borderWidth: 1,
+      borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.22)' : 'rgba(67, 97, 238, 0.18)',
+      backgroundColor: isDarkMode ? 'rgba(15, 23, 42, 0.5)' : 'rgba(255, 255, 255, 0.55)',
     },
-    wordDetailsText: {
-        fontSize: 15,
-        lineHeight: 22,
-        color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
-        fontWeight: '500',
+    morphText: {
+      fontSize: 15,
+      lineHeight: 22,
+      color: body,
+      fontWeight: '500',
     },
-    definitionContainer: {
-        marginTop: 16,
-        borderRadius: 8,
-        padding: 12,
-        backgroundColor: isDarkMode ? "#2A2A2C" : "#F0F0F0",
-        borderLeftWidth: 4,
-        borderLeftColor: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
+    defPanel: {
+      marginTop: 12,
+      borderRadius: 14,
+      padding: 14,
+      borderWidth: 1,
+      borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.18)' : 'rgba(67, 97, 238, 0.14)',
+      backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.06)' : 'rgba(67, 97, 238, 0.05)',
     },
-    definitionText: {
-        fontSize: 15,
-        lineHeight: 22,
-        color: isDarkMode ? "#DDD" : "#444",
-        marginBottom: 6,
+    defLine: {
+      fontSize: 15,
+      lineHeight: 24,
+      color: body,
+      marginBottom: 8,
+      paddingLeft: 8,
+      borderLeftWidth: 3,
+      borderLeftColor: a,
     },
     noDataText: {
-        fontSize: 14,
-        fontStyle: "italic",
-        color: isDarkMode ? "#888" : "#999",
-        marginTop: 4,
-    },
-    errorText: {
-        fontSize: 16,
-        color: "#FF3B30",
-        textAlign: "center",
-        marginTop: 20,
+      fontSize: 14,
+      fontStyle: 'italic',
+      color: muted,
     },
     toggleButton: {
-        marginTop: 8,
-        paddingVertical: 6,
-        paddingHorizontal: 12,
-        borderRadius: 6,
-        alignSelf: 'flex-start',
-        backgroundColor: isDarkMode ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
+      marginTop: 12,
+      alignSelf: 'flex-start',
+      paddingVertical: 10,
+      paddingHorizontal: 14,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.35)' : 'rgba(67, 97, 238, 0.28)',
+      backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.08)',
     },
     toggleButtonText: {
-        color: isDarkMode ? DARK_BLUE : PRIMARY_COLOR,
-        fontSize: 14,
-        fontFamily: 'Inter-Medium',
+      color: a,
+      fontSize: 13,
+      fontWeight: '700',
     },
-});
+    paginationContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginHorizontal: 20,
+      marginTop: 8,
+      marginBottom: 28,
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)',
+      backgroundColor: isDarkMode ? 'rgba(26, 26, 46, 0.75)' : 'rgba(255, 255, 255, 0.85)',
+      ...Platform.select({
+        ios: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: isDarkMode ? 0.35 : 0.12,
+          shadowRadius: 12,
+        },
+        default: { elevation: 6 },
+      }),
+    },
+    paginationButton: {
+      width: 48,
+      height: 48,
+      borderRadius: 14,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.35)' : 'rgba(67, 97, 238, 0.25)',
+      backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.12)' : 'rgba(67, 97, 238, 0.08)',
+    },
+    paginationButtonDisabled: {
+      opacity: 0.35,
+    },
+    paginationText: {
+      marginHorizontal: 20,
+      fontSize: 15,
+      fontWeight: '800',
+      color: hero,
+      minWidth: 72,
+      textAlign: 'center',
+    },
+    paginationMuted: {
+      fontWeight: '600',
+      color: muted,
+    },
+    errorText: {
+      fontSize: 15,
+      fontWeight: '600',
+      color: isDarkMode ? '#FCA5A5' : '#B91C1C',
+      textAlign: 'center',
+      marginTop: 24,
+      paddingHorizontal: 24,
+    },
+  });
+};
 
 export const Colors = {
-    light: {
-        buttonBackground: 'rgba(30, 136, 229, 0.1)',
-        buttonText: PRIMARY_COLOR,
-        primaryText: PRIMARY_COLOR,
-        secondaryText: DARK_BLUE,
-        background: LIGHT_GRAY,
-    },
-    dark: {
-        buttonBackground: 'rgba(100, 181, 246, 0.1)',
-        buttonText: DARK_BLUE,
-        primaryText: DARK_BLUE,
-        secondaryText: '#90CAF9',
-        background: DARK_GRAY,
-    }
+  light: {
+    buttonBackground: 'rgba(67, 97, 238, 0.12)',
+    buttonText: ACCENT_L,
+    primaryText: ACCENT_L,
+    secondaryText: ACCENT_L,
+    background: '#F8F9FA',
+  },
+  dark: {
+    buttonBackground: 'rgba(76, 201, 240, 0.12)',
+    buttonText: ACCENT_D,
+    primaryText: ACCENT_D,
+    secondaryText: ACCENT_D,
+    background: '#0F0F1B',
+  },
 };

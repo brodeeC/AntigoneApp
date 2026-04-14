@@ -2,12 +2,12 @@ import { Platform, StyleSheet } from 'react-native';
 
 export const searchStyles = (isDark: boolean) => {
   const colors = {
-    background: isDark ? '#121212' : '#F9F9F9',
-    activeTab: isDark ? '#64B5F6' : '#1E88E5',
-    inactiveTab: isDark ? '#888' : '#999',
-    indicator: isDark ? '#64B5F6' : '#1E88E5',
+    background: isDark ? '#0F0F1B' : '#F8F9FA',
+    activeTab: isDark ? '#4CC9F0' : '#4361EE',
+    inactiveTab: isDark ? '#94A3B8' : '#64748B',
+    indicator: isDark ? '#4CC9F0' : '#4361EE',
     text: isDark ? '#E5E5E5' : '#333333',
-    tabBarBackground: isDark ? 'rgba(28, 28, 30, 0.9)' : 'rgba(249, 249, 249, 0.9)',
+    tabBarBackground: isDark ? 'rgba(26, 26, 46, 0.88)' : 'rgba(255, 255, 255, 0.92)',
     border: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
   };
 
@@ -37,11 +37,11 @@ export const searchStyles = (isDark: boolean) => {
     },
     indicator: {
       position: 'absolute',
-      bottom: -1, 
-      left: '60%', 
+      bottom: -1,
+      left: '60%',
       right: '60%',
       height: 3,
-      backgroundColor: isDark ? '#64B5F6' : '#1E88E5',
+      backgroundColor: isDark ? '#4CC9F0' : '#4361EE',
     },
     activeTabItem: {
       position: 'relative',
@@ -75,12 +75,12 @@ export const searchStyles = (isDark: boolean) => {
       borderBottomWidth: 1,
     },
     darkHeader: {
-      borderBottomColor: 'rgba(255, 255, 255, 0.1)',
-      backgroundColor: 'rgba(26, 26, 46, 0.7)',
+      borderBottomColor: 'rgba(255, 255, 255, 0.12)',
+      backgroundColor: 'rgba(26, 26, 46, 0.88)',
     },
     lightHeader: {
-      borderBottomColor: 'rgba(0, 0, 0, 0.05)',
-      backgroundColor: 'rgba(255, 255, 255, 0.7)',
+      borderBottomColor: 'rgba(0, 0, 0, 0.08)',
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
     },
     headerText: {
       fontSize: 22,

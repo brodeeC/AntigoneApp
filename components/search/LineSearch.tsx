@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, useColorScheme, Ke
 import { useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { screenGradient } from '@/lib/appTheme';
 
 export default function LineSearch() {
   const router = useRouter();
@@ -36,7 +37,7 @@ export default function LineSearch() {
 
   return (
     <LinearGradient
-      colors={isDark ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+      colors={screenGradient(isDark)}
       style={styles.container}
     >
       <View style={styles.content}>

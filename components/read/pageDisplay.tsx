@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { styles, getDynamicStyles, Colors } from "../../styles/styles";
 import WordDetails from "./wordDisplay"; 
 import { LinearGradient } from "expo-linear-gradient";
+import { screenGradient } from "@/lib/appTheme";
 import { getReadPageUrl } from "@/lib/api";
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 
@@ -60,7 +61,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
     if (!fontsLoaded) {
         return (
             <LinearGradient
-                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+                colors={screenGradient(isDarkMode)}
                 style={{ flex: 1 }}
             >
                 <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
@@ -94,7 +95,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
 
     if (loading) return (
         <LinearGradient
-            colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+            colors={screenGradient(isDarkMode)}
             style={{ flex: 1 }}
         >
             <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
@@ -107,7 +108,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
     );
     if (error) return (
         <LinearGradient
-            colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+            colors={screenGradient(isDarkMode)}
             style={{ flex: 1 }}
         >
             <Text>{error}</Text>

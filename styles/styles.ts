@@ -255,7 +255,7 @@ export const Colors = {
         buttonBackground: ACCENT_COLOR_DARK,
         buttonText: WHITE,
         background: DARK_BACKGROUND,
-        loadingBackground: '#121212',
+        loadingBackground: '#0F0F1B',
         loadingIndicator: ACCENT_COLOR_DARK,
         text: WHITE,
     }

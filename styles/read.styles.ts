@@ -135,16 +135,16 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
 
     return StyleSheet.create({
         paginationBottomContainer: {
-            backgroundColor: isDarkMode ? DARK_GRAY : LIGHT_GRAY,
-            borderColor: isDarkMode ? "#3A3A3C" : "#E0E0E0",
+            backgroundColor: isDarkMode ? 'rgba(26, 26, 46, 0.92)' : 'rgba(255, 255, 255, 0.94)',
+            borderColor: isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)',
             ...Platform.select({
                 ios: {
                     shadowColor: '#000',
-                    shadowOpacity: 0.1,
-                    shadowRadius: 10,
-                    shadowOffset: { width: 0, height: -5 }
-                }
-            })
+                    shadowOpacity: isDarkMode ? 0.32 : 0.12,
+                    shadowRadius: 14,
+                    shadowOffset: { width: 0, height: -6 },
+                },
+            }),
         },
         disabledArrowIcon: {
             color: isDarkMode ? "#666666" : "#A0A0A0",
@@ -205,8 +205,16 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
         },
         paginationContainer: {
-            borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-            backgroundColor: isDarkMode ? 'rgba(26, 26, 46, 0.8)' : 'rgba(248, 249, 250, 0.8)',
+            borderColor: isDarkMode ? 'rgba(255,255,255,0.14)' : 'rgba(0,0,0,0.08)',
+            backgroundColor: isDarkMode ? 'rgba(26, 26, 46, 0.88)' : 'rgba(255, 255, 255, 0.9)',
+            ...Platform.select({
+                ios: {
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: -4 },
+                    shadowOpacity: isDarkMode ? 0.35 : 0.12,
+                    shadowRadius: 14,
+                },
+            }),
         },
         pageNumber: {
             color: accentColor,
@@ -264,7 +272,7 @@ export const Colors = {
         buttonBackground: ACCENT_COLOR_DARK,
         buttonText: WHITE,
         background: DARK_BACKGROUND,
-        loadingBackground: '#121212',
+        loadingBackground: '#0F0F1B',
         loadingIndicator: ACCENT_COLOR_DARK,
         text: WHITE,
     }

@@ -1,114 +1,120 @@
 import { Platform, StyleSheet, TextStyle, ViewStyle } from 'react-native';
 
-// Modern color palette matching your line-details styles
-const PRIMARY_COLOR = "#4361EE";
-const SECONDARY_COLOR = "#3A0CA3";
-const ACCENT_COLOR = "#4CC9F0";
-const LIGHT_BACKGROUND = "#F8F9FA";
-const DARK_BACKGROUND = "#0F0F1B";
+const PRIMARY_COLOR = '#4361EE';
+const ACCENT_COLOR = '#4CC9F0';
 
 interface DynamicStyles {
-    activeTabColor: string;
-    menuItemStyle: ViewStyle;
-    menuItemTextStyle: TextStyle;
-    expandingMenuStyle: ViewStyle;
-    menuDividerStyle: ViewStyle;
+  activeTabColor: string;
+  menuItemStyle: ViewStyle;
+  menuItemTextStyle: TextStyle;
+  expandingMenuStyle: ViewStyle;
+  menuDividerStyle: ViewStyle;
 }
 
 export const styles = StyleSheet.create({
-    container: {
-        position: 'absolute',
-        top: Platform.select({
-            ios: 50,
-            android: 20
-        }),
-        right: 24,
-        zIndex: 100,
-    },
-    bookmarkButton: {
-        //backgroundColor: 'rgba(67, 97, 238, 0.1)',
-        width: 56,
-        height: 80,
-        borderRadius: Platform.select({
-            ios: 400,
-            android: 26,
-        }),
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 101,
-        shadowColor: '#FFF',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0,
-        shadowRadius: 1,
-        elevation: 6,
-        borderWidth: 0,
-        borderColor: 'rgba(67, 97, 238, 0.2)',
-    },
-    expandingMenu: {
-        position: 'absolute',
-        top: Platform.select({
-            ios: 120,
-            android: 100
-        }),
-        right: 24,
-        zIndex: 99,
-        borderRadius: 24,
-        paddingVertical: 16,
-        paddingHorizontal: 8,
-        minWidth: 160,
+  container: {
+    position: 'absolute',
+    right: 20,
+    zIndex: 100,
+    // `top` set in tabLayout from safe-area insets
+  },
+  /** Rounded chip (not a circle) — bookmark reads as a nav affordance, not a heavy FAB orb */
+  fabChrome: {
+    height: 44,
+    minWidth: 48,
+    paddingHorizontal: 13,
+    borderRadius: 14,
+    overflow: 'hidden',
+    zIndex: 101,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 0,
+    ...Platform.select({
+      ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.25,
-        shadowRadius: 16,
-        elevation: 12,
-    },
-    menuItem: {
-        paddingVertical: 12,
-        paddingHorizontal: 16,
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderRadius: 12,
-        marginVertical: 4,
-    },
-    menuItemText: {
-        marginLeft: 12,
-        fontSize: 16,
-        fontWeight: '600',
-    },
-    overlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: 10,
-    },
-    overlayBackground: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    },
-    menuDivider: {
-        height: 1,
-        marginVertical: 8,
-        width: '80%',
-        alignSelf: 'center',
-    }
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.18,
+        shadowRadius: 8,
+      },
+      default: {
+        elevation: 5,
+      },
+    }),
+  },
+  fabInner: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  expandingMenu: {
+    position: 'absolute',
+    right: 20,
+    zIndex: 99,
+    borderRadius: 20,
+    minWidth: 176,
+    overflow: 'hidden',
+    borderWidth: StyleSheet.hairlineWidth * 2,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.3,
+        shadowRadius: 20,
+      },
+      default: {
+        elevation: 16,
+      },
+    }),
+  },
+  menuInner: {
+    paddingVertical: 10,
+    paddingHorizontal: 6,
+  },
+  menuItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 14,
+    marginVertical: 2,
+  },
+  menuItemText: {
+    marginLeft: 12,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 10,
+  },
+  overlayBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+  },
+  menuDivider: {
+    height: StyleSheet.hairlineWidth,
+    marginVertical: 6,
+    width: '86%',
+    alignSelf: 'center',
+  },
 });
 
 export const getDynamicStyles = (isDarkMode: boolean): DynamicStyles => ({
-    activeTabColor: isDarkMode ? ACCENT_COLOR : PRIMARY_COLOR,
-    menuItemStyle: {
-      backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
-    },
-    menuItemTextStyle: {
-      color: isDarkMode ? '#F8F9FA' : '#2B2D42',
-    },
-    expandingMenuStyle: {
-      backgroundColor: isDarkMode ? '#1A1A2E' : '#FFFFFF',
-      borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.2)' : 'rgba(67, 97, 238, 0.1)',
-      borderWidth: 1,
-    },
-    menuDividerStyle: {
-      backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-    }
-  });
+  activeTabColor: isDarkMode ? ACCENT_COLOR : PRIMARY_COLOR,
+  menuItemStyle: {
+    backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.12)' : 'rgba(67, 97, 238, 0.1)',
+  },
+  menuItemTextStyle: {
+    color: isDarkMode ? '#F8FAFC' : '#1E293B',
+  },
+  expandingMenuStyle: {
+    backgroundColor: 'transparent',
+    borderColor: isDarkMode ? 'rgba(255,255,255,0.16)' : 'rgba(0,0,0,0.1)',
+  },
+  menuDividerStyle: {
+    backgroundColor: isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)',
+  },
+});

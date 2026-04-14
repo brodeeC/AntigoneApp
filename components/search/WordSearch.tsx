@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { screenGradient } from '@/lib/appTheme';
 import { router } from 'expo-router';
 import { buildSearchUrl, getSpeakersUrl } from '@/lib/api';
 
@@ -169,7 +170,7 @@ export default function WordSearch() {
 
   return (
     <LinearGradient
-      colors={isDark ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+      colors={screenGradient(isDark)}
       style={{ flex: 1 }}
     >
       <ScrollView

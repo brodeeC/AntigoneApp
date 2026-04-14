@@ -7,6 +7,7 @@ import { Feather, MaterialIcons } from "@expo/vector-icons";
 import WordDisplay from "../../../components/read/wordDisplay"; 
 import TabLayout from "../../(tabs)/tabLayout";
 import { LinearGradient } from 'expo-linear-gradient';
+import { screenGradient } from '@/lib/appTheme';
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 import { getLinesUrl } from "@/lib/api";
 
@@ -142,7 +143,7 @@ export default function LineDetails() {
         return (
             <TabLayout>
             <LinearGradient
-                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+                colors={screenGradient(isDarkMode)}
                 style={{ flex: 1 }}
             >
                 <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
@@ -159,7 +160,7 @@ export default function LineDetails() {
     if (loading) return (
         <TabLayout>
             <LinearGradient
-                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+                colors={screenGradient(isDarkMode)}
                 style={{ flex: 1 }}
             >
                 <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
@@ -174,7 +175,7 @@ export default function LineDetails() {
     
     if (error) return (
         <LinearGradient
-            colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+            colors={screenGradient(isDarkMode)}
             style={{ flex: 1 }}
         >
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
@@ -185,12 +186,6 @@ export default function LineDetails() {
     );
 
     if (!data) return <Text style={[dynamicStyles.text, { textAlign: 'center', margin: 20 }]}>No text found for these lines</Text>;
-
-    const ContentWrapper = data && data.length > 1 ? ScrollView : View;
-    const contentWrapperProps = data && data.length > 1 ? {
-        contentContainerStyle: styles.scrollContainer,
-        showsVerticalScrollIndicator: false
-    } : {};
 
     let lastSpeaker: string | null = null;
     const processedData = data
@@ -209,7 +204,7 @@ export default function LineDetails() {
             
             <TabLayout>
                 <LinearGradient
-                    colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+                    colors={screenGradient(isDarkMode)}
                     style={{ flex: 1 }}
                 >
                     <View style={[styles.headerContainer, dynamicStyles.headerContainer]}>
@@ -243,13 +238,18 @@ export default function LineDetails() {
                         <View style={styles.headerSpacer} />
                     </View>
 
-                    <ContentWrapper {...contentWrapperProps} style={styles.contentWrapper}>
+                    <ScrollView
+                        style={{ flex: 1 }}
+                        contentContainerStyle={styles.scrollContainer}
+                        showsVerticalScrollIndicator={false}
+                        keyboardShouldPersistTaps="handled"
+                    >
                     {processedData.map((line, i) => {
                         const prevSpeaker = i > 0 ? processedData[i - 1].speaker : null;
                         const showSpeaker = line.speaker && line.speaker !== prevSpeaker;
 
                             return (
-                                <View key={`line-${line.lineNum}`} style={{ marginBottom: i === data.length - 1 ? 0 : 24 }}>
+                                <View key={`line-${line.lineNum}`} style={{ marginBottom: i === processedData.length - 1 ? 0 : 24 }}>
                                     {showSpeaker && (
                                         <>
                                             {i > 0 && <View style={[styles.divider, dynamicStyles.divider]} />}
@@ -299,7 +299,7 @@ export default function LineDetails() {
                                 </View>
                             );
                         })}
-                    </ContentWrapper>
+                    </ScrollView>
                     
                     {/* Floating navigation footer */}
                     <View style={[styles.navigationContainer, dynamicStyles.navigationContainer]}>

@@ -13,6 +13,7 @@ import LineSearch from '@/components/search/LineSearch';
 import { router, useLocalSearchParams } from 'expo-router';
 import WordSearch from '@/components/search/WordSearch';
 import { LinearGradient } from 'expo-linear-gradient';
+import { screenGradient } from '@/lib/appTheme';
 import { Feather } from '@expo/vector-icons';
 
 type ValidTab = 'Word Search' | 'Line Search';
@@ -56,7 +57,11 @@ const Tabs = ({ activeTab, setActiveTab, isDark }: {
   return (
     <View style={[styles.tabBarContainer]}> 
       <LinearGradient
-        colors={isDark ? ['rgba(15,15,27,0.9)', 'rgba(26,26,46,0.9)'] : ['rgba(248,249,250,0.9)', 'rgba(255,255,255,0.9)']}
+        colors={
+          isDark
+            ? ['rgba(15,15,27,0.88)', 'rgba(26,26,46,0.9)']
+            : ['rgba(248,249,250,0.92)', 'rgba(255,255,255,0.95)']
+        }
         style={styles.tabBar}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 0 }}
@@ -129,7 +134,7 @@ export default function SearchScreen() {
 
   return (
     <LinearGradient
-      colors={isDark ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+      colors={screenGradient(isDark)}
       style={{ flex: 1 }}
     >
       <View style={[

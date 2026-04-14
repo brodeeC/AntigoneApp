@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, useColorScheme, ScrollView, ActivityIndic
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons"; 
 import { LinearGradient } from 'expo-linear-gradient';
+import { screenGradient } from '@/lib/appTheme';
 import PageDisplay from "@/components/read/pageDisplay";
 import { styles, getDynamicStyles, Colors } from "../../styles/read.styles";
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
@@ -71,7 +72,7 @@ export default function Read() {
     if (!fontsLoaded) {
         return (
             <LinearGradient
-                colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+                colors={screenGradient(isDarkMode)}
                 style={{ flex: 1 }}
             >
                 <View style={[styles.loadingContainer, dynamicStyles.loadingContainer]}>
@@ -86,7 +87,7 @@ export default function Read() {
 
     return (
         <LinearGradient
-            colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
+            colors={screenGradient(isDarkMode)}
             style={{ flex: 1 }}
         >
             <SafeAreaView style={[styles.container, dynamicStyles.container]}>

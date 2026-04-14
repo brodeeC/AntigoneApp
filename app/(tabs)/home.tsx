@@ -28,6 +28,7 @@ import {
 import { fetchMetadata } from '@/lib/api';
 import { getLastReadPage, setLastReadPage } from '@/lib/readingProgress';
 import { homeStyles, homeColors } from '@/styles/home.styles';
+import { screenGradient } from '@/lib/appTheme';
 
 type Metadata = Awaited<ReturnType<typeof fetchMetadata>>;
 
@@ -175,7 +176,7 @@ export default function HomeTab() {
   if (!fontsLoaded) {
     return (
       <LinearGradient
-        colors={isDark ? [...homeColors.darkBg] : [...homeColors.lightBg]}
+        colors={screenGradient(isDark)}
         style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
       >
         <ActivityIndicator
@@ -192,10 +193,7 @@ export default function HomeTab() {
       : 'Open reader';
 
   return (
-    <LinearGradient
-      colors={isDark ? [...homeColors.darkBg] : [...homeColors.lightBg]}
-      style={styles.safe}
-    >
+    <LinearGradient colors={screenGradient(isDark)} style={styles.safe}>
       <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
         <ScrollView
           keyboardShouldPersistTaps="handled"

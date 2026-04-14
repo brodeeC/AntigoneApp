@@ -5,35 +5,53 @@ export default StyleSheet.create({
     flex: 1,
   },
   scrollContainer: {
-    padding: 24,
+    paddingHorizontal: 20,
     paddingBottom: 40,
-    top: 40,
   },
-  header: {
-    marginBottom: 32,
-    alignItems: 'flex-start',
+  hero: {
+    marginBottom: 28,
   },
-  title: {
-    fontSize: 28,
+  eyebrow: {
+    fontSize: 11,
     fontWeight: '700',
-    marginBottom: 8,
+    letterSpacing: 2.2,
+    marginBottom: 10,
+    textTransform: 'uppercase',
+    opacity: 0.85,
   },
-  subtitle: {
-    fontSize: 16,
-    opacity: 0.8,
+  heroTitle: {
+    fontSize: 32,
+    fontWeight: '800',
+    letterSpacing: -0.5,
+    lineHeight: 38,
+    marginBottom: 10,
   },
-  section: {
+  heroSubtitle: {
+    fontSize: 17,
+    lineHeight: 26,
+    fontWeight: '500',
+    opacity: 0.92,
+    maxWidth: 340,
+  },
+  heroAccentBar: {
+    marginTop: 18,
+    height: 4,
+    width: 64,
+    borderRadius: 2,
+  },
+  panelGap: {
     marginBottom: 16,
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 14,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginLeft: 12,
+    fontSize: 18,
+    fontWeight: '700',
+    marginLeft: 10,
+    letterSpacing: -0.2,
   },
   sectionText: {
     fontSize: 15,
@@ -44,70 +62,86 @@ export default StyleSheet.create({
     fontStyle: 'italic',
   },
   featureList: {
-    marginTop: 12,
+    marginTop: 4,
   },
   featureItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
+    alignItems: 'flex-start',
+    marginBottom: 10,
   },
   featureIcon: {
     marginRight: 12,
+    marginTop: 3,
   },
   featureText: {
     fontSize: 14,
+    lineHeight: 22,
     flex: 1,
   },
   dataDetails: {
-    marginVertical: 12,
-    paddingLeft: 12,
+    marginVertical: 8,
+    paddingLeft: 4,
   },
   dataDetailText: {
     fontSize: 14,
     lineHeight: 22,
-    marginBottom: 6,
+    marginBottom: 8,
+  },
+  highlightWrap: {
+    marginVertical: 14,
+    paddingLeft: 14,
+    borderLeftWidth: 3,
+    borderRadius: 2,
   },
   highlightText: {
     fontSize: 16,
     fontStyle: 'italic',
-    marginVertical: 16,
-    paddingHorizontal: 16,
-    lineHeight: 24,
+    lineHeight: 26,
   },
   contactContainer: {
-    marginTop: 20,
+    marginTop: 18,
   },
   contactTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
     marginBottom: 12,
+    letterSpacing: 0.2,
   },
   contactLinks: {
     flexDirection: 'row',
-    gap: 20,
+    flexWrap: 'wrap',
+    gap: 10,
   },
-  contactButton: {
+  contactChip: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    paddingVertical: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 14,
+    borderWidth: StyleSheet.hairlineWidth * 2,
   },
   contactText: {
-    fontSize: 15,
+    fontSize: 14,
+    fontWeight: '600',
   },
   footer: {
-    marginTop: 20,
+    marginTop: 28,
     alignItems: 'center',
+    paddingHorizontal: 12,
   },
   footerText: {
     fontSize: 13,
+    fontWeight: '500',
+    textAlign: 'center',
   },
   footerCredit: {
     fontSize: 12,
-    marginTop: 8,
+    marginTop: 10,
     textAlign: 'center',
+    lineHeight: 18,
+    opacity: 0.85,
   },
-  // Color modes
   darkText: {
     color: '#E2E8F0',
   },
@@ -121,11 +155,13 @@ export default StyleSheet.create({
     color: '#64748B',
   },
   downloadSection: {
-    marginTop: 20,
+    marginTop: 18,
+    paddingTop: 16,
+    borderTopWidth: StyleSheet.hairlineWidth,
   },
   downloadTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
     marginBottom: 12,
   },
   downloadButton: {
@@ -133,28 +169,31 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 16,
-    borderRadius: 8,
+    borderRadius: 12,
     marginBottom: 8,
   },
   darkDownloadButton: {
-    backgroundColor: 'rgba(76, 201, 240, 0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(76, 201, 240, 0.3)',
+    backgroundColor: 'rgba(76, 201, 240, 0.12)',
+    borderWidth: StyleSheet.hairlineWidth * 2,
+    borderColor: 'rgba(76, 201, 240, 0.28)',
   },
   lightDownloadButton: {
     backgroundColor: 'rgba(67, 97, 238, 0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(67, 97, 238, 0.3)',
+    borderWidth: StyleSheet.hairlineWidth * 2,
+    borderColor: 'rgba(67, 97, 238, 0.22)',
   },
   downloadIcon: {
     marginRight: 12,
   },
   downloadText: {
     fontSize: 15,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   downloadingButton: {
-    opacity: 0.8,
+    opacity: 0.75,
+  },
+  licenseNote: {
+    marginTop: 14,
   },
   progressText: {
     marginLeft: 8,

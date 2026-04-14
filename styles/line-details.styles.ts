@@ -180,9 +180,6 @@ export const styles = StyleSheet.create({
         paddingBottom: 120,
         paddingTop: 16,
     },
-    contentWrapper: {
-        paddingTop: 16,
-    },
     navButtonText: {
         fontSize: 16,
         fontFamily: 'Inter-Medium',
@@ -208,9 +205,17 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             color: isDarkMode ? WHITE : DARK_TEXT,
         },
         navigationContainer: {
-            backgroundColor: isDarkMode ? 'rgba(15, 15, 27, 0.9)' : 'rgba(248, 249, 250, 0.9)',
+            backgroundColor: isDarkMode ? 'rgba(26, 26, 46, 0.92)' : 'rgba(255, 255, 255, 0.94)',
             borderTopWidth: 1,
-            borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+            borderColor: isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)',
+            ...Platform.select({
+                ios: {
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: -4 },
+                    shadowOpacity: isDarkMode ? 0.3 : 0.1,
+                    shadowRadius: 12,
+                },
+            }),
         },
         navButton: {
             backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
@@ -254,8 +259,8 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             borderWidth: 0,
         },
         headerContainer: {
-            borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-            backgroundColor: isDarkMode ? 'rgba(15, 15, 27, 0.9)' : 'rgba(248, 249, 250, 0.9)',
+            borderColor: isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)',
+            backgroundColor: isDarkMode ? 'rgba(26, 26, 46, 0.88)' : 'rgba(255, 255, 255, 0.9)',
         },
         lineNumberButton: {
             borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.3)' : 'rgba(67, 97, 238, 0.3)',
@@ -279,7 +284,7 @@ export const Colors = {
         buttonBackground: ACCENT_COLOR_DARK,
         buttonText: WHITE,
         background: DARK_BACKGROUND,
-        loadingBackground: '#121212',
+        loadingBackground: '#0F0F1B',
         loadingIndicator: ACCENT_COLOR_DARK,
         text: WHITE,
     }
