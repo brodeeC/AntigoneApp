@@ -56,7 +56,7 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
     };
 
     const handleMenuItemPress = (route: 
-        | '/'
+        | '/(tabs)/home'
         | '/(tabs)/read' 
         | '/(tabs)/search'
         | '/(tabs)/about'
@@ -139,7 +139,7 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
                         }
                     ]}>
                         <TouchableOpacity 
-                            onPress={() => handleMenuItemPress('/')} 
+                            onPress={() => handleMenuItemPress('/(tabs)/home')} 
                             style={[styles.menuItem, dynamicStyles.menuItemStyle]}
                         >
                             <EnIcon name="home" size={24} color={dynamicStyles.activeTabColor} />

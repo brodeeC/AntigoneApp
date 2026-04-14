@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, useColorScheme, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons"; 
@@ -6,18 +6,60 @@ import { LinearGradient } from 'expo-linear-gradient';
 import PageDisplay from "@/components/read/pageDisplay";
 import { styles, getDynamicStyles, Colors } from "../../styles/read.styles";
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
+import { fetchMetadata } from "@/lib/api";
+import { getLastReadPage, setLastReadPage } from "@/lib/readingProgress";
+
+const DEFAULT_LAST_PAGE = 123;
 
 export default function Read() {
     const [page, setPage] = useState(1);
+    const [lastPageBound, setLastPageBound] = useState(DEFAULT_LAST_PAGE);
     const isDarkMode = useColorScheme() === "dark";
     const dynamicStyles = getDynamicStyles(isDarkMode);
 
+    useEffect(() => {
+        let cancelled = false;
+        (async () => {
+            try {
+                const m = await fetchMetadata();
+                if (cancelled) return;
+                setLastPageBound(m.lastPage);
+                const stored = await getLastReadPage();
+                if (cancelled) return;
+                if (stored != null) {
+                    setPage((prev) =>
+                        Math.max(1, Math.min(stored, m.lastPage))
+                    );
+                }
+            } catch {
+                const stored = await getLastReadPage();
+                if (cancelled) return;
+                if (stored != null) {
+                    setPage((prev) =>
+                        Math.max(1, Math.min(stored, DEFAULT_LAST_PAGE))
+                    );
+                }
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
+    useEffect(() => {
+        void setLastReadPage(page);
+    }, [page]);
+
+    useEffect(() => {
+        setPage((p) => Math.min(p, lastPageBound));
+    }, [lastPageBound]);
+
     const handlePageChange = (newPage : number) => {
-        setPage(newPage);
+        setPage(Math.max(1, Math.min(newPage, lastPageBound)));
     };
 
     const handleFastForward = (forward = true) => {
-        setPage(forward ? Math.min(123, page + 10) : Math.max(1, page - 10));
+        setPage(forward ? Math.min(lastPageBound, page + 10) : Math.max(1, page - 10));
     };
 
     const [fontsLoaded] = useFonts({
@@ -87,13 +129,13 @@ export default function Read() {
 
                     <View style={styles.pageNumberContainer}>
                         <Text style={[styles.pageNumber, dynamicStyles.pageNumber]}>{page}</Text>
-                        <Text style={[styles.pageCount, dynamicStyles.pageCount]}>/ 123</Text>
+                        <Text style={[styles.pageCount, dynamicStyles.pageCount]}>/ {lastPageBound}</Text>
                     </View>
 
                     <TouchableOpacity
-                        style={[styles.navButton, page === 123 && styles.disabledArrowButton]}
+                        style={[styles.navButton, page === lastPageBound && styles.disabledArrowButton]}
                         onPress={() => handlePageChange(page + 1)}
-                        disabled={page === 123}
+                        disabled={page === lastPageBound}
                     >
                         <MaterialIcons
                             name="chevron-right"
@@ -103,9 +145,9 @@ export default function Read() {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={[styles.navButton, page === 123 && styles.disabledArrowButton]}
+                        style={[styles.navButton, page === lastPageBound && styles.disabledArrowButton]}
                         onPress={() => handleFastForward(true)}
-                        disabled={page === 123}
+                        disabled={page === lastPageBound}
                     >
                         <MaterialIcons name="keyboard-double-arrow-right" size={24} color={dynamicStyles.navIcon.color} />
                     </TouchableOpacity>

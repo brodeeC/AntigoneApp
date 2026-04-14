@@ -3,6 +3,7 @@ import { View, Text, ActivityIndicator, TouchableOpacity, useColorScheme } from 
 import { getDynamicStyles } from "../../styles/styles";
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import { getWordDetailsUrl } from "@/lib/api";
 
 type WordDetailsProps = {
     word: string;
@@ -22,7 +23,7 @@ export default function WordDetails({ word, lineNumber }: WordDetailsProps) {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`https://brodeeclontz.com/AntigoneApp/api/word-details/${word}`);
+                const response = await fetch(getWordDetailsUrl(word));
                 if (!response.ok) throw new Error("Failed to load word details");
                 const json = await response.json();
     

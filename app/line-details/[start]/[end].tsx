@@ -8,6 +8,7 @@ import WordDisplay from "../../../components/read/wordDisplay";
 import TabLayout from "../../(tabs)/tabLayout";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
+import { getLinesUrl } from "@/lib/api";
 
 interface LineData {
     lineNum: number;
@@ -109,7 +110,7 @@ export default function LineDetails() {
         if (router.canGoBack?.()) {
             router.back();
         } else {
-            router.replace('/');
+            router.replace('/(tabs)/home');
         }
     };
 
@@ -119,14 +120,10 @@ export default function LineDetails() {
         const loadData = async () => {
             setLoading(true);
             try {
-                let url = '';
-                if (startLine !== null && endLine !== startLine) {
-                    url = `https://brodeeclontz.com/AntigoneApp/api/lines/${startLine}/${endLine}`;
-                } else if (startLine !== null) {
-                    url = `https://brodeeclontz.com/AntigoneApp/api/lines/${startLine}`;
-                } else {
+                if (startLine === null) {
                     throw new Error("No valid line number provided.");
                 }
+                const url = getLinesUrl(startLine, endLine !== startLine ? endLine : undefined);
 
                 const response = await fetch(url);
                 if (!response.ok) throw new Error("Failed to load data");

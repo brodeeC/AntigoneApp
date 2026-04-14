@@ -1,0 +1,5 @@
+{
+  "name": "antigone-backend",
+  "private": true,
+  "description": "Python/Flask API only. The Expo app package.json is in the parent directory — run Expo and npm scripts from the repo root (..), never from backend/."
+}

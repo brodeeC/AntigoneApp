@@ -1,6 +1,11 @@
 # Antigone Reader
 #### Read Antigone from the palm of your hand!
 
+## Development (Expo + API)
+
+- **iOS / Metro / `npm run ios`:** run commands from the **repository root** (`AntigoneApp/`), where the main `package.json` and `app.json` live — **not** from `backend/`. If you `cd backend` and run Expo, you will see `ConfigError` about `package.json` or a non‑Expo folder.
+- **Flask API:** use `backend/` — `requirements.txt`, virtualenv, `DATABASE_URI` / `SECRET_KEY` in `backend/.env` are for the server only.
+
 ## Released April 2025 on iPhone and iPadOS:
 [Get Antigone Reader](https://apps.apple.com/app/id6745100412)
 

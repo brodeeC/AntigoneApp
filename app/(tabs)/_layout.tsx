@@ -7,9 +7,10 @@ export default function TabLayoutNav() {
     <TabLayout> 
       <View style={{ flex: 1 }}> 
         <Tabs screenOptions={{ headerShown: false }} tabBar={() => null}>
-          <Tabs.Screen name="read" />
-          <Tabs.Screen name="search" />
-          <Tabs.Screen name="about" />
+          <Tabs.Screen name="home" options={{ title: 'Home' }} />
+          <Tabs.Screen name="read" options={{ title: 'Read' }} />
+          <Tabs.Screen name="search" options={{ title: 'Search' }} />
+          <Tabs.Screen name="about" options={{ title: 'About' }} />
         </Tabs>
       </View>
     </TabLayout>

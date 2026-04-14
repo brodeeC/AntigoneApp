@@ -5,6 +5,7 @@
 expo-env.d.ts
 .expo/
 node_modules
+.env
 # @end expo-cli
 .DS_Store
 backend/.venv/

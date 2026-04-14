@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { styles, getDynamicStyles, Colors } from "../../styles/styles";
 import WordDetails from "./wordDisplay"; 
 import { LinearGradient } from "expo-linear-gradient";
+import { getReadPageUrl } from "@/lib/api";
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 
 
@@ -43,7 +44,7 @@ export default function PageDisplay({ page }: PageDisplayProps) {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const response = await fetch(`https://brodeeclontz.com/AntigoneApp/api/read/${page}`);
+                const response = await fetch(getReadPageUrl(page));
                 if (!response.ok) throw new Error("Failed to load data");
                 const json = await response.json();
                 setData(json);

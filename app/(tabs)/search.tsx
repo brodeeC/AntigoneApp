@@ -121,7 +121,7 @@ export default function SearchScreen() {
     if (router.canGoBack()) {
       router.back();
     } else {
-      router.replace('/');
+      router.replace('/(tabs)/home');
     }
   };
 

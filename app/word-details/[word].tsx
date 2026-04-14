@@ -12,6 +12,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import TabLayout from "../(tabs)/tabLayout";
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
+import { getWordDetailsUrl } from "@/lib/api";
 
 interface WordEntry {
     form: string;
@@ -89,7 +90,7 @@ export default function WordDetails() {
         if (router.canGoBack()) {
           router.back();
         } else {
-          router.push('/');
+          router.push('/(tabs)/home');
         }
     };
 
@@ -105,7 +106,7 @@ export default function WordDetails() {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`https://brodeeclontz.com/AntigoneApp/api/word-details/${word}`);
+                const response = await fetch(getWordDetailsUrl(String(word)));
                 if (!response.ok) throw new Error("Failed to load word details");
                 
                 const json: WordDataEntry[] = await response.json();

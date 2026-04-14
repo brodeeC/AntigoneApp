@@ -7,6 +7,7 @@ import {
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
+import { buildSearchUrl, getSpeakersUrl } from '@/lib/api';
 
 interface WordEntry {
   form: string;
@@ -35,7 +36,6 @@ export default function WordSearch() {
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<'word' | 'definition'>('word');
   const [results, setResults] = useState<WordDataEntry[]>([]);
-  const [filteredResults, setFilteredResults] = useState<WordDataEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [allSpeakers, setAllSpeakers] = useState<string[]>([]);
@@ -44,12 +44,12 @@ export default function WordSearch() {
   const [currentPage, setCurrentPage] = useState(0);
   const resultsPerPage = 5;
 
-  const paginatedResults = filteredResults.slice(
+  const paginatedResults = results.slice(
     currentPage * resultsPerPage,
     (currentPage + 1) * resultsPerPage
   );
 
-  const totalPages = Math.ceil(filteredResults.length / resultsPerPage);
+  const totalPages = Math.ceil(results.length / resultsPerPage);
 
   const goToNextPage = () => {
     setCurrentPage(prev => Math.min(prev + 1, totalPages - 1));
@@ -67,7 +67,7 @@ export default function WordSearch() {
     const fetchSpeakers = async () => {
       setSpeakersLoading(true);
       try {
-        const response = await fetch('https://brodeeclontz.com/AntigoneApp/api/get_all_speakers');
+        const response = await fetch(getSpeakersUrl());
         const data = await response.json();
         if (Array.isArray(data)) {
           setAllSpeakers(data);
@@ -82,40 +82,29 @@ export default function WordSearch() {
     fetchSpeakers();
   }, []);
 
-  // Filter results when selectedSpeaker changes
-  useEffect(() => {
-    if (selectedSpeaker) {
-      const filtered = results.filter(entry => 
-        entry[0]?.speaker?.toLowerCase() === selectedSpeaker.toLowerCase()
-      );
-      setFilteredResults(filtered);
-    } else {
-      setFilteredResults(results);
-    }
-  }, [selectedSpeaker, results]);
-
-  const handleSearch = useCallback(async () => {
-    Keyboard.dismiss();
-  
+  const doSearch = useCallback(async () => {
     const trimmedQuery = query.trim();
     if (!trimmedQuery) return;
-  
+
     const safeQuery = sanitizeInput(trimmedQuery);
     setLoading(true);
     setHasSearched(true);
-    setResults([]); // Clear previous results early
-  
+    setResults([]);
+
     try {
-      const response = await fetch(
-        `https://brodeeclontz.com/AntigoneApp/api/search?mode=${mode}&q=${encodeURIComponent(safeQuery)}`
-      );
-  
+      const url = buildSearchUrl({
+        mode,
+        q: safeQuery,
+        speaker: selectedSpeaker,
+      });
+      const response = await fetch(url);
+
       if (!response.ok) {
         throw new Error(`Server returned status ${response.status}`);
       }
-  
+
       const responseText = await response.text();
-  
+
       let data;
       try {
         data = JSON.parse(responseText);
@@ -123,12 +112,12 @@ export default function WordSearch() {
         console.error('Failed to parse response JSON:', parseError);
         throw new Error('Unexpected server response. Please try again.');
       }
-  
+
       if (!Array.isArray(data)) {
         console.error('Response is not an array:', data);
         throw new Error('Unexpected response format');
       }
-  
+
       setResults(data);
     } catch (err) {
       console.error('Search failed:', err);
@@ -137,12 +126,24 @@ export default function WordSearch() {
     } finally {
       setLoading(false);
     }
-  }, [query, mode, sanitizeInput]);
+  }, [query, mode, sanitizeInput, selectedSpeaker]);
+
+  const handleSearch = useCallback(() => {
+    Keyboard.dismiss();
+    void doSearch();
+  }, [doSearch]);
+
+  // Refetch when speaker chip changes after a search (server-side filter)
+  useEffect(() => {
+    if (!hasSearched || !query.trim()) return;
+    void doSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only refetch when speaker changes
+  }, [selectedSpeaker]);
   
 
   useEffect(() => {
     setCurrentPage(0);
-  }, [filteredResults]);
+  }, [results]);
 
   const handleWordDetails = useCallback((form: string) => {
     router.push(`/word-details/${form}`)
@@ -163,7 +164,6 @@ export default function WordSearch() {
     setSelectedSpeaker(null);
     setQuery('');
     setResults([]);
-    setFilteredResults([]);
     setHasSearched(false);
   }, []);
 
@@ -292,7 +292,7 @@ export default function WordSearch() {
           {/* Results */}
           {hasSearched && !loading && (
             <View style={styles.resultsContainer}>
-              {filteredResults.length === 0 ? (
+              {results.length === 0 ? (
                 <View style={styles.emptyState}>
                   <Feather name="search" size={40} color={isDark ? '#94A3B8' : '#64748B'} />
                   <Text style={styles.emptyText}>No results found</Text>
@@ -360,7 +360,7 @@ export default function WordSearch() {
                       </View>
                     );
                   })}
-                  {filteredResults.length > resultsPerPage && (
+                  {results.length > resultsPerPage && (
                     <View style={styles.paginationContainer}>
                       <TouchableOpacity
                         onPress={goToPrevPage}
