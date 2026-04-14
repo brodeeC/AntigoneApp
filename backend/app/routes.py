@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from sqlalchemy import func
 from app import db, limiter
 from app.models import FullText, LemmaData, LemmaDefinition
 from flask import send_from_directory
@@ -11,14 +12,15 @@ from app.utils import (
     MIN_LINE,
     MAX_LINE,
     FIRST_PAGE,
-    LAST_PAGE
+    LAST_PAGE,
+    LINES_PER_PAGE,
+    API_VERSION,
 )
 from app.database_helpers import (
     get_line,
     get_speaker,
     lookup_word_details,
     search_by_definition,
-    get_word,
     get_word_defs,
 )
 from http import HTTPStatus
@@ -26,6 +28,41 @@ import logging
 
 bp = Blueprint('api', __name__, url_prefix='/AntigoneApp/api')
 logger = logging.getLogger(__name__)
+
+
+def _optional_speaker_query():
+    """Return stripped speaker from query string, or None if absent/blank (no filtering)."""
+    raw = request.args.get("speaker")
+    if raw is None:
+        return None
+    s = raw.strip()
+    return s if s else None
+
+
+def _fulltext_speaker_filters(query, speaker_wanted):
+    if not speaker_wanted:
+        return query
+    return query.filter(
+        FullText.speaker.isnot(None),
+        func.lower(FullText.speaker) == speaker_wanted.lower(),
+    )
+
+
+def _filter_search_results_by_speaker(results, speaker_wanted):
+    if not speaker_wanted:
+        return results
+    want = speaker_wanted.casefold()
+    out = []
+    for entry in results:
+        if not entry or not isinstance(entry, list) or len(entry) < 1:
+            continue
+        meta = entry[0]
+        if not isinstance(meta, dict):
+            continue
+        sp = meta.get("speaker") or ""
+        if sp.casefold() == want:
+            out.append(entry)
+    return out
 
 @bp.route('/get_all_speakers', methods=['GET'])  
 @limiter.limit("50/minute")
@@ -41,6 +78,7 @@ def get_all_speakers():
 @bp.route('/lines/<startLine>/<endLine>', methods=['GET'])
 @limiter.limit("100/minute")
 def get_lines(startLine, endLine=None):
+    end = None
     try:
         try: 
             start = int(startLine)
@@ -49,7 +87,8 @@ def get_lines(startLine, endLine=None):
                     end = int(endLine)
                 except:
                     end = start + 10
-            else: end = None
+            else:
+                end = None
         except:
             start = MIN_LINE
 
@@ -64,6 +103,7 @@ def get_lines(startLine, endLine=None):
         if end and (start > end or end < start or end == start):
             end = None
 
+        sp = _optional_speaker_query()
 
         # Handle single line request
         if end is None:
@@ -73,16 +113,21 @@ def get_lines(startLine, endLine=None):
                 line_text = 'Line not in database.'
                 speaker = 'None'
 
+            if sp and (not speaker or speaker.casefold() != sp.casefold()):
+                return jsonify([])
+
             return jsonify([{
                 "lineNum": start,
                 "line_text": line_text,
                 "speaker": speaker
-            }])        
+            }])
 
-        # Fetch lines in range
+        # Fetch lines in range (optional speaker excludes non-matching lines)
         lines = []
         for line_num in range(start, end + 1):
             line_text, speaker = get_line(line_num)
+            if sp and (not speaker or speaker.casefold() != sp.casefold()):
+                continue
             lines.append({
                 "lineNum": line_num,
                 "line_text": line_text,
@@ -106,14 +151,15 @@ def get_page(page):
         if page < FIRST_PAGE or page > LAST_PAGE:
             return jsonify({"error": "Invalid page number"}), HTTPStatus.BAD_REQUEST
 
-        lines_per_page = 11
-        start_line = (page - 1) * lines_per_page + 1
-        end_line = page * lines_per_page
+        start_line = (page - 1) * LINES_PER_PAGE + 1
+        end_line = page * LINES_PER_PAGE
+        sp = _optional_speaker_query()
 
-        # Use SQLAlchemy session correctly
-        lines = db.session.query(FullText).filter(
+        q = db.session.query(FullText).filter(
             FullText.line_number.between(start_line, end_line)
-        ).order_by(FullText.line_number).all()
+        )
+        q = _fulltext_speaker_filters(q, sp)
+        lines = q.order_by(FullText.line_number).all()
 
         return jsonify([{
             "lineNum": line.line_number,
@@ -129,8 +175,25 @@ def get_page(page):
 def health_check():
     return jsonify(status="ok"), HTTPStatus.OK
 
+
+@bp.route("/metadata", methods=["GET"])
+@limiter.limit("200/minute")
+def get_metadata():
+    """Pagination and API constants for clients (avoids hardcoding page/line bounds)."""
+    return jsonify(
+        {
+            "apiVersion": API_VERSION,
+            "firstPage": FIRST_PAGE,
+            "lastPage": LAST_PAGE,
+            "linesPerPage": LINES_PER_PAGE,
+            "minLine": MIN_LINE,
+            "maxLine": MAX_LINE,
+        }
+    ), HTTPStatus.OK
+
+
 @bp.route('/search', methods=['GET'])
-@limiter.limit("10 per minute")
+@limiter.limit("30 per minute")
 def search():
     logger.info("\n=== NEW SEARCH REQUEST ===")
     logger.info(f"Request args: {request.args}")
@@ -163,6 +226,9 @@ def search():
         else:
             logger.warning("Invalid search mode")
             return jsonify([]), HTTPStatus.OK  # Invalid mode = empty list
+
+        sp = _optional_speaker_query()
+        results = _filter_search_results_by_speaker(results, sp)
 
         logger.info(f"Returning {len(results)} results")
         return jsonify(results)

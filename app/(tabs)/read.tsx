@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity, useColorScheme, SafeAreaView, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, useColorScheme, ScrollView, ActivityIndicator } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons"; 
 import { LinearGradient } from 'expo-linear-gradient';
 import PageDisplay from "@/components/read/pageDisplay";

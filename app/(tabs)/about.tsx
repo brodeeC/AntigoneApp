@@ -2,11 +2,14 @@ import { View, Text, ScrollView, useColorScheme, Linking, TouchableOpacity, Aler
 import { LinearGradient } from 'expo-linear-gradient';
 import EnIcon from 'react-native-vector-icons/Entypo';
 import styles from '../../styles/about.styles';
-import * as FileSystem from 'expo-file-system';
+import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
+import Constants from 'expo-constants';
 import { useState } from 'react';
 
 export default function AboutScreen() {
+  const appVersion = Constants.expoConfig?.version ?? '2.0.0';
+
   const isDarkMode = useColorScheme() === 'dark';
   const dynamicTextColor = isDarkMode ? styles.darkText : styles.lightText;
   const dynamicSubtextColor = isDarkMode ? styles.darkSubtext : styles.lightSubtext;
@@ -16,27 +19,13 @@ export default function AboutScreen() {
 const downloadCSV = async (filename: string) => {
   try {
     setDownloading(filename);
-    
-    const fileUri = `${FileSystem.documentDirectory}${filename}`;
-    const downloadUrl = `https://raw.githubusercontent.com/brodeeC/AntigoneApp/refs/heads/main/backend/database/csv/${filename}`; 
-    
-    const downloadResumable = FileSystem.createDownloadResumable(
-        downloadUrl,
-        fileUri,
-        {},
-        (downloadProgress) => {
-          const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
-          console.log(`Download progress: ${progress * 100}%`);
-        }
-      );
-  
-      const result = await downloadResumable.downloadAsync();
-      
-      if (!result) {
-        throw new Error('Download failed - no result returned');
-      }
-  
-      const { uri } = result;
+
+    const downloadUrl = `https://raw.githubusercontent.com/brodeeC/AntigoneApp/refs/heads/main/backend/database/csv/${filename}`;
+    const destination = new File(Paths.document, filename);
+    const downloaded = await File.downloadFileAsync(downloadUrl, destination, {
+      idempotent: true,
+    });
+    const { uri } = downloaded;
       
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri, {
@@ -81,7 +70,7 @@ const downloadCSV = async (filename: string) => {
             <Text style={[styles.sectionTitle, dynamicTextColor]}>The App</Text>
           </View>
           <Text style={[styles.sectionText, dynamicSubtextColor]}>
-            Antigone Reader reimagines Sophocles' classic tragedy for the digital age. Designed for 
+            Antigone Reader reimagines Sophocles{"'"} classic tragedy for the digital age. Designed for 
             students, scholars, and enthusiasts, this app provides:
           </Text>
           <View style={styles.featureList}>
@@ -212,7 +201,7 @@ const downloadCSV = async (filename: string) => {
             Greek literature and modern tech. What started as a simple idea became:
           </Text>
           <Text style={[styles.highlightText, { color: isDarkMode ? "#4CC9F0" : "#4361EE" }]}>
-            "A tool that makes reading Antigone as accessible as checking social media."
+            {"\u201c"}A tool that makes reading Antigone as accessible as checking social media.{"\u201d"}
           </Text>
           <Text style={[styles.sectionText, dynamicSubtextColor]}>
             I never expected my semester project, a mobile adaptation of Antigone, to be such a rewarding 
@@ -255,7 +244,10 @@ const downloadCSV = async (filename: string) => {
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={[styles.footerText, dynamicSubtextColor]}>
-            Version 1.1 · Made with ♥ for Greek tragedy
+            Version {appVersion} · Made with ♥ for Greek tragedy
+          </Text>
+          <Text style={[styles.footerCredit, dynamicSubtextColor]}>
+            Additional development assistance: Cursor (AI-assisted tooling)
           </Text>
         </View>
       </ScrollView>

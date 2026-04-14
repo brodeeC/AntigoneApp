@@ -38,7 +38,6 @@ export default function WordSearch() {
   const [filteredResults, setFilteredResults] = useState<WordDataEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
-  const [showAllResults, setShowAllResults] = useState(false);
   const [allSpeakers, setAllSpeakers] = useState<string[]>([]);
   const [selectedSpeaker, setSelectedSpeaker] = useState<string | null>(null);
   const [speakersLoading, setSpeakersLoading] = useState(false);
@@ -59,8 +58,6 @@ export default function WordSearch() {
   const goToPrevPage = () => {
     setCurrentPage(prev => Math.max(prev - 1, 0));
   };
-
-  const displayedResults = showAllResults ? filteredResults : filteredResults.slice(0, 5);
 
   const sanitizeInput = useCallback((text: string) => 
     text.replace(/[^a-zA-Zά-ωΑ-Ω\s']/g, ''), []);

@@ -1,10 +1,10 @@
 import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Text, SafeAreaView, ScrollView, View, TouchableOpacity, useColorScheme, ActivityIndicator } from "react-native";
+import { Text, ScrollView, View, TouchableOpacity, useColorScheme, ActivityIndicator } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { styles, getDynamicStyles, Colors } from "../../styles/styles";
 import WordDetails from "./wordDisplay"; 
 import { LinearGradient } from "expo-linear-gradient";
-import TabLayout from "@/app/(tabs)/tabLayout";
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 
 
@@ -40,7 +40,23 @@ export default function PageDisplay({ page }: PageDisplayProps) {
         'Inter-Bold': Inter_700Bold,
     });
 
-    if (!fontsLoaded && !loading) {
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const response = await fetch(`https://brodeeclontz.com/AntigoneApp/api/read/${page}`);
+                if (!response.ok) throw new Error("Failed to load data");
+                const json = await response.json();
+                setData(json);
+            } catch {
+                setError("Error loading data");
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadData();
+    }, [page]);
+
+    if (!fontsLoaded) {
         return (
             <LinearGradient
                 colors={isDarkMode ? ['#0F0F1B', '#1A1A2E'] : ['#F8F9FA', '#FFFFFF']}
@@ -55,22 +71,6 @@ export default function PageDisplay({ page }: PageDisplayProps) {
             </LinearGradient>
         );
     }
-
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                const response = await fetch(`https://brodeeclontz.com/AntigoneApp/api/read/${page}`);
-                if (!response.ok) throw new Error("Failed to load data");
-                const json = await response.json();
-                setData(json);
-            } catch (err) {
-                setError("Error loading data");
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadData();
-    }, [page]);
 
     const handleWordPress = (word: string, lineNum: number, wordIndex: number) => {
         const isSelected = selectedWord?.word === word &&

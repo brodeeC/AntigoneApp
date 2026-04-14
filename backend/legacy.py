@@ -333,7 +333,7 @@ def add_defs(data, result_def):
     return data
 
 @app.route('/AntigoneApp/search', methods=['GET'])
-@limiter.limit("10 per minute")
+@limiter.limit("30 per minute")
 def search():
     print("\n=== NEW REQUEST ===")
     print(f"Request args: {request.args}")

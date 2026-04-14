@@ -1,7 +1,7 @@
 // Updated line-details.tsx with improved styling
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { useEffect, useState } from "react";
-import { SafeAreaView, Text, TouchableOpacity, View, useColorScheme, Animated, ActivityIndicator, ScrollView } from "react-native";
+import { Text, TouchableOpacity, View, useColorScheme, Animated, ActivityIndicator, ScrollView } from "react-native";
 import { styles, getDynamicStyles, Colors } from "../../../styles/line-details.styles";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import WordDisplay from "../../../components/read/wordDisplay"; 
@@ -97,7 +97,7 @@ export default function LineDetails() {
             } else {
                 setSelectedWord({ word, lineNum, index });
             }
-        } catch (error) {
+        } catch {
             console.log("Failed to set selected word.");
         }
     };
@@ -132,7 +132,7 @@ export default function LineDetails() {
                 if (!response.ok) throw new Error("Failed to load data");
                 const json = await response.json();
                 setData(Array.isArray(json) ? json : [json]);
-            } catch (err) {
+            } catch {
                 setError("Error loading data");
             } finally {
                 setTimeout(() => setLoading(false), 50);

@@ -9,5 +9,5 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     RATE_LIMITS = {
         'default': '300 per day, 100 per hour',
-        'search': '10 per minute'
+        'search': '30 per minute',
     }

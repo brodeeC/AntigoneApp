@@ -99,10 +99,11 @@ export default function SearchScreen() {
   );
 
   useEffect(() => {
-    if (activeTab !== tab) {
+    const tabStr = typeof tab === 'string' ? tab : Array.isArray(tab) ? tab[0] ?? '' : '';
+    if (tabStr !== activeTab) {
       router.setParams({ tab: activeTab });
     }
-  }, [activeTab]);
+  }, [activeTab, tab]);
 
   const handleTabPress = (tabName: ValidTab) => {
     setActiveTab(tabName);

@@ -9,6 +9,10 @@ FIRST_PAGE = 1
 LAST_PAGE = 123
 MIN_LINE = 1
 MAX_LINE = 1353
+LINES_PER_PAGE = 11
+
+# Bumped when the read/search API contract or pagination semantics change.
+API_VERSION = "1.1.0"
 
 def strip_accents(s):
     return ''.join(c for c in normalize('NFD', s)
@@ -94,6 +98,9 @@ def is_ancient_greek(word):
     return True
 
 def parse_postag(postag):
+    if not postag or len(postag) < 9:
+        return {}
+
     pos_dict = {"n": "noun", "v": "verb", "a": "adjective", "d": "adverb", "l": "article", "g": "particle",
         "c": "conjunction", "r": "preposition", "p": "pronoun", "m": "numeral", "i": "interjection",
         "u": "punctuation", "x": "not available"}

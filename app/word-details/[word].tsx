@@ -184,8 +184,6 @@ export default function WordDetails() {
 
                             if (!entry || !entry[0]) return null; 
 
-                            const isCollapsed = collapsedEntries[absoluteIndex] !== false;
-
                             const { form, lemma, line_number, postag, speaker } = entry[0];
                             const lineNum = line_number;
                             const caseInfo: CaseInfo | null = entry[1]?.case ?? null;

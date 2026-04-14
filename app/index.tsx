@@ -63,7 +63,7 @@ export default function HomeScreen() {
                         Antigone Reader
                     </Text>
                     <Text style={[styles.subtitle, isDarkMode ? styles.darkSubtext : styles.lightSubtext]}>
-                        Explore Sophocles' classic tragedy
+                        Explore Sophocles{"'"} classic tragedy
                     </Text>
                 </View>
 

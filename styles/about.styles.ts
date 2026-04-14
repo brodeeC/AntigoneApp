@@ -102,6 +102,11 @@ export default StyleSheet.create({
   footerText: {
     fontSize: 13,
   },
+  footerCredit: {
+    fontSize: 12,
+    marginTop: 8,
+    textAlign: 'center',
+  },
   // Color modes
   darkText: {
     color: '#E2E8F0',
