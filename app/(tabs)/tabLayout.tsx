@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import EnIcon from 'react-native-vector-icons/Entypo';
@@ -21,6 +21,7 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
   const isDarkMode = useColorScheme() === 'dark';
   const dynamicStyles = getDynamicStyles(isDarkMode);
   const router = useRouter();
+  const pathname = usePathname();
   const insets = useSafeAreaInsets();
   const [expanded, setExpanded] = useState(false);
 
@@ -40,7 +41,12 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
     useNativeDriver: true,
   };
 
-  const fabTop = insets.top + 8;
+  // Some stack screens draw their own glass headers; drop the FAB slightly
+  // so it aligns with that header row instead of hugging the notch.
+  const fabTop =
+    pathname.startsWith('/line-details') || pathname.startsWith('/word-details')
+      ? insets.top + 18
+      : insets.top + 8;
   const fabHeight = 44;
   const menuTop = fabTop + fabHeight + 10;
 
@@ -67,9 +73,7 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
     ]).start();
   };
 
-  const handleMenuItemPress = (
-    route: '/(tabs)/home' | '/(tabs)/read' | '/(tabs)/search' | '/(tabs)/about'
-  ) => {
+  const handleMenuItemPress = (route: string) => {
     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setExpanded(false);
     overlayOpacity.setValue(0);
@@ -89,7 +93,7 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
       }),
     ]).start();
 
-    router.push(route);
+    router.push(route as any);
   };
 
   const translateY = animation.interpolate({
@@ -166,6 +170,16 @@ export default function TabLayout({ children }: { children: React.ReactNode }) {
               >
                 <EnIcon name="home" size={22} color={dynamicStyles.activeTabColor} />
                 <Text style={[styles.menuItemText, dynamicStyles.menuItemTextStyle]}>Home</Text>
+              </TouchableOpacity>
+
+              <View style={[styles.menuDivider, dynamicStyles.menuDividerStyle]} />
+
+              <TouchableOpacity
+                onPress={() => handleMenuItemPress('/bookmarks')}
+                style={[styles.menuItem, dynamicStyles.menuItemStyle]}
+              >
+                <EnIcon name="bookmarks" size={22} color={dynamicStyles.activeTabColor} />
+                <Text style={[styles.menuItemText, dynamicStyles.menuItemTextStyle]}>Bookmarks</Text>
               </TouchableOpacity>
 
               <View style={[styles.menuDivider, dynamicStyles.menuDividerStyle]} />

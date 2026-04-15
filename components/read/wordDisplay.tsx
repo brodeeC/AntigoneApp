@@ -7,6 +7,7 @@ import { screenGradient, accentFor } from '@/lib/appTheme';
 import { getWordDetailsUrl } from '@/lib/api';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { getWordDisplayStyles } from '@/styles/wordDisplay.styles';
+import { isBookmarked, toggleBookmark } from '@/lib/bookmarks';
 
 type WordDetailsProps = {
   word: string;
@@ -17,6 +18,7 @@ export default function WordDetails({ word, lineNumber }: WordDetailsProps) {
   const [wordData, setWordData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
 
   const isDarkMode = useColorScheme() === 'dark';
   const ws = getWordDisplayStyles(isDarkMode);
@@ -61,6 +63,38 @@ export default function WordDetails({ word, lineNumber }: WordDetailsProps) {
     }
   };
 
+  const lemma = wordData?.[0]?.lemma;
+  const form = wordData?.[0]?.form;
+  const caseInfo = wordData?.[1]?.case;
+  const definitions = wordData?.[2]?.definitions;
+
+  useEffect(() => {
+    const target = {
+      kind: 'word' as const,
+      word: String(form ?? word),
+      lemma: lemma ? String(lemma) : undefined,
+      line: lineNumber,
+      createdAt: Date.now(),
+    };
+    const check = async () => {
+      const ok = await isBookmarked(target);
+      setSaved(ok);
+    };
+    void check();
+  }, [form, lemma, word, lineNumber]);
+
+  const toggleSaved = async () => {
+    const target = {
+      kind: 'word' as const,
+      word: String(form ?? word),
+      lemma: lemma ? String(lemma) : undefined,
+      line: lineNumber,
+      createdAt: Date.now(),
+    };
+    const next = await toggleBookmark(target);
+    setSaved(next);
+  };
+
   if (loading) {
     return (
       <LinearGradient colors={screenGradient(isDarkMode)} style={{ flex: 1 }}>
@@ -96,15 +130,17 @@ export default function WordDetails({ word, lineNumber }: WordDetailsProps) {
     );
   }
 
-  const lemma = wordData[0]?.lemma;
-  const form = wordData[0]?.form;
-  const caseInfo = wordData[1]?.case;
-  const definitions = wordData[2]?.definitions;
-
   return (
     <GlassPanel isDark={isDarkMode} style={{ marginTop: 8 }}>
       <Text style={ws.eyebrow}>Lexicon preview</Text>
-      <Text style={ws.heroLemma}>{lemma || '—'}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+        <Text style={[ws.heroLemma, { flex: 1 }]} numberOfLines={2}>
+          {lemma || '—'}
+        </Text>
+        <TouchableOpacity onPress={() => void toggleSaved()} activeOpacity={0.82} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+          <MaterialIcons name={saved ? 'bookmark' : 'bookmark-border'} size={26} color={spin} />
+        </TouchableOpacity>
+      </View>
 
       <Text style={ws.formLabel}>Surface form</Text>
       <Text style={ws.formValue}>{form || '—'}</Text>

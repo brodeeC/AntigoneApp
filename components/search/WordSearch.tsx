@@ -5,10 +5,10 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import { screenGradient } from '@/lib/appTheme';
+import { accentFor } from '@/lib/appTheme';
 import { router } from 'expo-router';
 import { buildSearchUrl, getSpeakersUrl } from '@/lib/api';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 interface WordEntry {
   form: string;
@@ -33,6 +33,7 @@ interface WordDataEntry extends Array<unknown> {
 
 export default function WordSearch() {
   const isDark = useColorScheme() === 'dark';
+  const accent = accentFor(isDark);
   const styles = getStyles(isDark);
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<'word' | 'definition'>('word');
@@ -169,22 +170,21 @@ export default function WordSearch() {
   }, []);
 
   return (
-    <LinearGradient
-      colors={screenGradient(isDark)}
-      style={{ flex: 1 }}
+    <ScrollView
+      contentContainerStyle={styles.scrollContainer}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
     >
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={styles.content}>
-          <Text style={styles.title}>Antigone Lexicon Search</Text>
-          <Text style={styles.subtitle}>
+      <View style={styles.content}>
+        <Text style={[styles.eyebrow, { color: accent }]}>Lexicon</Text>
+        <Text style={styles.title}>Search</Text>
+        <Text style={styles.subtitle}>
             {selectedSpeaker 
               ? `Showing results for speaker: ${selectedSpeaker}` 
               : 'Search by ' + (mode === 'word' ? 'word (Greek or Latin characters)' : 'English definitions')}
           </Text>
 
+        <GlassPanel isDark={isDark} padding={16} style={styles.panel}>
           {/* Search Mode Toggle */}
           <View style={styles.toggleContainer}>
             {['word', 'definition'].map((option) => (
@@ -198,12 +198,15 @@ export default function WordSearch() {
                   setMode(option as 'word' | 'definition');
                   setSelectedSpeaker(null); // Reset speaker when changing mode
                 }}
+                activeOpacity={0.85}
               >
-                <Text style={[
-                  styles.toggleText,
-                  mode === option && styles.toggleTextActive
-                ]}>
-                  {option === 'word' ? 'Greek Word' : 'Definition'}
+                <Text
+                  style={[
+                    styles.toggleText,
+                    mode === option && styles.toggleTextActive,
+                  ]}
+                >
+                  {option === 'word' ? 'Greek word' : 'Definition'}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -213,7 +216,7 @@ export default function WordSearch() {
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionTitle}>Filter by Speaker</Text>
             {speakersLoading ? (
-              <ActivityIndicator size="small" color={isDark ? '#64B5F6' : '#1E88E5'} />
+              <ActivityIndicator size="small" color={accent} />
             ) : (
               <ScrollView 
                 horizontal 
@@ -228,6 +231,7 @@ export default function WordSearch() {
                       selectedSpeaker === speaker && styles.speakerButtonActive
                     ]}
                     onPress={() => handleSpeakerSelect(speaker)}
+                    activeOpacity={0.85}
                   >
                     <Text style={[
                       styles.speakerButtonText,
@@ -267,6 +271,7 @@ export default function WordSearch() {
                 !selectedSpeaker && !query && { opacity: 0.5 }
               ]}
               disabled={!selectedSpeaker && !query}
+              activeOpacity={0.85}
             >
               <Text style={styles.clearButtonText}>Clear</Text>
             </TouchableOpacity>
@@ -278,6 +283,7 @@ export default function WordSearch() {
                 (!query) && { opacity: 0.5 }
               ]}
               disabled={!query}
+              activeOpacity={0.85}
             >
               {loading ? (
                 <ActivityIndicator color="#FFF" />
@@ -289,20 +295,23 @@ export default function WordSearch() {
               )}
             </TouchableOpacity>
           </View>
+        </GlassPanel>
 
           {/* Results */}
           {hasSearched && !loading && (
             <View style={styles.resultsContainer}>
               {results.length === 0 ? (
-                <View style={styles.emptyState}>
-                  <Feather name="search" size={40} color={isDark ? '#94A3B8' : '#64748B'} />
-                  <Text style={styles.emptyText}>No results found</Text>
-                  <Text style={styles.emptySubtext}>
-                    {selectedSpeaker 
-                      ? `No ${mode === 'word' ? 'words' : 'definitions'} found for speaker ${selectedSpeaker}`
-                      : 'Try a different search term'}
-                  </Text>
-                </View>
+                <GlassPanel isDark={isDark} padding={22} style={styles.panel}>
+                  <View style={styles.emptyState}>
+                    <Feather name="search" size={40} color={isDark ? '#94A3B8' : '#64748B'} />
+                    <Text style={styles.emptyText}>No results found</Text>
+                    <Text style={styles.emptySubtext}>
+                      {selectedSpeaker
+                        ? `No ${mode === 'word' ? 'words' : 'definitions'} found for speaker ${selectedSpeaker}`
+                        : 'Try a different search term'}
+                    </Text>
+                  </View>
+                </GlassPanel>
               ) : (
                 <>
                   {paginatedResults.map((entry, index) => {
@@ -312,25 +321,26 @@ export default function WordSearch() {
                     const definitions = entry[2]?.definitions?.slice(0, 3) || [];
 
                     return (
-                      <View key={`${entry[0].lemma_id}-${index}`} style={styles.entryContainer}>
+                      <GlassPanel key={`${entry[0].lemma_id}-${index}`} isDark={isDark} padding={16} style={styles.entryContainer}>
                         <View style={styles.entryHeader}>
-                          <Text style={styles.entryTitle}>{currentPage * resultsPerPage + index + 1}</Text>
+                          <Text style={[styles.entryTitle, { color: accent }]}>#{currentPage * resultsPerPage + index + 1}</Text>
                           <Text style={styles.entryForm}>{form}</Text>
                         </View>
 
                         <View style={styles.entryRow}>
-                          <Text style={styles.entryLabel}>Lemma:</Text>
+                          <Text style={styles.entryLabel}>Lemma</Text>
                           <Text style={styles.entryValue}>{lemma}</Text>
                         </View>
 
                         <View style={styles.entryRow}>
-                          <Text style={styles.entryLabel}>Line:</Text>
+                          <Text style={styles.entryLabel}>Line</Text>
                           <Text style={styles.entryValue}>{line_number}</Text>
                           <TouchableOpacity 
-                            style={styles.lineButton}
+                            style={[styles.lineButton, { borderColor: accent }]}
                             onPress={() => handleLineDetails(line_number)}
+                            activeOpacity={0.85}
                           >
-                            <Text style={styles.lineButtonText}>Go</Text>
+                            <Text style={[styles.lineButtonText, { color: accent }]}>Go</Text>
                           </TouchableOpacity>
                         </View>
 
@@ -343,7 +353,7 @@ export default function WordSearch() {
 
                         {definitions.length > 0 && (
                           <View style={styles.definitionContainer}>
-                            <Text style={styles.sectionTitle}>Definitions:</Text>
+                            <Text style={styles.sectionTitle}>Definitions</Text>
                             {definitions.map((def) => (
                               <Text key={def.def_num} style={styles.definitionText}>
                                 {def.def_num}. {def.short_def}
@@ -354,11 +364,13 @@ export default function WordSearch() {
 
                         <TouchableOpacity
                           onPress={() => handleWordDetails(form)}
-                          style={styles.detailsButton}
+                          style={[styles.detailsButton, { backgroundColor: accent }]}
+                          activeOpacity={0.88}
                         >
-                          <Text style={styles.detailsButtonText}>Word Details</Text>
+                          <Text style={styles.detailsButtonText}>Full entry</Text>
+                          <Feather name="arrow-up-right" size={16} color="#FFF" />
                         </TouchableOpacity>
-                      </View>
+                      </GlassPanel>
                     );
                   })}
                   {results.length > resultsPerPage && (
@@ -370,13 +382,14 @@ export default function WordSearch() {
                           styles.paginationButton,
                           currentPage === 0 && styles.paginationButtonDisabled
                         ]}
+                        activeOpacity={0.85}
                       >
                         <Feather 
                           name="chevron-left" 
                           size={20} 
                           color={currentPage === 0 ? 
                             (isDark ? '#64748B' : '#94A3B8') : 
-                            (isDark ? '#64B5F6' : '#1E88E5')} 
+                            accent} 
                         />
                       </TouchableOpacity>
                       
@@ -391,13 +404,14 @@ export default function WordSearch() {
                           styles.paginationButton,
                           currentPage === totalPages - 1 && styles.paginationButtonDisabled
                         ]}
+                        activeOpacity={0.85}
                       >
                         <Feather 
                           name="chevron-right" 
                           size={20} 
                           color={currentPage === totalPages - 1 ? 
                             (isDark ? '#64748B' : '#94A3B8') : 
-                            (isDark ? '#64B5F6' : '#1E88E5')} 
+                            accent} 
                         />
                       </TouchableOpacity>
                     </View>
@@ -406,39 +420,53 @@ export default function WordSearch() {
               )}
             </View>
           )}
-        </View>
-      </ScrollView>
-    </LinearGradient>
+      </View>
+    </ScrollView>
   );
 }
 
 const getStyles = (isDark: boolean) => StyleSheet.create({
   scrollContainer: {
-    padding: 20,
-    paddingBottom: 40,
+    paddingHorizontal: 20,
+    paddingTop: 14,
+    paddingBottom: 44,
   },
   content: {
     flex: 1,
   },
-  title: {
-    fontSize: 24,
+  eyebrow: {
+    fontSize: 11,
     fontWeight: '700',
-    marginBottom: 4,
+    letterSpacing: 2.2,
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    marginBottom: 8,
+    opacity: 0.9,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '800',
+    marginBottom: 6,
     color: isDark ? '#E2E8F0' : '#1E293B',
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 14,
-    marginBottom: 24,
+    marginBottom: 18,
     color: isDark ? '#94A3B8' : '#64748B',
     textAlign: 'center',
+  },
+  panel: {
+    marginBottom: 14,
   },
   sectionContainer: {
     marginBottom: 16,
   },
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 1.4,
+    textTransform: 'uppercase',
     color: isDark ? '#CBD5E1' : '#475569',
     marginBottom: 12,
   },
@@ -448,23 +476,22 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
   speakerButton: {
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 20,
-    backgroundColor: isDark ? '#1E293B' : '#E2E8F0',
+    borderRadius: 999,
+    backgroundColor: isDark ? 'rgba(76, 201, 240, 0.10)' : 'rgba(67, 97, 238, 0.08)',
     marginRight: 10,
     borderWidth: 1,
-    borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+    borderColor: isDark ? 'rgba(76, 201, 240, 0.22)' : 'rgba(67, 97, 238, 0.18)',
   },
   speakerButtonActive: {
-    backgroundColor: isDark ? '#64B5F6' : '#1E88E5',
-    borderColor: isDark ? '#64B5F6' : '#1E88E5',
+    backgroundColor: isDark ? 'rgba(76, 201, 240, 0.20)' : 'rgba(67, 97, 238, 0.16)',
+    borderColor: isDark ? 'rgba(76, 201, 240, 0.46)' : 'rgba(67, 97, 238, 0.40)',
   },
   speakerButtonText: {
     fontSize: 14,
-    color: isDark ? '#CBD5E1' : '#475569',
+    color: isDark ? '#E2E8F0' : '#334155',
   },
   speakerButtonTextActive: {
-    color: '#FFF',
-    fontWeight: '600',
+    fontWeight: '700',
   },
   toggleContainer: {
     flexDirection: 'row',
@@ -475,19 +502,22 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
   toggleButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 20,
-    backgroundColor: isDark ? '#1E293B' : '#E2E8F0',
+    borderRadius: 999,
+    backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+    borderWidth: 1,
+    borderColor: isDark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.08)',
   },
   toggleButtonActive: {
-    backgroundColor: isDark ? '#64B5F6' : '#1E88E5',
+    backgroundColor: isDark ? 'rgba(76, 201, 240, 0.18)' : 'rgba(67, 97, 238, 0.14)',
+    borderColor: isDark ? 'rgba(76, 201, 240, 0.40)' : 'rgba(67, 97, 238, 0.34)',
   },
   toggleText: {
     fontSize: 14,
     color: isDark ? '#CBD5E1' : '#475569',
   },
   toggleTextActive: {
-    color: '#FFF',
-    fontWeight: '600',
+    fontWeight: '800',
+    color: isDark ? '#F8FAFC' : '#0F172A',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -522,20 +552,20 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     borderRadius: 12,
   },
   clearButton: {
-    backgroundColor: isDark ? '#1E293B' : '#E2E8F0',
+    backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
     borderWidth: 1,
     borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
   },
   clearButtonText: {
     color: isDark ? '#E2E8F0' : '#1E293B',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '800',
   },
   searchButton: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: isDark ? '#64B5F6' : '#1E88E5',
+    backgroundColor: isDark ? '#4CC9F0' : '#4361EE',
     paddingVertical: 16,
     borderRadius: 12,
     gap: 8,
@@ -544,18 +574,13 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
   searchButtonText: {
     color: '#FFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '800',
   },
   resultsContainer: {
     marginTop: 12,
   },
   entryContainer: {
-    padding: 16,
-    backgroundColor: isDark ? '#1E293B' : '#FFFFFF',
-    borderRadius: 12,
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
   },
   entryHeader: {
     flexDirection: 'row',
@@ -564,13 +589,12 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
   },
   entryTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    color: isDark ? '#64B5F6' : '#1E88E5',
+    fontWeight: '800',
     marginRight: 12,
   },
   entryForm: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: '900',
     color: isDark ? '#F8FAFC' : '#1E293B',
   },
   entryRow: {
@@ -580,8 +604,10 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     flexWrap: 'wrap',
   },
   entryLabel: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
     color: isDark ? '#94A3B8' : '#64748B',
     marginRight: 6,
   },
@@ -593,16 +619,16 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
   lineButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: isDark ? '#64748B' : '#94A3B8',
+    borderColor: isDark ? 'rgba(76, 201, 240, 0.42)' : 'rgba(67, 97, 238, 0.40)',
     paddingVertical: 4,
     paddingHorizontal: 12,
-    borderRadius: 4,
+    borderRadius: 10,
     marginLeft: 'auto',
   },
   lineButtonText: {
     color: isDark ? '#E2E8F0' : '#334155',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '800',
   },
   definitionContainer: {
     marginTop: 12,
@@ -615,15 +641,18 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     marginBottom: 4,
   },
   detailsButton: {
-    backgroundColor: isDark ? '#1E88E5' : '#1E88E5',
+    backgroundColor: isDark ? '#4CC9F0' : '#4361EE',
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: 8,
     marginTop: 12,
   },
   detailsButtonText: {
     color: '#FFF',
-    fontWeight: '600',
+    fontWeight: '900',
     fontSize: 14,
   },
   emptyState: {
@@ -655,7 +684,7 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
   paginationButton: {
     padding: 10,
     borderRadius: 8,
-    backgroundColor: isDark ? 'rgba(100, 181, 246, 0.1)' : 'rgba(30, 136, 229, 0.1)',
+    backgroundColor: isDark ? 'rgba(76, 201, 240, 0.10)' : 'rgba(67, 97, 238, 0.08)',
   },
   paginationButtonDisabled: {
     opacity: 0.5,

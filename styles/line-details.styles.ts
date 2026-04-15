@@ -27,28 +27,19 @@ export const styles = StyleSheet.create({
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between', 
+        justifyContent: 'space-between',
         paddingHorizontal: 16,
         paddingTop: Platform.select({
-            ios: 70,
-            android: 30
+            ios: 16,
+            android: 10
         }),
-        paddingBottom: 16,
-        borderBottomWidth: 1,
+        paddingBottom: 10,
     },
     headerSpacer: {
-        width: 80, 
+        width: 44,
     },
     lineRangeContainer: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 8,
-        top: 70,
-        paddingHorizontal: 16,
-        borderRadius: 12,
+        // legacy (no longer used)
     },
     speaker: {
         fontSize: 22,
@@ -94,11 +85,7 @@ export const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingHorizontal: 16,
-        paddingVertical: 30,
+        paddingVertical: 10,
         backgroundColor: 'transparent',
     },
     disabledNavButton: {
@@ -125,7 +112,8 @@ export const styles = StyleSheet.create({
         maxWidth: 400,
     },
     backButton: {
-        padding: 8,
+        paddingVertical: 6,
+        paddingHorizontal: 8,
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
@@ -137,6 +125,8 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Inter-Medium',
         marginLeft: 8,
+        includeFontPadding: false,
+        lineHeight: 20,
     },
     loadingContainer: {
         flex: 1,
@@ -159,6 +149,7 @@ export const styles = StyleSheet.create({
         fontFamily: 'Inter-SemiBold',
         letterSpacing: 0.3,
         includeFontPadding: false,
+        lineHeight: 20,
     },
     lineNumberButton: {
         paddingVertical: 4,
@@ -205,17 +196,7 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             color: isDarkMode ? WHITE : DARK_TEXT,
         },
         navigationContainer: {
-            backgroundColor: isDarkMode ? 'rgba(26, 26, 46, 0.92)' : 'rgba(255, 255, 255, 0.94)',
-            borderTopWidth: 1,
-            borderColor: isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)',
-            ...Platform.select({
-                ios: {
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: -4 },
-                    shadowOpacity: isDarkMode ? 0.3 : 0.1,
-                    shadowRadius: 12,
-                },
-            }),
+            // footer background now handled by GlassPanel
         },
         navButton: {
             backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
@@ -254,13 +235,11 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
             color: accentColor,
         },
         lineRangeContainer: {
-            //backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.1)' : 'rgba(67, 97, 238, 0.1)',
-            //borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.3)' : 'rgba(67, 97, 238, 0.3)',
-            borderWidth: 0,
+            // legacy (no longer used)
         },
         headerContainer: {
-            borderColor: isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)',
-            backgroundColor: isDarkMode ? 'rgba(26, 26, 46, 0.88)' : 'rgba(255, 255, 255, 0.9)',
+            borderColor: 'transparent',
+            backgroundColor: 'transparent',
         },
         lineNumberButton: {
             borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.3)' : 'rgba(67, 97, 238, 0.3)',

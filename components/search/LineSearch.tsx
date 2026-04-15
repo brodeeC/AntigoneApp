@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, useColorScheme, Keyboard } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
+import { accentFor } from '@/lib/appTheme';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 import { LinearGradient } from 'expo-linear-gradient';
-import { screenGradient } from '@/lib/appTheme';
 
 export default function LineSearch() {
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function LineSearch() {
   const [endLine, setEndLine] = useState('');
   const [isPressed, setIsPressed] = useState(false);
   const isDark = useColorScheme() === 'dark';
+  const accent = accentFor(isDark);
 
   const handleSearch = () => {
     Keyboard.dismiss();
@@ -36,15 +38,20 @@ export default function LineSearch() {
   const styles = getStyles(isDark);
 
   return (
-    <LinearGradient
-      colors={screenGradient(isDark)}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Search by Line Number</Text>
+        <Text style={[styles.eyebrow, { color: accent }]}>By line</Text>
+        <Text style={styles.title}>Jump to text</Text>
         <Text style={styles.subtitle}>Enter a line or range of lines</Text>
-        
-        <View style={styles.inputContainer}>
+        <LinearGradient
+          colors={isDark ? ['#4CC9F0', '#4361EE'] : ['#4361EE', '#5B8DEF']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.accentBar}
+        />
+
+        <GlassPanel isDark={isDark} padding={16}>
+          <View style={styles.inputContainer}>
           <Feather name="hash" size={20} color={isDark ? '#94A3B8' : '#64748B'} style={styles.inputIcon} />
           <TextInput
             placeholder="Start Line"
@@ -55,9 +62,9 @@ export default function LineSearch() {
             style={styles.input}
             clearButtonMode="while-editing"
           />
-        </View>
+          </View>
 
-        <View style={styles.inputContainer}>
+          <View style={styles.inputContainer}>
           <Feather name="hash" size={20} color={isDark ? '#94A3B8' : '#64748B'} style={styles.inputIcon} />
           <TextInput
             placeholder="End Line (optional)"
@@ -68,9 +75,9 @@ export default function LineSearch() {
             style={styles.input}
             clearButtonMode="while-editing"
           />
-        </View>
+          </View>
 
-        <View style={styles.buttonsContainer}>
+          <View style={styles.buttonsContainer}>
           <TouchableOpacity
             onPress={handleSearch}
             onPressIn={() => setIsPressed(true)}
@@ -93,32 +100,51 @@ export default function LineSearch() {
               color={isDark ? '#E2E8F0' : '#F8FAFC'} 
             />
           </TouchableOpacity>
-        </View>
+          </View>
+        </GlassPanel>
       </View>
-    </LinearGradient>
+    </View>
   );
 }
 
 const getStyles = (isDark: boolean) => StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 14,
+    paddingBottom: 44,
   },
   content: {
     flex: 1,
   },
-  title: {
-    fontSize: 24,
+  eyebrow: {
+    fontSize: 11,
     fontWeight: '700',
-    marginBottom: 4,
+    letterSpacing: 2.2,
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    marginBottom: 8,
+    opacity: 0.9,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '800',
+    marginBottom: 6,
     color: isDark ? '#E2E8F0' : '#1E293B',
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 14,
-    marginBottom: 24,
+    marginBottom: 18,
     color: isDark ? '#94A3B8' : '#64748B',
     textAlign: 'center',
+  },
+  accentBar: {
+    height: 4,
+    width: 70,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 14,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -129,7 +155,6 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     borderWidth: 1,
     borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
     marginBottom: 16,
-    top: 70,
   },
   inputIcon: {
     marginRight: 12,
@@ -145,13 +170,12 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
     justifyContent: 'space-between',
     gap: 12,
     marginBottom: 20,
-    top: 70,
   },
   searchButton: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: isDark ? '#64B5F6' : '#1E88E5',
+    backgroundColor: isDark ? '#4CC9F0' : '#4361EE',
     paddingVertical: 16,
     borderRadius: 12,
     gap: 8,
@@ -167,6 +191,6 @@ const getStyles = (isDark: boolean) => StyleSheet.create({
   searchButtonText: {
     color: isDark ? '#E2E8F0' : '#F8FAFC',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '800',
   },
 });

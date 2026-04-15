@@ -7,9 +7,12 @@ import { Feather, MaterialIcons } from "@expo/vector-icons";
 import WordDisplay from "../../../components/read/wordDisplay"; 
 import TabLayout from "../../(tabs)/tabLayout";
 import { LinearGradient } from 'expo-linear-gradient';
-import { screenGradient } from '@/lib/appTheme';
+import { accentFor, screenGradient } from '@/lib/appTheme';
 import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 import { getLinesUrl } from "@/lib/api";
+import { addBookmark, isBookmarked, listBookmarks, removeBookmark, toggleBookmark } from '@/lib/bookmarks';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface LineData {
     lineNum: number;
@@ -29,10 +32,14 @@ export default function LineDetails() {
     const [error, setError] = useState<string | null>(null);
     const [selectedWord, setSelectedWord] = useState<SelectedWordType>(null);
     const [buttonScale] = useState(new Animated.Value(1));
+    const [lineBookmarked, setLineBookmarked] = useState<Record<number, boolean>>({});
+    const [rangeSaved, setRangeSaved] = useState(false);
     
     const router = useRouter();
     const isDarkMode = useColorScheme() === "dark";
     const dynamicStyles = getDynamicStyles(isDarkMode);
+    const accent = accentFor(isDarkMode);
+    const insets = useSafeAreaInsets();
 
     const { start, end } = useLocalSearchParams();
     const startLine = start ? Number(start) : 1;
@@ -72,14 +79,14 @@ export default function LineDetails() {
     };
 
     const goToLine = (line: number) => {
-        router.replace({ 
+        router.push({ 
             pathname: "/line-details/[start]/[end]", 
             params: { start: line.toString(), end: line } 
         });
     };
 
     const goToLines = (start: number, end: number) => {
-        router.replace({ 
+        router.push({ 
             pathname: "/line-details/[start]/[end]", 
             params: { 
                 start: start.toString(),
@@ -138,6 +145,56 @@ export default function LineDetails() {
         };
         loadData();
     }, [startLine, endLine]);
+
+    useEffect(() => {
+        const loadBookmarks = async () => {
+            const all = await listBookmarks();
+            const map: Record<number, boolean> = {};
+            for (const b of all) {
+                if (b.kind === 'line') map[b.line] = true;
+            }
+            setLineBookmarked(map);
+        };
+        void loadBookmarks();
+    }, []);
+
+    useEffect(() => {
+        if (span <= 1) return;
+        const check = async () => {
+            const ok = await isBookmarked({ kind: 'range', start: currentStart, end: currentEnd });
+            setRangeSaved(ok);
+        };
+        void check();
+    }, [span, currentStart, currentEnd]);
+
+    const toggleLineBookmark = async (lineNum: number) => {
+        const next = await toggleBookmark({ kind: 'line', line: lineNum });
+        setLineBookmarked((prev) => ({ ...prev, [lineNum]: next }));
+    };
+
+    const toggleRangeBookmark = async () => {
+        if (rangeSaved) {
+            await removeBookmark({ kind: 'range', start: currentStart, end: currentEnd });
+            setRangeSaved(false);
+            return;
+        }
+
+        // Save as ONE range bookmark entry
+        await addBookmark({ kind: 'range', start: currentStart, end: currentEnd });
+        setRangeSaved(true);
+
+        // Auto-clean: remove any individual line bookmarks inside this range
+        await Promise.all(
+            Array.from({ length: currentEnd - currentStart + 1 }, (_, i) =>
+                removeBookmark({ kind: 'line', line: currentStart + i })
+            )
+        );
+        setLineBookmarked((prev) => {
+            const next = { ...prev };
+            for (let n = currentStart; n <= currentEnd; n++) delete next[n];
+            return next;
+        });
+    };
 
     if (!fontsLoaded && !loading) {
         return (
@@ -207,35 +264,75 @@ export default function LineDetails() {
                     colors={screenGradient(isDarkMode)}
                     style={{ flex: 1 }}
                 >
-                    <View style={[styles.headerContainer, dynamicStyles.headerContainer]}>
-                        <TouchableOpacity 
-                            onPressIn={() => setIsBackPressed(true)}
-                            onPressOut={() => setIsBackPressed(false)}
-                            onPress={handleGoBack}
-                            style={[
-                                styles.backButton,
-                                dynamicStyles.backButton,
-                                isBackPressed && { opacity: 0.7 }
-                            ]}
-                            activeOpacity={0.7}
-                        >
-                            <Feather 
-                                name="chevron-left" 
-                                size={20} 
-                                color={isDarkMode ? "#64B5F6" : "#1E88E5"} 
-                            />
-                            <Text style={[styles.backButtonText, dynamicStyles.backButtonText]}>
-                                Back
-                            </Text>
-                        </TouchableOpacity>
+                    <View style={{ paddingHorizontal: 16, paddingTop: insets.top + 6, paddingBottom: 10 }}>
+                        <GlassPanel isDark={isDarkMode} padding={12}>
+                            <View style={{ height: 44, justifyContent: 'center' }}>
+                                {/* Left slot: Back + (range) bookmark */}
+                                <View
+                                    style={{
+                                        position: 'absolute',
+                                        left: 0,
+                                        top: 0,
+                                        bottom: 0,
+                                        width: 132,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <TouchableOpacity
+                                        onPressIn={() => setIsBackPressed(true)}
+                                        onPressOut={() => setIsBackPressed(false)}
+                                        onPress={handleGoBack}
+                                        style={[
+                                            styles.backButton,
+                                            dynamicStyles.backButton,
+                                            { height: 44, justifyContent: 'center' },
+                                            isBackPressed && { opacity: 0.72 },
+                                        ]}
+                                        activeOpacity={0.85}
+                                    >
+                                        <Feather
+                                            name="chevron-left"
+                                            size={22}
+                                            color={isDarkMode ? "#E2E8F0" : "#1E293B"}
+                                        />
+                                        <Text style={[styles.backButtonText, dynamicStyles.backButtonText]}>Back</Text>
+                                    </TouchableOpacity>
 
-                        <View style={[styles.lineRangeContainer, dynamicStyles.lineRangeContainer]}>
-                            <Text style={[styles.lineRangeText, dynamicStyles.lineRangeText]}>
-                                {data && data.length === 1 ? `Line ${currentStart}` : `Lines ${currentStart}–${currentEnd}`}
-                            </Text>
-                        </View>
+                                    {span > 1 && (
+                                        <TouchableOpacity
+                                            onPress={() => void toggleRangeBookmark()}
+                                            activeOpacity={0.85}
+                                            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                                            style={{
+                                                width: 38,
+                                                height: 38,
+                                                borderRadius: 12,
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                marginLeft: 6,
+                                            }}
+                                        >
+                                            <MaterialIcons
+                                                name={rangeSaved ? 'bookmark' : 'bookmark-border'}
+                                                size={22}
+                                                color={rangeSaved ? accent : (isDarkMode ? 'rgba(226,232,240,0.65)' : 'rgba(30,41,59,0.45)')}
+                                            />
+                                        </TouchableOpacity>
+                                    )}
+                                </View>
 
-                        <View style={styles.headerSpacer} />
+                                {/* Center title: fixed left/right ensures true centering */}
+                                <View style={{ position: 'absolute', left: 132, right: 44, top: 0, bottom: 0, justifyContent: 'center' }}>
+                                    <Text style={[styles.lineRangeText, dynamicStyles.lineRangeText, { textAlign: 'center' }]} numberOfLines={1}>
+                                        {data && data.length === 1 ? `Line ${currentStart}` : `Lines ${currentStart}–${currentEnd}`}
+                                    </Text>
+                                </View>
+
+                                {/* Right slot spacer (keeps title centered) */}
+                                <View style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 44 }} />
+                            </View>
+                        </GlassPanel>
                     </View>
 
                     <ScrollView
@@ -259,14 +356,36 @@ export default function LineDetails() {
                                         </>
                                     )}
                                     
-                                    <TouchableOpacity
-                                        style={[styles.lineNumberButton, dynamicStyles.lineNumberButton]}
-                                        onPress={() => goToLine(line.lineNum)}
-                                    >
-                                        <Text style={[styles.lineNumberButtonText, dynamicStyles.lineNumberButtonText]}>
-                                            {line.lineNum}
-                                        </Text>
-                                    </TouchableOpacity>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginLeft: 16, marginVertical: 8 }}>
+                                        <TouchableOpacity
+                                            style={[styles.lineNumberButton, dynamicStyles.lineNumberButton, { marginLeft: 0, marginVertical: 0 }]}
+                                            onPress={() => goToLine(line.lineNum)}
+                                            activeOpacity={0.8}
+                                        >
+                                            <Text style={[styles.lineNumberButtonText, dynamicStyles.lineNumberButtonText]}>
+                                                {line.lineNum}
+                                            </Text>
+                                        </TouchableOpacity>
+
+                                        {span === 1 && (
+                                            <TouchableOpacity
+                                                onPress={() => void toggleLineBookmark(line.lineNum)}
+                                                activeOpacity={0.8}
+                                                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                                                style={{ padding: 6, borderRadius: 12 }}
+                                            >
+                                                <MaterialIcons
+                                                    name={lineBookmarked[line.lineNum] ? 'bookmark' : 'bookmark-border'}
+                                                    size={22}
+                                                    color={
+                                                        lineBookmarked[line.lineNum]
+                                                            ? (isDarkMode ? '#4CC9F0' : '#4361EE')
+                                                            : (isDarkMode ? 'rgba(226,232,240,0.55)' : 'rgba(30,41,59,0.45)')
+                                                    }
+                                                />
+                                            </TouchableOpacity>
+                                        )}
+                                    </View>
                                     
                                     <View style={styles.lineTextContainer}>
                                         {line.line_text.split(" ").map((word, index) => {
@@ -302,74 +421,76 @@ export default function LineDetails() {
                     </ScrollView>
                     
                     {/* Floating navigation footer */}
-                    <View style={[styles.navigationContainer, dynamicStyles.navigationContainer]}>
-                        <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.navButton, 
-                                    dynamicStyles.navButton,
-                                    currentStart <= 1 && styles.disabledNavButton
-                                ]}
-                                onPress={() => {
-                                    handleNavPress();
-                                    const newStart = Math.max(1, currentStart - span);
-                                    const newEnd = Math.max(1, currentEnd - span);
-                                    if (span > 1) {
-                                        goToLines(newStart, newEnd);
-                                    } else {
-                                        goToLine(newStart);
-                                    }
-                                }}
-                                onPressIn={handlePressIn}
-                                onPressOut={handlePressOut}
-                                disabled={currentStart <= 1}
-                            >
-                                <MaterialIcons
-                                    name="chevron-left"
-                                    size={24}
-                                    color={currentStart <= 1 ? 
-                                        (isDarkMode ? "#555555" : "#AAAAAA") : 
-                                        (isDarkMode ? "#64B5F6" : "#1E88E5")}
-                                />
-                                <Text style={[styles.navButtonText, dynamicStyles.navButtonText]}>
-                                    Prev
-                                </Text>
-                            </TouchableOpacity>
-                        </Animated.View>
+                    <View style={styles.navigationContainer}>
+                        <GlassPanel
+                            isDark={isDarkMode}
+                            padding={10}
+                            style={{ marginHorizontal: 16, marginBottom: insets.bottom + 10 }}
+                        >
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                                <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.navButton,
+                                            dynamicStyles.navButton,
+                                            currentStart <= 1 && styles.disabledNavButton,
+                                        ]}
+                                        onPress={() => {
+                                            handleNavPress();
+                                            const newStart = Math.max(1, currentStart - span);
+                                            const newEnd = Math.max(1, currentEnd - span);
+                                            if (span > 1) {
+                                                goToLines(newStart, newEnd);
+                                            } else {
+                                                goToLine(newStart);
+                                            }
+                                        }}
+                                        onPressIn={handlePressIn}
+                                        onPressOut={handlePressOut}
+                                        disabled={currentStart <= 1}
+                                        activeOpacity={0.85}
+                                    >
+                                        <MaterialIcons
+                                            name="chevron-left"
+                                            size={22}
+                                            color={currentStart <= 1 ? (isDarkMode ? "#555555" : "#AAAAAA") : accent}
+                                        />
+                                        <Text style={[styles.navButtonText, dynamicStyles.navButtonText]}>Prev</Text>
+                                    </TouchableOpacity>
+                                </Animated.View>
 
-                        <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
-                            <TouchableOpacity
-                                style={[
-                                    styles.navButton, 
-                                    dynamicStyles.navButton,
-                                    currentEnd >= 1353 ? styles.disabledNavButton : null
-                                ]}
-                                onPress={() => {
-                                    handleNavPress();
-                                    const newStart = Math.min(1353, currentStart + span);
-                                    const newEnd = Math.min(1353, currentEnd + span);
-                                    if (span > 1) {
-                                        goToLines(newStart, newEnd);
-                                    } else {
-                                        goToLine(newStart);
-                                    }
-                                }}
-                                onPressIn={handlePressIn}
-                                onPressOut={handlePressOut}
-                                disabled={currentEnd >= 1353}
-                            >
-                                <Text style={[styles.navButtonText, dynamicStyles.navButtonText]}>
-                                    Next
-                                </Text>
-                                <MaterialIcons
-                                    name="chevron-right"
-                                    size={24}
-                                    color={currentEnd >= 1353 ? 
-                                        (isDarkMode ? "#555555" : "#AAAAAA") : 
-                                        (isDarkMode ? "#64B5F6" : "#1E88E5")}
-                                />
-                            </TouchableOpacity>
-                        </Animated.View>
+                                <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.navButton,
+                                            dynamicStyles.navButton,
+                                            currentEnd >= 1353 ? styles.disabledNavButton : null,
+                                        ]}
+                                        onPress={() => {
+                                            handleNavPress();
+                                            const newStart = Math.min(1353, currentStart + span);
+                                            const newEnd = Math.min(1353, currentEnd + span);
+                                            if (span > 1) {
+                                                goToLines(newStart, newEnd);
+                                            } else {
+                                                goToLine(newStart);
+                                            }
+                                        }}
+                                        onPressIn={handlePressIn}
+                                        onPressOut={handlePressOut}
+                                        disabled={currentEnd >= 1353}
+                                        activeOpacity={0.85}
+                                    >
+                                        <Text style={[styles.navButtonText, dynamicStyles.navButtonText]}>Next</Text>
+                                        <MaterialIcons
+                                            name="chevron-right"
+                                            size={22}
+                                            color={currentEnd >= 1353 ? (isDarkMode ? "#555555" : "#AAAAAA") : accent}
+                                        />
+                                    </TouchableOpacity>
+                                </Animated.View>
+                            </View>
+                        </GlassPanel>
                     </View>
                 </LinearGradient>
             </TabLayout>

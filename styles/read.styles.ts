@@ -18,12 +18,13 @@ const DISABLED_COLOR = "#A0A0A0"; // Gray for disabled state
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: 24,
-        paddingTop: Platform.select({ ios: 60, android: 40 }),
+        paddingHorizontal: 20,
+        paddingTop: Platform.select({ ios: 10, android: 6 }),
     },
     headerContainer: {
-        marginBottom: 24,
+        marginBottom: 14,
         alignItems: 'center',
+        flexDirection: 'row',
     },
     header: {
         fontSize: 32,
@@ -43,42 +44,59 @@ export const styles = StyleSheet.create({
     },
     headerDivider: {
         height: 1,
-        width: '40%',
-        marginTop: 16,
+        width: '100%',
+        marginBottom: 12,
     },
     scrollView: {
         flex: 1,
     },
     scrollContent: {
-        paddingBottom: 100,
+        paddingBottom: 120,
+    },
+    pageBookmarkButton: {
+        padding: 8,
+        borderRadius: 14,
+        marginLeft: 10,
+    },
+    paginationOuter: {
+        paddingBottom: 10,
+    },
+    paginationGlass: {
+        borderRadius: 18,
     },
     paginationContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical: 16,
-        paddingHorizontal: 8,
-        borderTopWidth: 1,
+        justifyContent: 'space-between',
+    },
+    navGroup: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
     },
     navButton: {
-        padding: 16,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
         borderRadius: 12,
-        backgroundColor: 'rgba(67, 97, 238, 0.1)',
+        backgroundColor: 'rgba(67, 97, 238, 0.08)',
     },
-    pageJumpButton: {
-        padding: 12,
-        borderRadius: 8,
+    navButtonDisabled: {
+        opacity: 0.45,
     },
-    pageNumberContainer: {
+    pagePill: {
+        paddingVertical: 8,
+        paddingHorizontal: 14,
+        borderRadius: 999,
         flexDirection: 'row',
         alignItems: 'baseline',
+        gap: 8,
     },
     pageNumber: {
-        fontSize: 24,
+        fontSize: 20,
         fontFamily: 'Inter-SemiBold',
     },
     pageCount: {
-        fontSize: 16,
+        fontSize: 13,
         opacity: 0.6,
     },
     // Line number button styles
@@ -204,17 +222,16 @@ export const getDynamicStyles = (isDarkMode: boolean) => {
         headerDivider: {
             backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
         },
-        paginationContainer: {
-            borderColor: isDarkMode ? 'rgba(255,255,255,0.14)' : 'rgba(0,0,0,0.08)',
-            backgroundColor: isDarkMode ? 'rgba(26, 26, 46, 0.88)' : 'rgba(255, 255, 255, 0.9)',
-            ...Platform.select({
-                ios: {
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: -4 },
-                    shadowOpacity: isDarkMode ? 0.35 : 0.12,
-                    shadowRadius: 14,
-                },
-            }),
+        paginationContainer: {},
+        pagePill: {
+            backgroundColor: isDarkMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+            borderWidth: 1,
+            borderColor: isDarkMode ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.08)',
+        },
+        navButton: {
+            backgroundColor: isDarkMode ? 'rgba(76, 201, 240, 0.10)' : 'rgba(67, 97, 238, 0.08)',
+            borderWidth: 1,
+            borderColor: isDarkMode ? 'rgba(76, 201, 240, 0.22)' : 'rgba(67, 97, 238, 0.18)',
         },
         pageNumber: {
             color: accentColor,
