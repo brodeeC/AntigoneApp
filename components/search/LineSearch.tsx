@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, useColorScheme, Keyboard } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Feather } from '@expo/vector-icons';
+import Feather from '@expo/vector-icons/Feather';
 import { accentFor } from '@/lib/appTheme';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { LinearGradient } from 'expo-linear-gradient';

@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, getDynamicStyles } from '../../styles/word-details.styles';
 import { router, useLocalSearchParams } from 'expo-router';
 import TabLayout from '../(tabs)/tabLayout';
-import { Feather } from '@expo/vector-icons';
+import Feather from '@expo/vector-icons/Feather';
 import { LinearGradient } from 'expo-linear-gradient';
 import { screenGradient, accentFor } from '@/lib/appTheme';
 import { getWordDetailsUrl } from '@/lib/api';

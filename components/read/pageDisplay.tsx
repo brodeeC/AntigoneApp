@@ -1,5 +1,5 @@
 import { Stack, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Text, ScrollView, View, TouchableOpacity, useColorScheme, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles, getDynamicStyles, Colors } from "../../styles/styles";
@@ -225,29 +225,44 @@ export default function PageDisplay({ page }: PageDisplayProps) {
                                                 selectedWord?.index === wordIndex;
 
                                             return (
-                                                <TouchableOpacity
-                                                    key={`${line.lineNum}-${wordIndex}`}
-                                                    onPress={() => handleWordPress(word, line.lineNum, wordIndex)}
-                                                >
-                                                    <Text style={[
-                                                        styles.word,
-                                                        dynamicStyles.word,
-                                                        isSelected && dynamicStyles.selectedWord
-                                                    ]}>
-                                                        {word}{" "}
-                                                    </Text>
-                                                </TouchableOpacity>
+                                                <Fragment key={`${line.lineNum}-${wordIndex}`}>
+                                                    <TouchableOpacity
+                                                        onPress={() => handleWordPress(word, line.lineNum, wordIndex)}
+                                                    >
+                                                        <Text style={[
+                                                            styles.word,
+                                                            dynamicStyles.word,
+                                                            isSelected && dynamicStyles.selectedWord
+                                                        ]}>
+                                                            {word}{" "}
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                    {isSelected && (
+                                                        <View style={styles.wordDetailsFullRow}>
+                                                            <View
+                                                                style={[
+                                                                    styles.wordDetailsContainer,
+                                                                    dynamicStyles.wordDetailsContainer,
+                                                                    {
+                                                                        marginTop: 0,
+                                                                        marginBottom: 0,
+                                                                        marginHorizontal: 0,
+                                                                        width: '100%',
+                                                                        maxWidth: '100%',
+                                                                        alignSelf: 'stretch',
+                                                                    },
+                                                                ]}
+                                                            >
+                                                                <WordDetails word={word} lineNumber={line.lineNum} />
+                                                            </View>
+                                                        </View>
+                                                    )}
+                                                </Fragment>
                                             );
                                         })}
                                     </View>
                                 </View>
                             ))}
-
-                            {selectedWord && seg.lines.some((l) => l.lineNum === selectedWord.lineNum) && (
-                                <View style={[styles.wordDetailsContainer, dynamicStyles.wordDetailsContainer]}>
-                                    <WordDetails word={selectedWord.word} lineNumber={selectedWord.lineNum} />
-                                </View>
-                            )}
                         </View>
                     );
                 })}

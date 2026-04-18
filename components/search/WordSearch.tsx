@@ -4,7 +4,7 @@ import {
   StyleSheet, useColorScheme, Keyboard, ScrollView,
   ActivityIndicator
 } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import Feather from '@expo/vector-icons/Feather';
 import { accentFor } from '@/lib/appTheme';
 import { router } from 'expo-router';
 import { buildSearchUrl, getSpeakersUrl } from '@/lib/api';

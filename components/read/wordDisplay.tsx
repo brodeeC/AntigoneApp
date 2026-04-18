@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, TouchableOpacity, useColorScheme } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { MaterialIcons } from '@expo/vector-icons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { screenGradient, accentFor } from '@/lib/appTheme';
 import { getWordDetailsUrl } from '@/lib/api';
 import { GlassPanel } from '@/components/ui/GlassPanel';

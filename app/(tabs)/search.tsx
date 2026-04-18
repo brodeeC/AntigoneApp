@@ -14,7 +14,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import WordSearch from '@/components/search/WordSearch';
 import { LinearGradient } from 'expo-linear-gradient';
 import { screenGradient } from '@/lib/appTheme';
-import { Feather } from '@expo/vector-icons';
+import Feather from '@expo/vector-icons/Feather';
 
 type ValidTab = 'Word Search' | 'Line Search';
 

@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, useColorScheme, Alert } from 'react-native';
 import { Stack, router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Feather, MaterialIcons } from '@expo/vector-icons';
+import Feather from '@expo/vector-icons/Feather';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import TabLayout from './(tabs)/tabLayout';

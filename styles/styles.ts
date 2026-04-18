@@ -79,6 +79,14 @@ export const styles = StyleSheet.create({
         marginRight: 6,
         marginVertical: 2,
     },
+    /** Forces a flex-wrap line break so content spans the full line width (read screen word popup). */
+    wordDetailsFullRow: {
+        width: '100%',
+        flexBasis: '100%',
+        flexGrow: 1,
+        marginTop: 6,
+        marginBottom: 10,
+    },
     wordDetailsContainer: {
         borderRadius: 16,
         padding: 20,
